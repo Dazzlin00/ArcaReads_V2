@@ -7,6 +7,8 @@ import { View, Text, StyleSheet } from 'react-native';
 
 import ProfileScreen from "../screens/ProfileScreen";
 import MessagesScreen from "../screens/MessagesScreen";
+import RegisterScreen from "../components/Register";
+
 
 
 const Stack = createNativeStackNavigator();
@@ -19,6 +21,7 @@ export default function AppNavigator() {
         <Stack.Screen name="Home" component={TabNavigator} options={{ headerShown: false }} />
         <Stack.Screen name="Profile" component={ProfileScreen} />
         <Stack.Screen name="Messages" component={MessagesScreen} />
+        <Stack.Screen name="Register" component={RegisterScreen} />
 
       </Stack.Navigator>
     </NavigationContainer>
