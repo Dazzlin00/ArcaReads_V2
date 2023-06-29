@@ -1,33 +1,41 @@
 import React, { useState } from 'react';
 import { View, Text, FlatList,Button } from 'react-native';
 import Post from '../components/Post';
-import Inicio from '../components/Home';
 
 const posts = [
   {
     id: 1,
     title: 'Post 1',
-    image: 'https://picsum.photos/id/1/200/200',
-    content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+    name: 'Kaladin Sanderson',
+    createdAt: 'September 16, 2023',
+    avatar: 'https://scontent.fbrm1-1.fna.fbcdn.net/v/t39.30808-6/278924392_5149441235078544_4418800854132458724_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=Aa-5MJ7_Ae0AX_17XXS&_nc_ht=scontent.fbrm1-1.fna&oh=00_AfAzDR74DTan69RQJplHglFSSx-ipPaTTYho9peQQzEWfw&oe=649FFA50',
+    image: 'https://th.bing.com/th/id/OIP.DpPte76sF97HIyOUjvWGAAHaFv?pid=ImgDet&rs=1',
+    content: '"Puedes tomar el control de mi mente y mi cuerpo, pero hay una cosa que un Saiyajin siempre guarda ... ¡su ORGULLO!"',
     likes: 10,
-    dislikes: 2,
+    commnents: 2,
   },
   {
     id: 2,
     title: 'Post 2',
+    name: 'Elizabeth Gomez',
+    avatar: 'https://th.bing.com/th/id/OIP.tMW1EYoheuu537IDWfBVdAHaHa?pid=ImgDet&rs=1',
+    createdAt: 'September 15, 2023',
     image: 'https://picsum.photos/id/2/200/200',
-    content: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+    content: '"Si piensas que los usuarios de tus programas son idiotas, sólo los idiotas usarán tus programas.- Linus Torvalds"',
     likes: 5,
-    dislikes: 1,
+    commnents: 1,
   },
   {
     id: 3,
     title: 'Post 3',
+    name: 'Eliza Graterol',
+    avatar: 'https://scontent.fbrm1-1.fna.fbcdn.net/v/t1.18169-9/12341239_1189570834404876_3160794268176549905_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=VmxU8MgqcF0AX9Eak5U&_nc_ht=scontent.fbrm1-1.fna&oh=00_AfBGaJeRumCNlX073sSyzkKD-vjop6UOem-PYHko_6ubQg&oe=64C1B7A8',
+    createdAt: 'September 14, 2023',
     image: 'https://picsum.photos/id/3/200/200',
-    content: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+    content: '"Es genial trabajar con ordenadores. No discuten, lo recuerdan todo y no se beben tu cerveza. – Paul Leary"',
     likes: 8,
-    dislikes: 3,
-  },
+    commnents: 3,
+  }
 ];
 
 export default function HomeScreen() {
@@ -58,17 +66,16 @@ export default function HomeScreen() {
     sendPushNotification();
   };
   return (
-    <View>
-      <Inicio />
-      <Text>Lista de posts</Text>
+    <View style={{ flex: 1, width: '100%' }}>
       <FlatList
         data={postList}
         keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <Post post={item} onLike={() => handleLike(item.id)} onDislike={() => handleDislike(item.id)} />
+        renderItem={({ item:post }) => (
+          <Post post={post}
+              onLike={() => handleLike(post.id)}
+              onDislike={() => handleDislike(post.id)} />
         )}
       />
-      <Button title="Enviar notificación" onPress={handlePress} />
     </View>
   );
 }

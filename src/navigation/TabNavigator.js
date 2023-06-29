@@ -12,24 +12,21 @@ const Tab = createBottomTabNavigator();
 
 export default function TabNavigator() {
   return (
-    <Tab.Navigator style={styles.container}>
+    <Tab.Navigator
+      tabBarOptions={{
+        activeTintColor: '#4D194D',
+        inactiveTintColor: 'white',
+        activeBackgroundColor: '#1B3A4A',
+        inactiveBackgroundColor: '#1B3A4A',
+      }}
+    >
       <Tab.Screen
         name="Inicio"
         component={HomeScreen}
         options={{
-          title: "Inicio",
+          title: "",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="home" color={color} size={size} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Perfil"
-        component={ProfileScreen}
-        options={{
-          title: "Perfil",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="person" color={color} size={size} />
           ),
         }}
       />
@@ -37,29 +34,19 @@ export default function TabNavigator() {
         name="Mensajes"
         component={MessagesScreen}
         options={{
-          title: "Mensajes",
+          title: "",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="mail" color={color} size={size} />
+            <Ionicons name="add" color={color} size={size} />
           ),
         }}
       />
-      <Tab.Screen
-        name="Buscar"
-        component={SearchScreen}
+       <Tab.Screen
+        name="Perfil"
+        component={ProfileScreen}
         options={{
-          title: "Buscar",
+          title: "",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="search" color={color} size={size} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Notificaciones"
-        component={NotificationsScreen}
-        options={{
-          title: "Notificaciones",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="notifications" color={color} size={size} />
+            <Ionicons name="person" color={color} size={size} />
           ),
         }}
       />
@@ -71,4 +58,10 @@ const styles = StyleSheet.create({
     backgroundColor: "red",
     padding: 10,
   },
+  footer: {
+    backgroundColor: "#1B3A4A",
+    height: 60,
+    width: "100%",
+    marginTop: 20,
+  }
 });
