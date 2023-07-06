@@ -15,7 +15,7 @@ export default function TabNavigator() {
   return (
     <Tab.Navigator
       tabBarOptions={{
-        activeTintColor: '#4D194D',
+        activeTintColor: 'white',
         inactiveTintColor: 'white',
         activeBackgroundColor: '#1B3A4A',
         inactiveBackgroundColor: '#1B3A4A',

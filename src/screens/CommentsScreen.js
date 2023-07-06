@@ -30,7 +30,12 @@ const CommentsScreen = () => {
     const comentarioIndex = comentarios.findIndex(comentario => comentario.id === id);
     if (comentarioIndex !== -1) {
       const comentariosActualizados = [...comentarios];
-      comentariosActualizados[comentarioIndex].likes += 1;
+      const comentario = comentariosActualizados[comentarioIndex];
+      if (comentario.likes === 0) {
+        comentario.likes = 1; // Dar "me gusta"
+      } else {
+        comentario.likes = 0; // Quitar "me gusta" (dislike)
+      }
       setComentarios(comentariosActualizados);
     }
   };
@@ -111,21 +116,22 @@ const CommentsScreen = () => {
 const styles = StyleSheet.create({
   header: {
     
-    backgroundColor: '#4D194D',
+    backgroundColor: '#ffff',
     paddingVertical: 16,
     
     marginBottom: 16,
      width: '100%',
   },
   headerText: {
-    color: 'white',
+    color: '#4D194D',
     fontSize: 18,
     fontWeight: 'bold',
+    textAlign: 'center',
   },
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    paddingHorizontal: 16,
+    paddingHorizontal: 20,
     paddingTop: 16,
   },
   comentarioContainer: {
@@ -178,7 +184,7 @@ const styles = StyleSheet.create({
   },
   sendButton: {
     marginLeft: 8,
-    backgroundColor: 'blue',
+    backgroundColor: '#4D194D',
     padding: 8,
     borderRadius: 4,
   },
@@ -196,12 +202,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     paddingHorizontal: 8,
   },
-  sendButton: {
-    marginLeft: 8,
-    backgroundColor: 'blue',
-    padding: 8,
-    borderRadius: 4,
-  },
+
 });
 
 
