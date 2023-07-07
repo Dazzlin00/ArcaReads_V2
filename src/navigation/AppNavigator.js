@@ -8,6 +8,8 @@ import ProfileScreen from "../screens/ProfileScreen";
 import MessagesScreen from "../screens/MessagesScreen";
 import RegisterScreen from "../components/Register";
 import CommentsScreen from "../screens/CommentsScreen";
+import iniScreen from "../screens/iniScreen";
+
 
 const Stack = createNativeStackNavigator();
 
@@ -15,7 +17,10 @@ export default function AppNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator style={styles.container}>
-        <Stack.Screen name="Login" component={LoginScreen} />
+        
+     
+      <Stack.Screen name="Ini" component={iniScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="Login" component={LoginScreen}  />
         <Stack.Screen
           name="Home"
           component={TabNavigator}
