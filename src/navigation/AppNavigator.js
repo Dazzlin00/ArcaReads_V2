@@ -9,7 +9,7 @@ import MessagesScreen from "../screens/MessagesScreen";
 import RegisterScreen from "../components/Register";
 import CommentsScreen from "../screens/CommentsScreen";
 import iniScreen from "../screens/iniScreen";
-
+import SettingsScreen from "../screens/SettingsScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -30,6 +30,7 @@ export default function AppNavigator() {
         <Stack.Screen name="Profile" component={ProfileScreen} />
         <Stack.Screen name="Messages" component={MessagesScreen} />
         <Stack.Screen name="Register" component={RegisterScreen} />
+        <Stack.Screen name="Settings" component={SettingsScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
