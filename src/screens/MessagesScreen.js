@@ -1,11 +1,16 @@
-import React from 'react';
-import { View } from 'react-native';
-import Mensajes from '../components/Messages';
 
-export default function MessagesScreen() {
+import React from 'react';
+import { Ionicons } from 'react-native-vector-icons';
+import Messages from '../components/Messages';
+
+
+import { View, ScrollView, StyleSheet, Image, TouchableOpacity, SafeAreaView } from 'react-native';
+export default function MensajesScreen() {
   return (
-    <View>
-      <Mensajes />
-    </View>
+      <View>
+      <Messages />
+     </View>
+     
   );
 }
+

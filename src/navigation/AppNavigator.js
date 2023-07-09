@@ -10,8 +10,7 @@ import RegisterScreen from "../screens/RegisterScreen";
 import ResetPasswordScreen from "../screens/ResetPasswordScreen";
 import CommentsScreen from "../screens/CommentsScreen";
 import iniScreen from "../screens/iniScreen";
-import SearchScreen from "../screens/SearchScreen";
-import AddScreen from "../screens/AddScreen";
+
 
 const Stack = createNativeStackNavigator();
 
@@ -41,26 +40,7 @@ export default function AppNavigator() {
         />
         <Stack.Screen name="Profile" component={ProfileScreen} />
         <Stack.Screen name="Messages" component={MessagesScreen} />
-        <Stack.Screen
-          name="Register"
-          component={RegisterScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="ResetPassword"
-          component={ResetPasswordScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Buscar"
-          component={SearchScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Add"
-          component={AddScreen}
-         
-        />
+        <Stack.Screen name="Register" component={RegisterScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
