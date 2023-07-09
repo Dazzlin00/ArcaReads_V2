@@ -1,10 +1,15 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView } from 'react-native';
 
-export default function Messages() {
+export default Messages= () => {
+
   return (
-    <View>
-      <Text>Mensajes</Text>
-    </View>
+      
+          <View>
+            <Text>Mensajes </Text>
+          </View>
+        
+
   );
-}
+};
+

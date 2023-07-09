@@ -1,26 +1,25 @@
 import React from 'react';
 import { Ionicons } from 'react-native-vector-icons';
 import Profile from '../components/Profile';
+import Galeria from '../components/Galeria';
+import { View, Text, Image, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 
-import { View, ScrollView, StyleSheet, Image, TouchableOpacity, SafeAreaView } from 'react-native';
 export default function ProfileScreen() {
+  const navigation = useNavigation();
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header }>
+    <View style={styles.container}>
+      <View style={styles.header}>
         <Image source={require('../../assets/logoblanco.png')} style={styles.logo} resizeMode="contain" />
-        <TouchableOpacity style={styles.notificationButton}>
+        <TouchableOpacity onPress={() => navigation.navigate('Settings')} style={styles.notificationButton}>
           <Ionicons name="settings-outline" size={30} color="white" />
         </TouchableOpacity>
       </View>
 
-      <View>
       <Profile />
-     </View>
-     
-
-    </SafeAreaView>
-
+      <Galeria />
+    </View>
   );
 }
 
@@ -30,7 +29,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   header: {
-    marginTop: 20 ,
+    marginTop: 20,
     height: 60,
     backgroundColor: '#4D194D',
     flexDirection: 'row',

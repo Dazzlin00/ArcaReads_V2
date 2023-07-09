@@ -29,6 +29,15 @@ export default ProfileView = () => {
         </View>
       </View>
 
+      <View style={styles.body}>
+        <View style={styles.bodyContent}>
+          
+          <Text style={styles.description}>
+            Lorem ipsum dolor sit amet, saepe sapientem eu nam. Qui ne assum electram expetendis,
+            omittam deseruisse consequuntur ius an,
+          </Text>
+        </View>
+      </View>
     </View>
   )
 }
@@ -46,7 +55,7 @@ const styles = StyleSheet.create({
     height: 130,
     borderRadius: 63,
     borderWidth: 2,
-    borderColor: '#4D194D',
+    borderColor: 'white',
     marginBottom: 10,
   },
   name: {
@@ -60,7 +69,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     position: 'absolute',
-    backgroundColor: '#ffffff',
+    backgroundColor: '#4D194D',
   },
   detailContent: {
     margin: 10,
@@ -68,7 +77,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    color: '#4D194D',
+    color: '#FFFFFF',
   },
   count: {
     fontSize: 18,
@@ -77,7 +86,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     padding: 30,
-    marginTop: 40,
+    marginTop: -11,
   },
   textInfo: {
     fontSize: 18,
@@ -102,3 +111,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 })
+
+
+       
