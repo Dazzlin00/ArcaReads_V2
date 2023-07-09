@@ -1,11 +1,16 @@
 import React, { useState } from "react";
-import { View, Text, Image, StyleSheet, TouchableOpacity,Modal } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  Modal,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 
-
 const PostCard = ({ post }) => {
-
   const navigation = useNavigation();
 
   const [comments, setComments] = useState([]);
@@ -41,48 +46,39 @@ const PostCard = ({ post }) => {
   const handleUsernameClick = () => {
     navigation.navigate("Profile"); // Me dirige al perfil de usuario
   };
-  
-  console.log("Postcard:", post);
-  
-  
-  
-  
 
+  console.log("Postcard:", post);
 
   return (
     <View style={styles.container}>
-      {/*----------------------------HEADER--------------------------------------------*/ }
+      {/*----------------------------HEADER--------------------------------------------*/}
       <View style={styles.header}>
         <TouchableOpacity onPress={handleUsernameClick}>
           <Image source={post.avatar} style={styles.avatar} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={handleUsernameClick}>
-        <Text style={styles.username}>{post.username}</Text>
-        </TouchableOpacity>
-       
-        <Text style={styles.timestamp}>{post.timestamp}</Text>
+        <View style={{ flexDirection: "column" }}>
+          <TouchableOpacity onPress={handleUsernameClick}>
+            <Text style={styles.username}>{post.username}</Text>
+          </TouchableOpacity>
+          <Text style={styles.timestamp}>{post.timestamp}</Text>
+        </View>
       </View>
-      {/*----------------------------POSTIMAGEN--------------------------------------------*/ }
+      {/*----------------------------POSTIMAGEN--------------------------------------------*/}
       <Text style={styles.text}>{post.text}</Text>
       <View>
         <TouchableOpacity onPress={toggleImageModal}>
           {/* Agrega el onPress para abrir el modal */}
           <Image source={{ uri: post.image }} style={styles.image} />
-
         </TouchableOpacity>
       </View>
 
-
-
-
-
       <View style={styles.actionsContainer}>
         <View style={styles.leftButtonsContainer}>
-          <TouchableOpacity style={styles.button } onPress={handleLike}>
+          <TouchableOpacity style={styles.button} onPress={handleLike}>
             <Ionicons
               name={liked ? "heart" : "heart-outline"}
               size={30}
-              color={liked ? "#671067" : "gray"}
+              color={liked ? "#ba6bad" : "gray"}
             />
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={handleOpenComments}>
@@ -93,7 +89,7 @@ const PostCard = ({ post }) => {
           <FontAwesome
             name={saved ? "bookmark" : "bookmark-o"}
             size={30}
-            color={saved ? "#671067" : "gray"}
+            color={saved ? "#ba6bad" : "gray"}
           />
         </TouchableOpacity>
       </View>
@@ -106,15 +102,9 @@ const PostCard = ({ post }) => {
         ))}
       </View>
 
-
-
-
       <View style={styles.footer}>
         {/* Add any additional footer elements here */}
       </View>
-
-
-
 
       <Modal
         visible={isImageModalVisible}
@@ -131,7 +121,6 @@ const PostCard = ({ post }) => {
           <Image source={{ uri: post.image }} style={styles.modalImage} />
         </View>
       </Modal>
-
     </View>
   );
 };
@@ -145,10 +134,7 @@ const styles = StyleSheet.create({
     marginLeft: 22,
     marginRight: 22,
     marginBottom: 7,
-    shadowColor: "black",
-    shadowOpacity: 0.2,
-    shadowRadius: 5,
-    elevation: 5,
+    elevation: 1,
   },
   header: {
     flexDirection: "row",
@@ -161,7 +147,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    marginRight: 10,
+    marginRight: 15,
   },
   username: {
     fontSize: 16,
@@ -211,7 +197,6 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
   },
 
-
   actionsContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -223,7 +208,6 @@ const styles = StyleSheet.create({
   },
   button: {
     marginRight: 10,
-    
   },
   commentsContainer: {
     marginTop: 10,

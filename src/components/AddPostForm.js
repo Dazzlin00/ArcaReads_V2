@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
+import { LinearGradient } from "expo-linear-gradient";
 
 const AddPostForm = ({ onSubmit }) => {
   const [text, setText] = useState("");
@@ -73,15 +74,22 @@ const AddPostForm = ({ onSubmit }) => {
         numberOfLines={4}
       />
       <View style={styles.footer}>
-        <TouchableOpacity style={styles.footerButton} onPress={handleSubmit}>
-          <Ionicons
-            name="paper-plane-outline"
-            size={24}
-            color="white"
-            style={styles.icon}
-          />
-          <Text style={styles.buttonText}>Compartir</Text>
-        </TouchableOpacity>
+        <LinearGradient
+          colors={["rgba(238,174,202,0.7)", "rgba(93,135,218,0.9)"]}
+          start={{ x: 1, y: 0 }}
+          end={{ x: 0, y: 1 }}
+          style={styles.buttonSearchContainer}
+        >
+          <TouchableOpacity style={styles.footerButton} onPress={handleSubmit}>
+            <Ionicons
+              name="paper-plane-outline"
+              size={24}
+              color="white"
+              style={styles.icon}
+            />
+            <Text style={styles.buttonText}>Compartir</Text>
+          </TouchableOpacity>
+        </LinearGradient>
       </View>
     </View>
   );
@@ -89,14 +97,11 @@ const AddPostForm = ({ onSubmit }) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "rgba(255, 255, 255, 0.9)",
+    backgroundColor: "rgba(255, 255, 255, 1)",
     borderRadius: 10,
     padding: 10,
     margin: 22,
-    shadowColor: "black",
-    shadowOpacity: 0.2,
-    shadowRadius: 5,
-    elevation: 5,
+    elevation: 1.2,
   },
   header: {
     flexDirection: "row",
@@ -110,11 +115,20 @@ const styles = StyleSheet.create({
     marginRight: 10,
     marginLeft: 20,
   },
+  buttonSearchContainer:
+  { flex: 1,
+    borderRadius: 10,
+
+
+  },
   attachButton: {
     borderWidth: 1,
-    borderColor: "gray",
+    borderColor: "white",
     borderRadius: 5,
     padding: 5,
+  },
+  username: {
+    marginRight: 5,
   },
   image: {
     width: "100%",
@@ -137,9 +151,9 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   footerButton: {
-    flexDirection: 'row',
+    flexDirection: "row",
     alignItems: "center",
-    justifyContent: 'center',
+    justifyContent: "center",
 
     backgroundColor: "rgba(6,18,38,0.2)",
     borderRadius: 10,
@@ -154,7 +168,7 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
   buttonText: {
-    color: 'white',
+    color: "white",
     marginLeft: 5,
   },
 });

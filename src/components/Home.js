@@ -56,6 +56,7 @@ const Home = ({ username, date, text, profileImage, postImage }) => {
 
   return (
     <View style={styles.container}>
+      
     </View>
   );
 }

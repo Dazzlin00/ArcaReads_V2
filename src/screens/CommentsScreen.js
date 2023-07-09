@@ -74,7 +74,7 @@ const CommentsScreen = () => {
             {item.reply !== '' && <Text style={styles.reply}>{item.reply}</Text>}
             <View style={styles.buttonsContainer}>
               <TouchableOpacity style={styles.likeButton} onPress={() => agregarMeGusta(item.id)}>
-                <Ionicons name="heart" size={24} color="#671067" />
+                <Ionicons name="heart" size={24} color="#ba6bad" />
                 <Text style={styles.likeCount}>{item.likes}</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.replyButton} onPress={() => mostrarCajaTextoRespuesta(item.id)}>
@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
   },
   sendButton: {
     marginLeft: 8,
-    backgroundColor: '#4D194D',
+    backgroundColor: '#ba6bad',
     padding: 8,
     borderRadius: 4,
   },

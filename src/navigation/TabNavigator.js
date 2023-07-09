@@ -14,13 +14,16 @@ const Tab = createBottomTabNavigator();
 
 export default function TabNavigator() {
   return (
+
+
     <Tab.Navigator
-      tabBarStyle={{ backgroundColor: "#1B3A4A", height: 60, position: "absolute", bottom: 0 }}
-      screenOptions={{
-        activeTintColor: "red",
-        inactiveTintColor: "white",
-        activeBackgroundColor: "#1B3A4A",
-        inactiveBackgroundColor: "#1B3A4A",
+      tabBarStyle={{  height: 60, position: "absolute", bottom: 0,borderTopWidth: 1,
+      borderTopColor: "black", }}
+      tabBarOptions={{
+        activeTintColor: "#ba6bad",
+        inactiveTintColor: "gray",
+        activeBackgroundColor: "white",
+        inactiveBackgroundColor: "white",
       }}
     >
       <Tab.Screen
@@ -45,17 +48,7 @@ export default function TabNavigator() {
           headerShown: false,
         }}
       />
-      <Tab.Screen
-        name="Agregar"
-        component={AddScreen}
-        options={{
-          title: "",
-          tabBarIcon: ({ color, size }) => (
-            <Icon name="plus" size={size} color={color} />
-          ),
-          headerShown: false,
-        }}
-      />
+ 
       <Tab.Screen
         name="Perfil"
         component={ProfileScreen}

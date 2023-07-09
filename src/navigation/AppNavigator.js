@@ -11,12 +11,14 @@ import ResetPasswordScreen from "../screens/ResetPasswordScreen";
 import CommentsScreen from "../screens/CommentsScreen";
 import iniScreen from "../screens/iniScreen";
 
+import SettingsScreen from "../screens/SettingsScreen";
 
 const Stack = createNativeStackNavigator();
 
 export default function AppNavigator() {
   return (
-    <NavigationContainer>
+    <NavigationContainer style={styles.tab}>
+
       <Stack.Navigator style={styles.container}>
         <Stack.Screen
           name="Ini"
@@ -38,9 +40,12 @@ export default function AppNavigator() {
           component={CommentsScreen}
           options={{ headerShown: false }}
         />
-        <Stack.Screen name="Profile" component={ProfileScreen} />
-        <Stack.Screen name="Messages" component={MessagesScreen} />
-        <Stack.Screen name="Register" component={RegisterScreen} />
+        <Stack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="Messages" component={MessagesScreen}  options={{ headerShown: false }}/>
+        <Stack.Screen name="Register" component={RegisterScreen} options={{ headerShown: false }}  />
+        <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} options={{ headerShown: false }}  />
+        <Stack.Screen name="Settings" component={SettingsScreen} options={{ headerShown: false }}  />
+
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -50,5 +55,9 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "red",
     padding: 10,
+  },
+  tab:{
+
+    backgroundColor: "red",
   },
 });
