@@ -29,7 +29,7 @@ export default Settings = () => {
             />
 
             <Text style={styles.name}>Elizabeth Gomez </Text>
-            <Text style={styles.userInfo}>eligomez@mail.com </Text>
+            <Text style={styles.userInfo}>eligomez@gmail.com </Text>
             <Text style={styles.userInfo}>Barquisimeto </Text>
           </View>
         </View>
@@ -41,11 +41,11 @@ export default Settings = () => {
             <View style={styles.iconContent}>
               <Image
                 style={styles.icon}
-                source={require('../../assets/cambio.png')}
+                source={require('../../assets/modificar.jpg')}
               />
             </View>
             <View style={styles.infoContent}>
-              <Text style={styles.info}>Modificar foto de perfil</Text>
+              <Text style={styles.info}>Editar Perfil</Text>
             </View>
           </TouchableOpacity>
 
@@ -55,11 +55,11 @@ export default Settings = () => {
             <View style={styles.iconContent}>
               <Image
                 style={styles.icon}
-                source={require('../../assets/modificar.jpg')}
+                source={require('../../assets/cambioo.png')}
               />
             </View>
             <View style={styles.infoContent}>
-              <Text style={styles.info}>Modificar Informacion </Text>
+              <Text style={styles.info}>Cambiar Contraseña </Text>
             </View>
           </TouchableOpacity>
 
