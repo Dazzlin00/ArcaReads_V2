@@ -4,9 +4,9 @@ import { Ionicons } from 'react-native-vector-icons';
 
 const CommentsScreen = () => {
   const [comentarios, setComentarios] = useState([
-    { id: '1', username: 'usuario1', comment: '¡Hermosa foto!', reply: '', likes: 0 },
-    { id: '2', username: 'usuario2', comment: 'Me encanta', reply: '', likes: 0 },
-    { id: '3', username: 'usuario3', comment: '¡Wow! Increíble', reply: '', likes: 0 },
+    { id: '1', username: 'Jesus Lopez', comment: '¡Hermosa foto!', reply: '', likes: 0 },
+    { id: '2', username: 'Maria Jimenez', comment: 'Me encanta', reply: '', likes: 0 },
+    { id: '3', username: 'Laura Perdomo', comment: '¡Wow! Increíble', reply: '', likes: 0 },
   ]);
   const [nuevoComentario, setNuevoComentario] = useState('');
   const [mostrarCajaRespuesta, setMostrarCajaRespuesta] = useState(false);

@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, ScrollView, TouchableOpacity, Image } from 'react-native';
 import Story from './Story';
+import { MaterialCommunityIcons } from 'react-native-vector-icons';
 
 const StoriesBar = () => {
   const [stories, setStories] = useState([
-    { id: 1, image: require("../../assets/fondo2.jpg"), title: 'Historia 1' },
-    { id: 2, image: require("../../assets/fondo3.png"), title: 'Historia 2' },
-    { id: 3, image: require("../../assets/fondo4.jpg"), title: 'Historia 3' },
+    { id: 1, image: require("../../assets/fondo2.jpg"), title: 'Mey Clinton' },
+    { id: 2, image: require("../../assets/fondo3.png"), title: 'Lily Padilla' },
+    { id: 3, image: require("../../assets/fondo4.jpg"), title: 'Sasha Mendez' },
   ]);
 
   const addStory = (image, title) => {
@@ -22,8 +23,8 @@ const StoriesBar = () => {
     <View style={styles.container}>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         {/* Agrega un botón "+" para agregar una nueva historia */}
-        <TouchableOpacity style={styles.addStoryButton} onPress={() => addStory(require('../../assets/AB.png'), 'Nueva Historia')}>
-          <Image source={require('../../assets/AB.png')} style={styles.addStoryIcon} />
+        <TouchableOpacity style={styles.addStoryButton} onPress={() => addStory(require('../../assets/eli.jpg'), 'Nueva Historia')}>
+          <MaterialCommunityIcons name="plus" size={30} color="#ba6bad" />
         </TouchableOpacity>
         <View style={styles.storiesContainer}>
           {stories.map((story) => (
@@ -70,10 +71,12 @@ const styles = StyleSheet.create({
   },
   story: {
    
-    marginRight: 3,
-    width: 80,
+    marginRight: 2,
+    width: 100,
     height: 100,
+   
   },
+  
 });
 
 export default StoriesBar;

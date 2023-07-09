@@ -45,6 +45,7 @@ export default ProfileView = () => {
 const styles = StyleSheet.create({
   header: {
     backgroundColor: '#da70d6',
+    
   },
   headerContent: {
     padding: 30,

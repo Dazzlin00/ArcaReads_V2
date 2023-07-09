@@ -14,9 +14,9 @@ import { LinearGradient } from "expo-linear-gradient";
 const AddPostForm = ({ onSubmit }) => {
   const [text, setText] = useState("");
   const [image, setImage] = useState(null);
-  const [avatar, setAvatar] = useState(require("../../assets/fondo14.jpg")); // Nombre de usuario predeterminado
+  const [avatar, setAvatar] = useState(require("../../assets/eli.jpg")); // Nombre de usuario predeterminado
 
-  const [username, setUsername] = useState("Eliza Graterol"); // Nombre de usuario predeterminado
+  const [username, setUsername] = useState("Elizabeth Gomez"); // Nombre de usuario predeterminado
   const [timestamp, setTimestamp] = useState(
     new Date().toLocaleTimeString("en-US", {
       hour: "numeric",

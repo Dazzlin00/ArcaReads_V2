@@ -37,7 +37,7 @@ function HomeScreen({ navigation }) {
       username: "Elizabeth Gomez",
       timestamp: "11:34 AM",
       image: "https://picsum.photos/id/237/200/300",
-      date: "2022-07-09T12:34:56.000Z",
+     
     },
     {
       id: 2,
@@ -46,15 +46,16 @@ function HomeScreen({ navigation }) {
       username: "Omerly Mendoza",
       timestamp: "12:34 AM",
       image: "https://picsum.photos/id/238/200/300",
-      date: "2022-07-08T09:15:23.000Z",
+    
     },
     {
       id: 3,
       text: "¡Estoy emocionado de unirme a esta comunidad!",
-      avatar: require("../../assets/fondo12.jpg"),
-      username: "hilary clinton",
+      avatar: require("../../assets/eliza.jpg"),
+      username: "Eliza Graterol",
+      image: "https://picsum.photos/id/238/200/300",
       timestamp: "12:34 AM",
-      date: "2022-07-07T18:45:12.000Z",
+      
     },
   ]);
   const handleAddPost = (post) => {
