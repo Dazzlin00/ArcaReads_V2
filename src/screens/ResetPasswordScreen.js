@@ -8,11 +8,11 @@ import {
   TouchableOpacity,
   ImageBackground,
 } from "react-native";
-import Login from "../components/Login";
+import ResetPassword from "../components/ResetPassword";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { LinearGradient } from "expo-linear-gradient";
 
-export default function LoginScreen({ navigation }) {
+export default function ResetPasswordScreen({ navigation }) {
   return (
     <ImageBackground
     source={require("../../assets/fondo12.jpg")}
@@ -32,7 +32,7 @@ export default function LoginScreen({ navigation }) {
     >
       
       
-            <Login navigation={navigation} />
+            <ResetPassword navigation={navigation} />
          
       
     </LinearGradient>

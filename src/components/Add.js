@@ -15,7 +15,7 @@ import { useNavigation } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { FontAwesome } from "react-native-vector-icons";
 
-function Search() {
+function Add() {
   const navigation = useNavigation();
 
 
@@ -23,7 +23,7 @@ function Search() {
 
   return (
     <View style={styles.container}>
-  <Text >hOLA DESDE COMPONENT</Text>
+  <Text >hOLA DESDE COMPONENT Add</Text>
     </View>
   );
 }
@@ -32,4 +32,4 @@ const styles = StyleSheet.create({
   
 });
 
-export default Search;
+export default Add;

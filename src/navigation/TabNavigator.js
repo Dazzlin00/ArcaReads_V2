@@ -7,18 +7,20 @@ import MessagesScreen from "../screens/MessagesScreen";
 import NotificationsScreen from "../screens/NotificationsScreen";
 import { View, Text, StyleSheet } from "react-native";
 import SearchScreen from "../screens/SearchScreen";
-import { Ionicons } from "@expo/vector-icons";
+import Icon from "react-native-vector-icons/FontAwesome";
+import AddScreen from "../screens/AddScreen";
 
 const Tab = createBottomTabNavigator();
 
 export default function TabNavigator() {
   return (
     <Tab.Navigator
-      tabBarOptions={{
-        activeTintColor: 'white',
-        inactiveTintColor: 'white',
-        activeBackgroundColor: '#1B3A4A',
-        inactiveBackgroundColor: '#1B3A4A',
+      tabBarStyle={{ backgroundColor: "#1B3A4A", height: 60, position: "absolute", bottom: 0 }}
+      screenOptions={{
+        activeTintColor: "red",
+        inactiveTintColor: "white",
+        activeBackgroundColor: "#1B3A4A",
+        inactiveBackgroundColor: "#1B3A4A",
       }}
     >
       <Tab.Screen
@@ -27,28 +29,40 @@ export default function TabNavigator() {
         options={{
           title: "",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home" color={color} size={size} />
+            <Icon name="home" size={size} color={color} />
           ),
-          headerShown: false 
+          headerShown: false,
         }}
       />
       <Tab.Screen
-        name="Mensajes"
-        component={MessagesScreen}
+        name="Search"
+        component={SearchScreen}
         options={{
           title: "",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="add" color={color} size={size} />
+            <Icon name="search" size={size} color={color} />
           ),
+          headerShown: false,
         }}
       />
-       <Tab.Screen
+      <Tab.Screen
+        name="Agregar"
+        component={AddScreen}
+        options={{
+          title: "",
+          tabBarIcon: ({ color, size }) => (
+            <Icon name="plus" size={size} color={color} />
+          ),
+          headerShown: false,
+        }}
+      />
+      <Tab.Screen
         name="Perfil"
         component={ProfileScreen}
         options={{
           title: "",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="person" color={color} size={size} />
+            <Icon name="user" size={size} color={color} />
           ),
         }}
       />

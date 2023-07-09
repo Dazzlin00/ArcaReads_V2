@@ -1,190 +1,212 @@
-import React from 'react';
-import { View, Text, TextInput, Button,StyleSheet,Image,TouchableOpacity,Field } from 'react-native';
+import React from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  StyleSheet,
+  Image,
+  ImageBackground,
+  TouchableOpacity,
+  Field,
+  Dimensions,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { FontAwesome } from "react-native-vector-icons";
 
-
-
-//export default function Login() {
- // const [email, setEmail] = React.useState('');
-  //const [password, setPassword] = React.useState('');
-
-  //const handleLogin = () => {
-    // Lógica para iniciar sesión
-  //};
-
-
-  function Login() {
-   
+function Login() {
   const navigation = useNavigation();
+  const [message, setMessage] = React.useState("");
 
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [showPassword, setShowPassword] = React.useState(false);
 
   const handleLogin = () => {
-    navigation.navigate('Home');
+    if (!email || !password) {
+      setMessage("Por favor complete todos los campos.");
+      return;
+    }
+   
+    
+    navigation.navigate("Home");
+  };
+
+  const windowWidth = Dimensions.get("window").width;
+  const windowHeight = Dimensions.get("window").height;
+
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
-    <KeyboardAwareScrollView
-      contentContainerStyle={styles.container}
-      enableOnAndroid={true}
-      keyboardDismissMode="interactive"
-    >
-      <View style={styles.header} />
-      <Text style={styles.text}>Bienvenidos a</Text>
-      <View style={styles.imagenContainer}>
+    <View style={styles.container}>
+      <View style={styles.Imagecontainer}>
         <Image
-          style={styles.imagen}
-          source={require("../../assets/logo.png")}
+          source={require("../../assets/AB.png")}
+          style={[
+            styles.image,
+            { width: windowWidth / 2, height: windowHeight / 4 },
+          ]}
         />
       </View>
-      <Text style={styles.text}>Iniciar Sesión</Text>
-       
-      <Text style={styles.label}>Usuario</Text>
-      <TextInput
-        style={styles.input}
-        value={email}
-        onChangeText={setEmail}
-        placeholder="correo@correo.com"
-      />
 
-      <Text style={styles.label}>Contraseña</Text>
-      <TextInput
-        style={styles.input}
-        value={password}
-        onChangeText={setPassword}
-        placeholder="********"
-        secureTextEntry
-      />
+      <View style={styles.inputContainer}>
+        <FontAwesome
+          style={styles.inputIcon}
+          name="user"
+          size={20}
+          color="#fff"
+        />
+        <TextInput
+          style={styles.input}
+          value={email}
+          onChangeText={setEmail}
+          onFocus={() => setMessage("")}
+          placeholder="Correo electrónico"
+          placeholderTextColor="#EBEBEB"
+          keyboardType="email-address"
+          autoCapitalize="none"
+          autoCorrect={false}
+        />
+      </View>
 
-      <TouchableOpacity
-        style={styles.button} 
-        onPress={handleLogin}
-      >
+      <View style={styles.inputContainer}>
+        <FontAwesome
+          style={styles.inputIcon}
+          name="lock"
+          size={20}
+          color="#fff"
+        />
+        <TextInput
+          style={styles.input}
+          value={password}
+          onChangeText={setPassword}
+          onFocus={() => setMessage("")}
+          placeholder="Contraseña"
+          placeholderTextColor="#EBEBEB"
+          secureTextEntry={!showPassword}
+          autoCapitalize="none"
+          autoCorrect={false}
+        />
+        <TouchableOpacity onPress={toggleShowPassword}>
+          <FontAwesome
+            style={styles.showPasswordIcon}
+            name={showPassword ? "eye-slash" : "eye"}
+            size={20}
+            color="#fff"
+          />
+        </TouchableOpacity>
+      </View>
+      <Text style={styles.mess}>{message}</Text>
+
+      <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>Iniciar sesión</Text>
       </TouchableOpacity>
 
-      <Text style={styles.texto}>¿No tienes cuenta todavia?</Text>
-      <TouchableOpacity
-        style={styles.link}
-        onPress={() => {
-          navigation.navigate("Register");
-        }}
-      >
-        <Text style={styles.linkText}>Regístrate aquí</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.link}
-        onPress={() => {
-          navigation.navigate("Register");
-        }}
-      >
-        <Text style={styles.linkText}>Reestablecer Contraseña</Text>
-      </TouchableOpacity>
-      <View style={styles.footer} />
-    </KeyboardAwareScrollView>
+      <View style={styles.linkContainer}>
+        <Text style={styles.linkText}>¿No tienes cuenta todavía?</Text>
+        <TouchableOpacity
+          style={styles.link}
+          onPress={() => {
+            navigation.navigate("Register");
+          }}
+        >
+          <Text style={[styles.linkText, styles.link]}>Regístrate aquí</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.link}
+          onPress={() => {
+            navigation.navigate("ResetPassword");
+          }}
+        >
+          <Text style={[styles.linkText, styles.link]}>
+            Reestablecer Contraseña
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1, 
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 0.5, 
-    backgroundColor: "#fff",
-  },
-  header: {
-    backgroundColor: "#1B3A4A",
-    height: 60,
-    width: "100%",
-   
-  },
-  footer: {
-    backgroundColor: "#1B3A4A",
-    height: 60,
-    width: "100%",
-    marginTop: 20,
-  },
-  text: {
-    fontSize: 25,
-    fontWeight: "bold",
-    fontFamily: "Roboto",
-    textAlign: "center",
-    marginBottom: 10,
-    marginTop: 10,
-  },
-  imagenContainer: {
-    alignItems: "center",
-    width: "100%",
-    height: 90,
-    justifyContent: "center",
-    
-  },
-  imagen: {
     flex: 1,
-    width: "90%",
-    height: "100%",
+    marginTop: 50,
+    marginBottom: 30,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 10,
+    backgroundColor: "rgba(255, 255, 255, 0.3)",
+    padding: 40,
+    borderRadius: 100,
+  },
+  Imagecontainer: {
+    paddingBottom: 20,
+  },
+  image: {
     resizeMode: "contain",
   },
   label: {
-    fontSize: 15,
+    fontSize: 16,
     fontWeight: "bold",
-    fontFamily: "Roboto",
-    textAlign: "center",
-    marginBottom: 5,
-    marginTop: 15,
-    
-    width: "100%",
+    marginTop: 20,
+  },
+  inputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderBottomWidth: 1,
+    borderBottomColor: "#fff",
+    paddingBottom: 5,
+    marginBottom: 20,
+    width: 300,
+  },
+  inputIcon: {
+    marginRight: 10,
   },
   input: {
-    backgroundColor: "#D5D8DC",
-    borderRadius: 20,
-    paddingVertical: 18,
-    paddingHorizontal: 10,
-    width: "70%",
-    marginBottom: 15,
+    flex: 1,
+    height: 40,
+
+    fontSize: 16,
+    color: "#fff",
   },
-    button: {
-    backgroundColor: "#4D194D",
-    paddingHorizontal: 20,
-    paddingVertical: 17,
-    borderRadius: 50,
-    width: "40%",
-    marginTop: 20,
+  showPasswordIcon: {
+    marginLeft: 10,
+  },
+  button: {
+    backgroundColor: "rgba(6,18,38,0.3)",
+    borderRadius: 20,
+    paddingHorizontal: 100,
+    paddingVertical: 20,
+    margin: 10,
   },
   buttonText: {
     color: "white",
-    fontWeight: "bold",
+    fontSize: 15,
+
     textAlign: "center",
-    fontSize: 16,
-    
   },
-  texto: {
-    textAlign: "center",
-    color: "#17202A",
-    fontWeight: "bold",
-    fontSize: 18,
-    marginTop: 15,
-    width: "100%",
+  linkContainer: {
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 20,
   },
   link: {
-    backgroundColor: "#fff",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 20,
-    marginBottom: 10,
-    width: "100%",
+    marginVertical: 1,
   },
   linkText: {
-    color: "#671067",
-    fontWeight: "bold",
-    fontSize: 18,
-    textAlign: "center",
-   
-    marginBottom:1
+    fontSize: 16,
+    color: "#fff",
   },
+  mess:
+  {
+
+    fontSize: 16,
+    color: "purple", 
+  }
 });
 
 export default Login;

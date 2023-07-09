@@ -24,6 +24,8 @@ function IniScreen() {
   return (
     <ImageBackground
       source={require("../../assets/fondo12.jpg")}
+      blurRadius={3}
+
       style={styles.imageBackground}
     >
       <LinearGradient
@@ -54,6 +56,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     height: "100%",
+    
   },
   linearGradient: {
     flex: 1,

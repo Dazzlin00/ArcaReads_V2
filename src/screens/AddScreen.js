@@ -13,11 +13,12 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import Search from "../components/Search";
-
+import Add from "../components/Add";
 import { LinearGradient } from "expo-linear-gradient";
-function SearchScreen({ navigation }) {
-  
+
+function AddScreen() {
+  const navigation = useNavigation();
+
   return (
     <SafeAreaView style={styles.container}>
       <ImageBackground
@@ -32,10 +33,10 @@ function SearchScreen({ navigation }) {
           style={styles.linearGradient}
         >
           <ScrollView style={styles.scrollView}>
-            <Search navigation={navigation} />
+            <Add navigation={navigation} />
           </ScrollView>
 
-          <Text style={styles.text}>HOLA DESDE SCREEN Search</Text>
+          <Text style={styles.text}>HOLA DESDE SCREEN Add</Text>
         </LinearGradient>
       </ImageBackground>
     </SafeAreaView>
@@ -69,4 +70,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SearchScreen;
+export default AddScreen;

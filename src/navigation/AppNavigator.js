@@ -6,10 +6,12 @@ import { View, Text, StyleSheet } from "react-native";
 
 import ProfileScreen from "../screens/ProfileScreen";
 import MessagesScreen from "../screens/MessagesScreen";
-import RegisterScreen from "../components/Register";
+import RegisterScreen from "../screens/RegisterScreen";
+import ResetPasswordScreen from "../screens/ResetPasswordScreen";
 import CommentsScreen from "../screens/CommentsScreen";
 import iniScreen from "../screens/iniScreen";
-
+import SearchScreen from "../screens/SearchScreen";
+import AddScreen from "../screens/AddScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -17,19 +19,48 @@ export default function AppNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator style={styles.container}>
-        
-     
-      <Stack.Screen name="Ini" component={iniScreen} options={{ headerShown: false }} />
-      <Stack.Screen name="Login" component={LoginScreen}  />
+        <Stack.Screen
+          name="Ini"
+          component={iniScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen
           name="Home"
           component={TabNavigator}
           options={{ headerShown: false }}
         />
-        <Stack.Screen name="Comentarios" component={CommentsScreen}  options={{ headerShown: false }} />
+        <Stack.Screen
+          name="Comentarios"
+          component={CommentsScreen}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen name="Profile" component={ProfileScreen} />
         <Stack.Screen name="Messages" component={MessagesScreen} />
-        <Stack.Screen name="Register" component={RegisterScreen} />
+        <Stack.Screen
+          name="Register"
+          component={RegisterScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ResetPassword"
+          component={ResetPasswordScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Buscar"
+          component={SearchScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Add"
+          component={AddScreen}
+         
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -1,31 +1,25 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  TextInput,
-  Modal,
-} from "react-native";
-import { Ionicons, FontAwesome } from "@expo/vector-icons";
+import { View, Text, Image, StyleSheet, TouchableOpacity,Modal } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { Ionicons, FontAwesome } from "@expo/vector-icons";
 
-const Card = ({ username, date, text, profileImage, postImage }) => {
+
+const PostCard = ({ post }) => {
+
+  const navigation = useNavigation();
+
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
   const [likes, setLikes] = useState(0);
   const [liked, setLiked] = useState(false);
   const [isImageModalVisible, setIsImageModalVisible] = useState(false); // Estado para controlar la visibilidad del modal
   const [saved, setSaved] = useState(false); //Guardar
-  const navigation = useNavigation();
   const handleComment = () => {
     if (newComment.trim() !== "") {
       setComments([...comments, newComment]);
       setNewComment("");
     }
   };
-
   const handleLike = () => {
     if (liked) {
       setLikes(likes - 1);
@@ -34,11 +28,9 @@ const Card = ({ username, date, text, profileImage, postImage }) => {
     }
     setLiked(!liked);
   };
-
   const handleOpenComments = () => {
     navigation.navigate("Comentarios");
   };
-
   const toggleImageModal = () => {
     setIsImageModalVisible(!isImageModalVisible);
   };
@@ -49,48 +41,59 @@ const Card = ({ username, date, text, profileImage, postImage }) => {
   const handleUsernameClick = () => {
     navigation.navigate("Profile"); // Me dirige al perfil de usuario
   };
+  
+  console.log("Postcard:", post);
+  
+  
+  
+  
+
+
   return (
     <View style={styles.container}>
-     <View style={styles.header}>
-  <TouchableOpacity onPress={handleUsernameClick}>
-    <Image source={profileImage} style={styles.profilePicture} />
-  </TouchableOpacity>
-  <View style={styles.userInfo}>
-    <TouchableOpacity onPress={handleUsernameClick}>
-      <Text style={styles.username}>{username}</Text>
-    </TouchableOpacity>
-    <Text style={styles.date}>{date}</Text>
-  </View>
-</View>
-
-      <Text style={styles.text}>{text}</Text>
+      {/*----------------------------HEADER--------------------------------------------*/ }
+      <View style={styles.header}>
+        <TouchableOpacity onPress={handleUsernameClick}>
+          <Image source={post.avatar} style={styles.avatar} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={handleUsernameClick}>
+        <Text style={styles.username}>{post.username}</Text>
+        </TouchableOpacity>
+       
+        <Text style={styles.timestamp}>{post.timestamp}</Text>
+      </View>
+      {/*----------------------------POSTIMAGEN--------------------------------------------*/ }
+      <Text style={styles.text}>{post.text}</Text>
       <View>
         <TouchableOpacity onPress={toggleImageModal}>
           {/* Agrega el onPress para abrir el modal */}
-          <Image source={postImage} style={styles.postImage} />
+          <Image source={{ uri: post.image }} style={styles.image} />
+
         </TouchableOpacity>
       </View>
 
 
-      
+
+
+
       <View style={styles.actionsContainer}>
         <View style={styles.leftButtonsContainer}>
-          <TouchableOpacity style={styles.button} onPress={handleLike}>
+          <TouchableOpacity style={styles.button } onPress={handleLike}>
             <Ionicons
               name={liked ? "heart" : "heart-outline"}
               size={30}
-              color={liked ? "#671067" : "black"}
+              color={liked ? "#671067" : "gray"}
             />
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={handleOpenComments}>
-            <Ionicons name="chatbubble-outline" size={29} color="black" />
+            <Ionicons name="chatbubble-outline" size={29} color="gray" />
           </TouchableOpacity>
         </View>
         <TouchableOpacity style={styles.button} onPress={handleSave}>
           <FontAwesome
             name={saved ? "bookmark" : "bookmark-o"}
             size={30}
-            color={saved ? "#671067" : "black"}
+            color={saved ? "#671067" : "gray"}
           />
         </TouchableOpacity>
       </View>
@@ -103,7 +106,16 @@ const Card = ({ username, date, text, profileImage, postImage }) => {
         ))}
       </View>
 
-      {/* Modal para mostrar la imagen */}
+
+
+
+      <View style={styles.footer}>
+        {/* Add any additional footer elements here */}
+      </View>
+
+
+
+
       <Modal
         visible={isImageModalVisible}
         transparent={true}
@@ -116,83 +128,71 @@ const Card = ({ username, date, text, profileImage, postImage }) => {
           >
             <Ionicons name="close" size={30} color="#fff" />
           </TouchableOpacity>
-          <Image source={postImage} style={styles.modalImage} />
+          <Image source={{ uri: post.image }} style={styles.modalImage} />
         </View>
       </Modal>
+
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#fff",
-    margin: 20,
-    padding: 15,
-    borderRadius: 15,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 4,
+    flex: 1,
+    backgroundColor: "white",
+    borderRadius: 5,
+    padding: 20,
+    marginLeft: 22,
+    marginRight: 22,
+    marginBottom: 7,
+    shadowColor: "black",
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 5,
   },
   header: {
     flexDirection: "row",
-    alignItems: "flex-start",
-    marginBottom: 25,
+    alignItems: "center",
+    marginTop: 10,
+    marginLeft: 20,
+    marginRight: 20,
   },
-  userInfo: {
-    marginLeft: 10,
-  },
-  profilePicture: {
+  avatar: {
     width: 40,
     height: 40,
-    borderRadius: 15,
+    borderRadius: 20,
     marginRight: 10,
   },
   username: {
     fontSize: 16,
     fontWeight: "bold",
+    marginRight: 5,
   },
-  text: {
-    fontSize: 14,
-    marginBottom: 10,
+  timestamp: {
+    fontSize: 12,
+    color: "gray",
   },
-  postImage: {
+  image: {
     width: "100%",
     height: 200,
     resizeMode: "cover",
-    borderRadius: 5,
+    marginBottom: 10,
+    borderRadius: 10,
   },
-  actionsContainer: {
+  text: {
+    fontSize: 16,
+    lineHeight: 22,
+    marginLeft: 20,
+    marginRight: 20,
+  },
+  footer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
     marginTop: 10,
+    marginLeft: 20,
+    marginRight: 20,
   },
-  leftButtonsContainer: {
-    flexDirection: "row",
-  },
-  button: {
-    marginRight: 10,
-  },
-  commentsContainer: {
-    marginTop: 10,
-  },
-  commentText: {
-    fontSize: 12,
-    marginBottom: 5,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 5,
-    padding: 5,
-    marginTop: 10,
-  },
-  //Al clickear la imagen se ve en una pantalla pequeña
+
   modalContainer: {
     flex: 1,
     justifyContent: "center",
@@ -210,11 +210,35 @@ const styles = StyleSheet.create({
     height: "100%",
     resizeMode: "contain",
   },
- 
-  date: {
-    fontSize: 13,
-    color: "#000000",
+
+
+  actionsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: 10,
+  },
+  leftButtonsContainer: {
+    flexDirection: "row",
+  },
+  button: {
+    marginRight: 10,
+    
+  },
+  commentsContainer: {
+    marginTop: 10,
+  },
+  commentText: {
+    fontSize: 12,
+    marginBottom: 5,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 5,
+    padding: 5,
+    marginTop: 10,
   },
 });
 
-export default Card;
+export default PostCard;

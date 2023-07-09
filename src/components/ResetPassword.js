@@ -15,14 +15,13 @@ import { useNavigation } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { FontAwesome } from "react-native-vector-icons";
 
-function Register() {
+function ResetPassword() {
   const navigation = useNavigation();
   const [message, setMessage] = React.useState("");
 
   const [email, setEmail] = React.useState("");
-  const [confirmPassword, setConfirmPassword] = React.useState("");
   const [password, setPassword] = React.useState("");
-
+  const [confirmPassword, setConfirmPassword] = React.useState("");
   const [showPassword, setShowPassword] = React.useState(false);
 
   const handleLogin = () => {
@@ -30,13 +29,14 @@ function Register() {
       setMessage("Por favor complete todos los campos.");
       return;
     }
-
+  
     if (password !== confirmPassword) {
       setMessage("Las contraseñas no coinciden.");
       return;
     }
-
+  
     setMessage("Registrado correctamente");
+
     navigation.navigate("Login");
   };
 
@@ -51,7 +51,7 @@ function Register() {
     <View style={styles.container}>
       <View style={styles.Imagecontainer}>
         <Image
-          source={require("../../assets/user.png")}
+          source={require("../../assets/candado.png")}
           style={[
             styles.image,
             { width: windowWidth / 2, height: windowHeight / 4 },
@@ -133,9 +133,10 @@ function Register() {
           />
         </TouchableOpacity>
       </View>
-      <Text style={styles.mess}>{message}</Text>
+      <Text style={styles.mess} >{message}</Text>
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Registrarse</Text>
+       
+        <Text style={styles.buttonText}>Reestablecer</Text>
       </TouchableOpacity>
     </View>
   );
@@ -154,10 +155,14 @@ const styles = StyleSheet.create({
     borderRadius: 100,
   },
   Imagecontainer: {
-    paddingBottom: 20,
+    paddingBottom: 15,
+    
+    
   },
   image: {
     resizeMode: "contain",
+    
+   
   },
   label: {
     fontSize: 16,
@@ -220,4 +225,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Register;
+export default ResetPassword;
