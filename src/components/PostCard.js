@@ -64,11 +64,13 @@ const PostCard = ({ post }) => {
         </View>
       </View>
       {/*----------------------------POSTIMAGEN--------------------------------------------*/}
+      <Text style={styles.text}>{post.title}</Text>
+
       <Text style={styles.text}>{post.text}</Text>
       <View>
         <TouchableOpacity onPress={toggleImageModal}>
           {/* Agrega el onPress para abrir el modal */}
-          <Image source={{ uri: post.image }} style={styles.image} />
+          <Image source={ post.image } style={styles.image} />
         </TouchableOpacity>
       </View>
 
@@ -118,7 +120,7 @@ const PostCard = ({ post }) => {
           >
             <Ionicons name="close" size={30} color="#fff" />
           </TouchableOpacity>
-          <Image source={{ uri: post.image }} style={styles.modalImage} />
+          <Image source={ post.image } style={styles.modalImage} />
         </View>
       </Modal>
     </View>
@@ -222,6 +224,16 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 5,
     marginTop: 10,
+  },
+
+  title:{
+
+   
+    marginBottom:5,
+
+  },
+  text:{
+    margin:10,
   },
 });
 

@@ -9,20 +9,22 @@ const CommentsScreen = () => {
     { id: '3', username: 'Laura Perdomo', comment: '¡Wow! Increíble', reply: '', likes: 0 },
   ]);
   const [nuevoComentario, setNuevoComentario] = useState('');
+  const [nuevoComentario2, setNuevoComentario2] = useState('');
+
   const [mostrarCajaRespuesta, setMostrarCajaRespuesta] = useState(false);
   const [idComentarioRespuesta, setIdComentarioRespuesta] = useState('');
 
   const agregarComentario = () => {
-    if (nuevoComentario.trim() !== '') {
+    if (nuevoComentario2.trim() !== '') {
       const comentario = {
         id: Math.random().toString(),
-        username: 'usuarioNuevo',
-        comment: nuevoComentario,
+        username: 'Elizabeth Gomez',
+        comment: nuevoComentario2,
         reply: '',
         likes: 0,
       };
       setComentarios([...comentarios, comentario]);
-      setNuevoComentario('');
+      setNuevoComentario2('');
     }
   };
 
@@ -43,13 +45,14 @@ const CommentsScreen = () => {
   const mostrarCajaTextoRespuesta = (id) => {
     setMostrarCajaRespuesta(true);
     setIdComentarioRespuesta(id);
+    
   };
 
   const agregarRespuesta = () => {
     const comentarioIndex = comentarios.findIndex(comentario => comentario.id === idComentarioRespuesta);
     if (comentarioIndex !== -1) {
       const comentario = comentarios[comentarioIndex];
-      const respuesta = `Respuesta a ${comentario.username}: ${nuevoComentario}`;
+      const respuesta = ` ${comentario.username}: ${nuevoComentario}`;
       const comentariosActualizados = [...comentarios];
       comentariosActualizados[comentarioIndex] = { ...comentario, reply: respuesta };
       setComentarios(comentariosActualizados);
@@ -82,6 +85,7 @@ const CommentsScreen = () => {
                 <Text style={styles.replyButtonText}>Responder</Text>
               </TouchableOpacity>
             </View>
+            {/*------------------------------------------RESPUESTA------------------------------------------------------------- */}
             {mostrarCajaRespuesta && idComentarioRespuesta === item.id && (
               <View style={styles.respuestaContainer}>
                 <TextInput
@@ -98,12 +102,13 @@ const CommentsScreen = () => {
           </View>
         )}
       />
+      
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
           placeholder="Añade un comentario..."
-          value={nuevoComentario}
-          onChangeText={texto => setNuevoComentario(texto)}
+          value={nuevoComentario2}
+          onChangeText={texto => setNuevoComentario2(texto)}
         />
         <TouchableOpacity style={styles.sendButton} onPress={agregarComentario}>
           <Ionicons name="send" size={24} color="white" />
@@ -151,8 +156,8 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
   },
   buttonsContainer: {
-    flexDirection: 'row',
-    marginTop: 8,
+flexDirection: "row",
+    justifyContent: 'space-between',    marginTop: 8,
   },
   likeButton: {
     flexDirection: 'row',

@@ -1,5 +1,6 @@
 import React from 'react'
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
+import { LinearGradient } from "expo-linear-gradient";
 
 export default ProfileView = () => {
   return (
@@ -13,21 +14,28 @@ export default ProfileView = () => {
           <Text style={styles.name}>Elizabeth Gomez</Text>
         </View>
       </View>
+      <LinearGradient
+          colors={["rgba(238,174,202,0.4)", "rgba(93,135,218,0.7)"]}
+          start={{ x: 1, y: 0 }}
+          end={{ x: 0, y: 1 }}
+          style={styles.profileDetail}
+        >
+           <View style={styles.detailContent}>
+          <Text style={styles.title}>Fotos</Text>
+          <Text style={styles.count}>200</Text>
+        </View>
+        <View style={styles.detailContent}>
+          <Text style={styles.title}>Seguidores</Text>
+          <Text style={styles.count}>200</Text>
+        </View>
+        <View style={styles.detailContent}>
+          <Text style={styles.title}>Siguiendo</Text>
+          <Text style={styles.count}>200</Text>
+        </View>
+        
+        </LinearGradient>
 
-      <View style={styles.profileDetail}>
-        <View style={styles.detailContent}>
-          <Text style={styles.title}>Photos</Text>
-          <Text style={styles.count}>200</Text>
-        </View>
-        <View style={styles.detailContent}>
-          <Text style={styles.title}>Followers</Text>
-          <Text style={styles.count}>200</Text>
-        </View>
-        <View style={styles.detailContent}>
-          <Text style={styles.title}>Following</Text>
-          <Text style={styles.count}>200</Text>
-        </View>
-      </View>
+     
 
       <View style={styles.body}>
         <View style={styles.bodyContent}>
@@ -44,7 +52,7 @@ export default ProfileView = () => {
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: '#da70d6',
+    backgroundColor: 'rgba(93,135,218,0.6)',
     
   },
   headerContent: {
@@ -71,6 +79,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     position: 'absolute',
     backgroundColor: '#4D194D',
+    borderRadius: 10,
   },
   detailContent: {
     margin: 10,
@@ -78,10 +87,13 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
+    fontWeight: 'bold',
     color: '#FFFFFF',
   },
   count: {
-    fontSize: 18,
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: 'white',
   },
   bodyContent: {
     flex: 1,

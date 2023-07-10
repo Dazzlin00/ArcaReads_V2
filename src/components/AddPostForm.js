@@ -13,6 +13,8 @@ import { LinearGradient } from "expo-linear-gradient";
 
 const AddPostForm = ({ onSubmit }) => {
   const [text, setText] = useState("");
+  const [title, setTitle] = useState("");
+
   const [image, setImage] = useState(null);
   const [avatar, setAvatar] = useState(require("../../assets/eli.jpg")); // Nombre de usuario predeterminado
 
@@ -40,12 +42,14 @@ const AddPostForm = ({ onSubmit }) => {
   const handleSubmit = () => {
     onSubmit({
       text,
+      title,
       image,
       avatar,
       username,
       timestamp,
     });
     setText("");
+    setTitle("");
     setImage(null);
   };
 
@@ -65,10 +69,19 @@ const AddPostForm = ({ onSubmit }) => {
       </View>
       {image && <Image source={{ uri: image }} style={styles.image} />}
       <TextInput
+        style={styles.title}
+        valuea={title}
+        onChangeText={setTitle}
+        placeholder="Titulo del libro"
+        maxLength={39}
+        multiline={true}
+        numberOfLines={1}
+      />
+      <TextInput
         style={styles.input}
         value={text}
         onChangeText={setText}
-        placeholder="What's on your mind?"
+        placeholder="¡Danos tu opinion!"
         maxLength={141}
         multiline={true}
         numberOfLines={4}
@@ -141,10 +154,21 @@ const styles = StyleSheet.create({
     borderColor: "white",
     borderRadius: 5,
     padding: 5,
-    marginBottom: 10,
+    marginBottom: 5,
     marginLeft: 20,
     marginRight: 20,
     maxHeight: 80,
+  },
+  title: {
+    borderWidth: 1,
+    borderColor: "white",
+    borderRadius: 5,
+    padding: 5,
+    
+    marginBottom: 1,
+    marginLeft: 20,
+    marginRight: 20,
+   
   },
   footer: {
     flexDirection: "row",

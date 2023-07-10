@@ -12,32 +12,27 @@ import {
   ImageBackground,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Search from "../components/Search";
+import Carrusel from "../components/Carrusel";
 
 import { LinearGradient } from "expo-linear-gradient";
-function SearchScreen({ navigation }) {
-  
+import Gallery from "../components/Gallery";
+
+function SearchScreen() {
+  const navigation = useNavigation();
+  const images = [
+    require('../../assets/harry.jpeg'),
+    require('../../assets/hobbit.jpeg'),
+    require('../../assets/instituto.jpeg'),
+    require('../../assets/panda.jpg'),
+  ];
   return (
     <SafeAreaView style={styles.container}>
-      <ImageBackground
-        source={require("../../assets/fondo12.jpg")}
-        blurRadius={3}
-        style={styles.imageBackground}
-      >
-        <LinearGradient
-          colors={["rgba(238,174,202,0.5)", "rgba(93,135,218,0.8)"]}
-          start={{ x: 1, y: 0 }}
-          end={{ x: 0, y: 1 }}
-          style={styles.linearGradient}
-        >
-          <ScrollView style={styles.scrollView}>
-            <Search navigation={navigation} />
-          </ScrollView>
-
-          <Text style={styles.text}>HOLA DESDE SCREEN Search</Text>
-        </LinearGradient>
-      </ImageBackground>
+      <ScrollView style={styles.scrollView}>
+        <Search />
+        <Carrusel images={images} />
+        <Gallery  />
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -45,7 +40,8 @@ function SearchScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop:20,
+    marginTop: 20,
+    backgroundColor:'white',
   },
   imageBackground: {
     flex: 1,
