@@ -44,7 +44,7 @@ const PostCard = ({ post }) => {
   };
 
   const handleUsernameClick = () => {
-    navigation.navigate("Profile"); // Me dirige al perfil de usuario
+    navigation.navigate("PerfilUsuario"); // Me dirige al perfil de usuario
   };
 
   console.log("Postcard:", post);
