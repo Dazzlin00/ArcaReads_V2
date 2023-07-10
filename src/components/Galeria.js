@@ -1,91 +1,169 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet, FlatList } from 'react-native';
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  FlatList,
+  Modal,
+  TouchableOpacity,
+} from "react-native";
+import { Ionicons } from "react-native-vector-icons";
 
-const PostList = () => {
+const Galeria = () => {
+  const [selectedImage, setSelectedImage] = useState(null);
+
   const data = [
     {
-      id: '1',
-      image: require('../../assets/libro1.jpg'),
-      title: 'Barbie',
-      subtitle: 'Feline friend'
+      id: "1",
+      image: require("../../assets/libro1.jpg"),
+      title: "Barbie",
+      subtitle: "Feline friend",
     },
     {
-      id: '2',
-      image: require('../../assets/libro2.jpg'),
-      title: 'Naruto',
-      subtitle: 'Natural wonder'
+      id: "2",
+      image: require("../../assets/libro2.jpg"),
+      title: "Naruto",
+      subtitle: "Natural wonder",
     },
     {
-      id: '3',
-      image: require('../../assets/libro3.jpg'),
-      title: 'A solas',
-      subtitle: 'Yum!'
+      id: "3",
+      image: require("../../assets/libro3.jpg"),
+      title: "A solas",
+      subtitle: "Yum!",
     },
     {
-      id: '4',
-      image: require('../../assets/libro4.jpg'),
-      title: 'Ejercicio',
-      subtitle: 'Paradise'
+      id: "4",
+      image: require("../../assets/libro4.jpg"),
+      title: "Ejercicio",
+      subtitle: "Paradise",
     },
     {
-      id: '5',
-      image: require('../../assets/libro5.jpg'),
-      title: 'Muerte',
-      subtitle: 'Rock on!'
+      id: "5",
+      image: require("../../assets/libro5.jpg"),
+      title: "Muerte",
+      subtitle: "Rock on!",
     },
   ];
 
   const renderItem = ({ item, index }) => {
     return (
-      <View style={styles.itemContainer}>
-        <Image source={item.image} style={styles.image} />
-        <View style={styles.textContainer}>
-          <Text style={styles.title}>{item.title}</Text>
-          <Text style={styles.subtitle}>{item.subtitle}</Text>
-        </View>
+      <View style={styles.touchableContainer}>
+        <TouchableOpacity
+          onPress={() => setSelectedImage(item)}
+          style={styles.touchable}
+        >
+          <View style={styles.itemContainer}>
+            <Image source={item.image} style={styles.image} />
+            <View style={styles.textContainer}>
+              <Text style={styles.title}>{item.title}</Text>
+              <Text style={styles.subtitle}>{item.subtitle}</Text>
+            </View>
+          </View>
+        </TouchableOpacity>
       </View>
     );
   };
 
   return (
-    <FlatList
-      data={data}
-      contentContainerStyle={styles.container}
-      renderItem={renderItem}
-      keyExtractor={(item) => item.id}
-      numColumns={2}
-    />
+    <View style={styles.container}>
+      <FlatList
+        data={data}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+        numColumns={2}
+      />
+      <Modal visible={selectedImage !== null} transparent={true}>
+        <View style={styles.modalContainer}>
+          <TouchableOpacity
+            style={styles.closeButton}
+            onPress={() => setSelectedImage(null)}
+          >
+            <Ionicons name="close" size={30} color="#fff" />
+          </TouchableOpacity>
+          <Image source={selectedImage?.image} style={styles.modalImage} />
+          <Text style={styles.modalTitle}>{selectedImage?.title}</Text>
+          <Text style={styles.modalSubtitle}>{selectedImage?.subtitle}</Text>
+        </View>
+      </Modal>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor:'#fff'
+    flex: 1,
+    backgroundColor: "#fff",
+    padding: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
+    height: "100%",
+  },
+  touchableContainer: {
+    width: "50%", // Make each item take half of the screen width
+    padding: 10, // Add padding to increase the touchable area
+  },
+  touchable: {
+    flex: 1,
   },
   itemContainer: {
     flex: 1,
-    padding: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection:  'column' 
+    alignItems: "stretch",
+    justifyContent: "center",
+    flexDirection: "column",
+    backgroundColor: "#fafafa",
   },
   image: {
-    width: '100%',
-    height: 200,
-    resizeMode: 'cover',
+    flex: 1,
+    width: "100%",
     borderRadius: 8,
   },
   textContainer: {
     padding: 16,
   },
   title: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
     fontSize: 18,
   },
   subtitle: {
     fontSize: 14,
-    color: 'gray',
+    color: "gray",
+  },
+  modalContainer: {
+    backgroundColor: "rgba(0, 0, 0, 0.9)",
+    flex: 1,
+    alignItems: "flex-end",
+    justifyContent: "center",
+    padding: 20,
+  },
+  closeButton: {
+    position: "absolute",
+    top: 20,
+    right: 20,
+    zIndex: 1,
+  },
+  closeButtonText: {
+    color: "#fff",
+    fontSize: 24,
+    fontWeight: "bold",
+  },
+  modalImage: {
+    width: "100%",
+    height: "80%",
+    resizeMode: "contain",
+  },
+  modalTitle: {
+    fontWeight: "bold",
+    fontSize: 24,
+    color: "#fff",
+    marginTop: 20,
+  },
+  modalSubtitle: {
+    fontSize: 18,
+    color: "#fff",
+    marginTop: 10,
   },
 });
 
-export default PostList;
+export default Galeria;
