@@ -6,9 +6,12 @@ import {
   StyleSheet,
   TouchableOpacity,
   Modal,
+  Alert,
+  TextInput,
+  Button,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Ionicons, FontAwesome } from "@expo/vector-icons";
+import { Ionicons, FontAwesome, MaterialIcons } from "@expo/vector-icons";
 
 const PostCard = ({ post }) => {
   const navigation = useNavigation();
@@ -17,8 +20,10 @@ const PostCard = ({ post }) => {
   const [newComment, setNewComment] = useState("");
   const [likes, setLikes] = useState(0);
   const [liked, setLiked] = useState(false);
-  const [isImageModalVisible, setIsImageModalVisible] = useState(false); // Estado para controlar la visibilidad del modal
-  const [saved, setSaved] = useState(false); //Guardar
+  const [isImageModalVisible, setIsImageModalVisible] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
+
   const handleComment = () => {
     if (newComment.trim() !== "") {
       setComments([...comments, newComment]);
@@ -43,34 +48,58 @@ const PostCard = ({ post }) => {
     setSaved(!saved);
   };
 
-  const handleUsernameClick = () => {
-    navigation.navigate("Profile"); // Me dirige al perfil de usuario
+  const handlePopup = () => {
+    setIsPopupVisible(!isPopupVisible);
+  };
+
+  const handleDelete = () => {
+    Alert.alert(
+      "Eliminar publicación",
+      "¿Está seguro de que desea eliminar esta publicación?",
+      [
+        {
+          text: "Cancelar",
+          style: "cancel",
+        },
+        {
+          text: "Eliminar",
+          onPress: () => console.log("Publicación eliminada"),
+          style: "destructive",
+        },
+      ]
+    );
+  };
+  const handleEdit = () => {
+    // Navegue a la pantalla de edición de publicación con los detalles de la publicación actual
   };
 
   console.log("Postcard:", post);
 
   return (
     <View style={styles.container}>
-      {/*----------------------------HEADER--------------------------------------------*/}
       <View style={styles.header}>
-        <TouchableOpacity onPress={handleUsernameClick}>
+        <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
           <Image source={post.avatar} style={styles.avatar} />
         </TouchableOpacity>
         <View style={{ flexDirection: "column" }}>
-          <TouchableOpacity onPress={handleUsernameClick}>
+          <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
             <Text style={styles.username}>{post.username}</Text>
           </TouchableOpacity>
           <Text style={styles.timestamp}>{post.timestamp}</Text>
         </View>
+        <View style={styles.popupContainer}>
+          <TouchableOpacity style={styles.button} onPress={handlePopup}>
+            <MaterialIcons name="more-horiz" size={30} color="gray" />
+          </TouchableOpacity>
+        </View>
       </View>
-      {/*----------------------------POSTIMAGEN--------------------------------------------*/}
+
       <Text style={styles.text}>{post.title}</Text>
 
       <Text style={styles.text}>{post.text}</Text>
       <View>
         <TouchableOpacity onPress={toggleImageModal}>
-          {/* Agrega el onPress para abrir el modal */}
-          <Image source={ post.image } style={styles.image} />
+          <Image source={post.image} style={styles.image} />
         </TouchableOpacity>
       </View>
 
@@ -89,39 +118,57 @@ const PostCard = ({ post }) => {
         </View>
         <TouchableOpacity style={styles.button} onPress={handleSave}>
           <FontAwesome
-            name={saved ? "bookmark" : "bookmark-o"}
+            name={saved ? "star" : "star-o"}
             size={30}
-            color={saved ? "#ba6bad" : "gray"}
+            color={saved ? "#ffd700" : "gray"}
           />
         </TouchableOpacity>
       </View>
 
-      <View style={styles.commentsContainer}>
+      <View style={styles.commentContainer}>
+        <Text style={styles.likesText}>{likes} Me gusta</Text>
         {comments.map((comment, index) => (
-          <Text key={index} style={styles.commentText}>
-            {comment}
-          </Text>
+          <View key={index} style={{ flexDirection: "row" }}>
+            <Text style={styles.username}>{post.username} </Text>
+            <Text>{comment}</Text>
+          </View>
         ))}
+    
       </View>
 
-      <View style={styles.footer}>
-        {/* Add any additional footer elements here */}
-      </View>
+      {/* Ventana emergente del menú */}
+      <Modal visible={isPopupVisible} transparent={true}>
+        <TouchableOpacity
+          style={styles.popupModal}
+          onPress={handlePopup}
+          activeOpacity={1}
+        >
+          <View style={styles.popupMenu}>
+            <TouchableOpacity style={styles.popupMenuItem} onPress={handleEdit}>
+              <Text style={styles.popupMenuText}>Modificar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.popupMenuItem} onPress={handleDelete}>
+              <Text style={styles.popupMenuText}>Eliminar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.popupMenuItem} onPress={handlePopup}>
+              <Text style={styles.popupMenuText}>Cancelar</Text>
+            </TouchableOpacity>
+          </View>
+        </TouchableOpacity>
+      </Modal>
 
+      {/* Modal de imagen */}
       <Modal
         visible={isImageModalVisible}
         transparent={true}
         onRequestClose={toggleImageModal}
       >
-        <View style={styles.modalContainer}>
-          <TouchableOpacity
-            style={styles.closeButton}
-            onPress={toggleImageModal}
-          >
-            <Ionicons name="close" size={30} color="#fff" />
-          </TouchableOpacity>
-          <Image source={ post.image } style={styles.modalImage} />
-        </View>
+        <TouchableOpacity
+          style={styles.modalContainer}
+          onPress={toggleImageModal}
+        >
+          <Image source={post.image} style={styles.modalImage} />
+        </TouchableOpacity>
       </Modal>
     </View>
   );
@@ -129,81 +176,52 @@ const PostCard = ({ post }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    marginVertical: 10,
+    marginHorizontal: 15,
     backgroundColor: "white",
-    borderRadius: 5,
-    padding: 20,
-    marginLeft: 22,
-    marginRight: 22,
-    marginBottom: 7,
-    elevation: 1,
+    borderRadius: 10,
+    padding: 10,
+    shadowColor: "black",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   header: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 10,
-    marginLeft: 20,
-    marginRight: 20,
+    justifyContent: "space-between",
+    marginBottom: 10,
   },
   avatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    marginRight: 15,
+    width: 50,
+    height: 50,
+    borderRadius: 50,
+    marginRight: 10,
   },
   username: {
-    fontSize: 16,
     fontWeight: "bold",
-    marginRight: 5,
+    fontSize: 16,
   },
   timestamp: {
-    fontSize: 12,
     color: "gray",
+    fontSize: 12,
+  },
+  text: {
+    fontSize: 16,
+    marginBottom: 10,
   },
   image: {
     width: "100%",
     height: 200,
-    resizeMode: "cover",
-    marginBottom: 10,
     borderRadius: 10,
+    marginBottom: 10,
   },
-  text: {
-    fontSize: 16,
-    lineHeight: 22,
-    marginLeft: 20,
-    marginRight: 20,
-  },
-  footer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 10,
-    marginLeft: 20,
-    marginRight: 20,
-  },
-
-  modalContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.8)",
-  },
-  closeButton: {
-    position: "absolute",
-    top: 20,
-    right: 20,
-    zIndex: 1,
-  },
-  modalImage: {
-    width: "90%",
-    height: "100%",
-    resizeMode: "contain",
-  },
-
   actionsContainer: {
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
-    marginTop: 10,
+    justifyContent: "space-between",
+    marginBottom: 10,
   },
   leftButtonsContainer: {
     flexDirection: "row",
@@ -211,29 +229,80 @@ const styles = StyleSheet.create({
   button: {
     marginRight: 10,
   },
-  commentsContainer: {
-    marginTop: 10,
-  },
-  commentText: {
-    fontSize: 12,
+  likesText: {
+    fontWeight: "bold",
     marginBottom: 5,
   },
-  input: {
+  commentContainer: {
+    borderTopWidth: 1,
+    borderTopColor: "#e0e0e0",
+    paddingTop: 10,
+  },
+  commentInput: {
+    flex: 1,
+    marginRight: 10,
     borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 5,
-    padding: 5,
+    borderColor: "#e0e0e0",
+    borderRadius: 20,
+    padding: 10,
+  },
+  addCommentContainer: {
+    flexDirection: "row",
+    alignItems: "center",
     marginTop: 10,
   },
-
-  title:{
-
-   
-    marginBottom:5,
-
+  popupContainer: {
+    flexDirection: "row",
+    alignItems: "center",
   },
-  text:{
-    margin:10,
+  popupMenu: {
+    position: "absolute",
+    top: 50,
+    right: 0,
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 10,
+    shadowColor: "black",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  popupButton: {
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+  },
+  popupText: {
+    fontSize: 16,
+  },
+  modalContainer: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.7)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalImage: {
+    width: "80%",
+    height: "80%",
+    resizeMode: "contain",
+  },
+  popupModal: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  popupMenu: {
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 10,
+    width: 150,
+  },
+  popupMenuItem: {
+    padding: 5,
+  },
+  popupMenuText: {
+    fontSize: 16,
   },
 });
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, FlatList, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, Image, StyleSheet, FlatList,Alert, TextInput, TouchableOpacity } from 'react-native';
 import { Ionicons } from 'react-native-vector-icons';
 
 const CommentsScreen = () => {
@@ -61,6 +61,23 @@ const CommentsScreen = () => {
       setIdComentarioRespuesta('');
     }
   };
+  const handleDelete = () => {
+    Alert.alert(
+      "Eliminar Comentario",
+      "¿Está seguro de que desea eliminar este comentario?",
+      [
+        {
+          text: "Cancelar",
+          style: "cancel",
+        },
+        {
+          text: "Eliminar",
+          onPress: () => console.log("Comentario eliminado"),
+          style: "destructive",
+        },
+      ]
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -83,6 +100,10 @@ const CommentsScreen = () => {
               <TouchableOpacity style={styles.replyButton} onPress={() => mostrarCajaTextoRespuesta(item.id)}>
                 <Ionicons name="chatbubble-outline" size={24} color="black" />
                 <Text style={styles.replyButtonText}>Responder</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.popupMenuItem} onPress={() =>handleDelete(item.id)}>
+              <Ionicons name="trash-outline" size={24} color="black" />               
+               <Text style={styles.replyButtonText}>Eliminar</Text>
               </TouchableOpacity>
             </View>
             {/*------------------------------------------RESPUESTA------------------------------------------------------------- */}
