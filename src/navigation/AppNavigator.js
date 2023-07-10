@@ -12,6 +12,10 @@ import CommentsScreen from "../screens/CommentsScreen";
 import iniScreen from "../screens/iniScreen";
 
 import SettingsScreen from "../screens/SettingsScreen";
+import EditarPerfilScreen from "../screens/EditarPerfilScreen";
+import CambiarContrasennaScreen from "../screens/CambiarContrasennaScreen";
+import CerrarSesionScreen from "../screens/CerrarSesionScreen";
+import DespedidaScreen from "../screens/DespedidaScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -45,7 +49,10 @@ export default function AppNavigator() {
         <Stack.Screen name="Register" component={RegisterScreen} options={{ headerShown: false }}  />
         <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} options={{ headerShown: false }}  />
         <Stack.Screen name="Settings" component={SettingsScreen} options={{ headerShown: false }}  />
-
+        <Stack.Screen name="EditarPerfil" component={EditarPerfilScreen} options={{ headerShown: false }}  />
+        <Stack.Screen name="CambiarContrasenna" component={CambiarContrasennaScreen} options={{ headerShown: false }}  />
+        <Stack.Screen name="CerrarSesion" component={CerrarSesionScreen} options={{ headerShown: false }}  />
+        <Stack.Screen name="Despedida" component={DespedidaScreen  } options={{ headerShown: false }}  />
       </Stack.Navigator>
     </NavigationContainer>
   );

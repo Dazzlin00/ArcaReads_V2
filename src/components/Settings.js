@@ -1,21 +1,25 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+
 
 export default Settings = () => {
+ 
+  const navigation = useNavigation();
   const handleModifyProfilePicture = () => {
-    // TODO: handle modify profile picture
+    navigation.navigate('EditarPerfil');
   };
 
   const handleModifyInformation = () => {
-    // TODO: handle modify information
+    navigation.navigate('CambiarContrasenna');
   };
 
   const handleLogout = () => {
-    // TODO: handle logout
+    navigation.navigate('CerrarSesion');
   };
 
   const handleDeactivateAccount = () => {
-    // TODO: handle deactivate account
+    navigation.navigate('Despedida');
   };
 
   return (
@@ -107,7 +111,7 @@ const styles = StyleSheet.create({
     height: 130,
     borderRadius: 63,
     borderWidth: 2,
-    borderColor: 'white',
+    borderColor: '#4D194D',
     marginBottom: 10,
   },
   name: {
