@@ -16,6 +16,8 @@ import EditarPerfilScreen from "../screens/EditarPerfilScreen";
 import CambiarContrasennaScreen from "../screens/CambiarContrasennaScreen";
 import CerrarSesionScreen from "../screens/CerrarSesionScreen";
 import DespedidaScreen from "../screens/DespedidaScreen";
+import CambiarFotoSreen from "../screens/CambiarFotoScreen";
+import  PerfilUsuarioScreen from "../screens/PerfilUsuarioScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -53,6 +55,8 @@ export default function AppNavigator() {
         <Stack.Screen name="CambiarContrasenna" component={CambiarContrasennaScreen} options={{ headerShown: false }}  />
         <Stack.Screen name="CerrarSesion" component={CerrarSesionScreen} options={{ headerShown: false }}  />
         <Stack.Screen name="Despedida" component={DespedidaScreen  } options={{ headerShown: false }}  />
+        <Stack.Screen name="CambiarFoto" component={CambiarFotoSreen  } options={{ headerShown: false }}  />
+        <Stack.Screen name="PerfilUsuario" component={PerfilUsuarioScreen  } options={{ headerShown: false }}  />
       </Stack.Navigator>
     </NavigationContainer>
   );

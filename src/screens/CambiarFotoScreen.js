@@ -1,11 +1,12 @@
 import React from 'react';
 import { Ionicons } from 'react-native-vector-icons';
-import CerrarSesion from '../components/CerrarSesion';
+import CambiarFoto from '../components/CambiarFoto';
+import { LinearGradient } from "expo-linear-gradient";
 import { View, Text, Image, StyleSheet, FlatList,SafeAreaView, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { LinearGradient } from "expo-linear-gradient";
 
-export default function CerrarSesionScreen() {
+
+export default function CambiarFotoScreen() {
   const navigation = useNavigation();
   return (
     <SafeAreaView style={styles.Container}>
@@ -31,7 +32,7 @@ export default function CerrarSesionScreen() {
     </LinearGradient>
 
 
-    <CerrarSesion/>
+    <CambiarFoto/>
     
 
 </SafeAreaView>

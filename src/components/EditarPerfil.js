@@ -23,7 +23,7 @@ const EditProfileView = () => {
           style={styles.avatar}
           source={require("../../assets/li.jpg")}
         />
-        <TouchableOpacity style={styles.changeAvatarButton} onPress={() => {/* open image picker */}}>
+        <TouchableOpacity style={styles.changeAvatarButton} onPress={() => navigation.navigate('CambiarFoto')}>
           <Text style={styles.changeAvatarButtonText}>Cambiar Foto</Text>
         </TouchableOpacity>
       </View>

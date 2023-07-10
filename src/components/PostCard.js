@@ -48,6 +48,7 @@ const PostCard = ({ post }) => {
     setSaved(!saved);
   };
 
+<<<<<<< HEAD
   const handlePopup = () => {
     setIsPopupVisible(!isPopupVisible);
   };
@@ -71,6 +72,10 @@ const PostCard = ({ post }) => {
   };
   const handleEdit = () => {
     // Navegue a la pantalla de edición de publicación con los detalles de la publicación actual
+=======
+  const handleUsernameClick = () => {
+    navigation.navigate("PerfilUsuario"); // Me dirige al perfil de usuario
+>>>>>>> 7dc3120524a942245752d4caf1fb4a771d3d2c5a
   };
 
   console.log("Postcard:", post);
