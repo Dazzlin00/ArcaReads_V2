@@ -22,12 +22,7 @@ export default function CerrarSesionScreen() {
           style={styles.imagelogo}
         />
       </View>
-      <TouchableOpacity
-        onPress={() => navigation.navigate("Settings")}
-        style={styles.notificationButton}
-      >
-      <Ionicons name="settings-outline" size={30} color="white" />
-      </TouchableOpacity>
+      
     </LinearGradient>
 
 

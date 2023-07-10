@@ -5,7 +5,7 @@ const Gallery = () => {
     require('../../assets/harry.jpeg'),
     require('../../assets/hobbit.jpeg'),
     require('../../assets/instituto.jpeg'),
-    require('../../assets/panda.jpg'),
+    require('../../assets/king.png'),
   ];
 
   const renderItem = ({ item }) => (

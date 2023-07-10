@@ -100,7 +100,7 @@ export default Settings = () => {
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: '#da70d6',
+    backgroundColor: 'rgba(93,135,218,0.6)',
   },
   headerContent: {
     padding: 8,

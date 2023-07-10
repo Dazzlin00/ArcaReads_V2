@@ -77,6 +77,22 @@ function ResetPassword() {
           autoCapitalize="none"
           autoCorrect={false}
         />
+        
+      </View>
+      <View style={styles.inputContainer}>
+        
+        <TextInput
+          style={styles.input}
+          value={email}
+          onChangeText={setEmail}
+          onFocus={() => setMessage("")}
+          placeholder="Codigo de Verificación"
+          placeholderTextColor="#EBEBEB"
+          keyboardType="email-address"
+          autoCapitalize="none"
+          autoCorrect={false}
+        />
+        
       </View>
 
       <View style={styles.inputContainer}>
@@ -146,13 +162,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: 50,
-    marginBottom: 30,
+    marginBottom: 10,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 10,
     backgroundColor: "rgba(255, 255, 255, 0.3)",
     padding: 45,
-    borderRadius: 100,
+    borderRadius: 50,
   },
   Imagecontainer: {
     paddingBottom: 15,

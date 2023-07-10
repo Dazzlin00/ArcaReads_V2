@@ -16,7 +16,8 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import Add from "../components/Add";
 import { LinearGradient } from "expo-linear-gradient";
 
-function AddScreen() {
+function AddScreen() 
+{
   const navigation = useNavigation();
 
   return (

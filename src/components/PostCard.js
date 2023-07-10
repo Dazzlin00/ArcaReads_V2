@@ -48,7 +48,7 @@ const PostCard = ({ post }) => {
     setSaved(!saved);
   };
 
-<<<<<<< HEAD
+
   const handlePopup = () => {
     setIsPopupVisible(!isPopupVisible);
   };
@@ -70,34 +70,37 @@ const PostCard = ({ post }) => {
       ]
     );
   };
-  const handleEdit = () => {
+  const handleEdit = () => 
     // Navegue a la pantalla de edición de publicación con los detalles de la publicación actual
-=======
+{
+
+}
   const handleUsernameClick = () => {
     navigation.navigate("PerfilUsuario"); // Me dirige al perfil de usuario
->>>>>>> 7dc3120524a942245752d4caf1fb4a771d3d2c5a
   };
 
   console.log("Postcard:", post);
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
-          <Image source={post.avatar} style={styles.avatar} />
-        </TouchableOpacity>
-        <View style={{ flexDirection: "column" }}>
-          <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
-            <Text style={styles.username}>{post.username}</Text>
-          </TouchableOpacity>
-          <Text style={styles.timestamp}>{post.timestamp}</Text>
-        </View>
-        <View style={styles.popupContainer}>
-          <TouchableOpacity style={styles.button} onPress={handlePopup}>
-            <MaterialIcons name="more-horiz" size={30} color="gray" />
-          </TouchableOpacity>
-        </View>
-      </View>
+ <View style={styles.header}>
+  <View style={{ flexDirection: "row", alignItems: "center" }}>
+    <TouchableOpacity onPress={() => navigation.navigate("PerfilUsuario")}>
+      <Image source={post.avatar} style={styles.avatar} />
+    </TouchableOpacity>
+    <View style={{ marginLeft: 10 }}>
+      <TouchableOpacity onPress={() => navigation.navigate("PerfilUsuario")}>
+        <Text style={styles.username}>{post.username}</Text>
+      </TouchableOpacity>
+      <Text style={styles.timestamp}>{post.timestamp}</Text>
+    </View>
+  </View>
+  <View style={styles.popupContainer}>
+    <TouchableOpacity style={styles.button} onPress={handlePopup}>
+      <MaterialIcons name="more-horiz" size={30} color="gray" />
+    </TouchableOpacity>
+  </View>
+</View>
 
       <Text style={styles.text}>{post.title}</Text>
 
