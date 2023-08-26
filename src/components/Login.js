@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -14,6 +14,8 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { FontAwesome } from "react-native-vector-icons";
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
 
 function Login() {
   const navigation = useNavigation();
@@ -22,16 +24,21 @@ function Login() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [showPassword, setShowPassword] = React.useState(false);
+  const [error, setError] = useState(null);
+  const { login } = useContext(AuthContext); //AUTENTICACION
 
   const handleLogin = () => {
     if (!email || !password) {
       setMessage("Por favor complete todos los campos.");
       return;
+
+      
     }
+      login(email, password);
    
-    
-    navigation.navigate("Home");
+  
   };
+  
 
   const windowWidth = Dimensions.get("window").width;
   const windowHeight = Dimensions.get("window").height;
@@ -52,6 +59,7 @@ function Login() {
         />
       </View>
 
+      <Text>{login} </Text>
       <View style={styles.inputContainer}>
         <FontAwesome
           style={styles.inputIcon}
@@ -99,12 +107,15 @@ function Login() {
           />
         </TouchableOpacity>
       </View>
+
       <Text style={styles.mess}>{message}</Text>
+
+    
 
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>Iniciar sesión</Text>
       </TouchableOpacity>
-
+      
       <View style={styles.linkContainer}>
         <Text style={styles.linkText}>¿No tienes cuenta todavía?</Text>
         <TouchableOpacity
@@ -201,12 +212,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#fff",
   },
-  mess:
-  {
-
+  mess: {
     fontSize: 16,
-    color: "purple", 
-  }
+    color: "purple",
+  },
 });
 
 export default Login;

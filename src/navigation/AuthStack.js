@@ -21,76 +21,40 @@ import PerfilUsuarioScreen from "../screens/PerfilUsuarioScreen";
 
 const Stack = createNativeStackNavigator();
 
-export default function AppNavigator() {
+export default function AuthStack() {
   return (
       <Stack.Navigator style={styles.container}>
-       
         <Stack.Screen
-          name="Home"
-          component={TabNavigator}
+          name="Ini"
+          component={iniScreen}
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="Comentarios"
-          component={CommentsScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Profile"
-          component={ProfileScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Messages"
-          component={MessagesScreen}
+          name="Login"
+          component={LoginScreen}
           options={{ headerShown: false }}
         />
        
         <Stack.Screen
-          name="Settings"
-          component={SettingsScreen}
+          name="Register"
+          component={RegisterScreen}
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="EditarPerfil"
-          component={EditarPerfilScreen}
+          name="ResetPassword"
+          component={ResetPasswordScreen}
           options={{ headerShown: false }}
         />
-        <Stack.Screen
-          name="CambiarContrasenna"
-          component={CambiarContrasennaScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="CerrarSesion"
-          component={CerrarSesionScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Despedida"
-          component={DespedidaScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="CambiarFoto"
-          component={CambiarFotoSreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="PerfilUsuario"
-          component={PerfilUsuarioScreen}
-          options={{ headerShown: false }}
-        />
+       
       </Stack.Navigator>
   );
 }
-
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "red",
-    padding: 10,
-  },
-  tab: {
-    backgroundColor: "red",
-  },
-});
+    container: {
+      backgroundColor: "red",
+      padding: 10,
+    },
+    tab: {
+      backgroundColor: "red",
+    },
+  });

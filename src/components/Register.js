@@ -14,30 +14,61 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { FontAwesome } from "react-native-vector-icons";
+import axios from "react-native-axios";
 
 function Register() {
   const navigation = useNavigation();
   const [message, setMessage] = React.useState("");
 
   const [email, setEmail] = React.useState("");
+  const [username, setUsername] = React.useState("");
+  const [name, setNombre] = React.useState("");
+
   const [confirmPassword, setConfirmPassword] = React.useState("");
   const [password, setPassword] = React.useState("");
 
   const [showPassword, setShowPassword] = React.useState(false);
+  console.log(email, username, name, password);
 
   const handleLogin = () => {
     if (!email || !password || !confirmPassword) {
       setMessage("Por favor complete todos los campos.");
       return;
     }
-
+  
     if (password !== confirmPassword) {
       setMessage("Las contraseñas no coinciden.");
       return;
     }
-
-    setMessage("Registrado correctamente");
-    navigation.navigate("Login");
+    const data = {
+      username: username,
+      email: email,
+      password: password,
+      name: name,
+    };
+   
+  
+    fetch("http://192.168.0.106:8800/api/auth/register", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          setMessage("Registrado correctamente");
+          navigation.navigate("Login");
+        } else {
+          console.log(JSON);
+          setMessage(response.json.message);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        setMessage(error.message);
+      });
   };
 
   const windowWidth = Dimensions.get("window").width;
@@ -48,96 +79,136 @@ function Register() {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.Imagecontainer}>
-        <Image
-          source={require("../../assets/user.png")}
-          style={[
-            styles.image,
-            { width: windowWidth / 2, height: windowHeight / 4 },
-          ]}
-        />
-      </View>
+    <KeyboardAwareScrollView>
+      <View style={styles.container}>
+        <View style={styles.Imagecontainer}>
+          <Image
+            source={require("../../assets/user.png")}
+            style={[
+              styles.image,
+              { width: windowWidth / 2, height: windowHeight / 4 },
+            ]}
+          />
+        </View>
 
-      <View style={styles.inputContainer}>
-        <FontAwesome
-          style={styles.inputIcon}
-          name="user"
-          size={20}
-          color="#fff"
-        />
-        <TextInput
-          style={styles.input}
-          value={email}
-          onChangeText={setEmail}
-          onFocus={() => setMessage("")}
-          placeholder="Correo electrónico"
-          placeholderTextColor="#EBEBEB"
-          keyboardType="email-address"
-          autoCapitalize="none"
-          autoCorrect={false}
-        />
-      </View>
-
-      <View style={styles.inputContainer}>
-        <FontAwesome
-          style={styles.inputIcon}
-          name="lock"
-          size={20}
-          color="#fff"
-        />
-        <TextInput
-          style={styles.input}
-          value={password}
-          onChangeText={setPassword}
-          onFocus={() => setMessage("")}
-          placeholder="Contraseña"
-          placeholderTextColor="#EBEBEB"
-          secureTextEntry={!showPassword}
-          autoCapitalize="none"
-          autoCorrect={false}
-        />
-        <TouchableOpacity onPress={toggleShowPassword}>
+        <View style={styles.inputContainer}>
           <FontAwesome
-            style={styles.showPasswordIcon}
-            name={showPassword ? "eye-slash" : "eye"}
+            style={styles.inputIcon}
+            name="envelope"
             size={20}
             color="#fff"
           />
-        </TouchableOpacity>
-      </View>
-      <View style={styles.inputContainer}>
-        <FontAwesome
-          style={styles.inputIcon}
-          name="lock"
-          size={20}
-          color="#fff"
-        />
-        <TextInput
-          style={styles.input}
-          value={confirmPassword}
-          onChangeText={setConfirmPassword}
-          onFocus={() => setMessage("")}
-          placeholder="Repetir Contraseña"
-          placeholderTextColor="#EBEBEB"
-          secureTextEntry={!showPassword}
-          autoCapitalize="none"
-          autoCorrect={false}
-        />
-        <TouchableOpacity onPress={toggleShowPassword}>
+          <TextInput
+            style={styles.input}
+            value={email}
+            onChangeText={setEmail}
+            onFocus={() => setMessage("")}
+            placeholder="Correo electrónico"
+            placeholderTextColor="#EBEBEB"
+            keyboardType="email-address"
+            autoCapitalize="none"
+            autoCorrect={false}
+          />
+        </View>
+        <View style={styles.inputContainer}>
           <FontAwesome
-            style={styles.showPasswordIcon}
-            name={showPassword ? "eye-slash" : "eye"}
+            style={styles.inputIcon}
+            name="user"
             size={20}
             color="#fff"
           />
+          <TextInput
+            style={styles.input}
+            value={username}
+            onChangeText={setUsername}
+            onFocus={() => setMessage("")}
+            placeholder="Nombre de usuario"
+            placeholderTextColor="#EBEBEB"
+            keyboardType="email-address"
+            autoCapitalize="none"
+            autoCorrect={false}
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <FontAwesome
+            style={styles.inputIcon}
+            name="user"
+            size={20}
+            color="#fff"
+          />
+          <TextInput
+            style={styles.input}
+            value={name}
+            onChangeText={setNombre}
+            onFocus={() => setMessage("")}
+            placeholder="Nombre y Apellido"
+            placeholderTextColor="#EBEBEB"
+            keyboardType="email-address"
+            autoCapitalize="none"
+            autoCorrect={false}
+          />
+        </View>
+
+        <View style={styles.inputContainer}>
+          <FontAwesome
+            style={styles.inputIcon}
+            name="lock"
+            size={20}
+            color="#fff"
+          />
+          <TextInput
+            style={styles.input}
+            value={password}
+            onChangeText={setPassword}
+            onFocus={() => setMessage("")}
+            placeholder="Contraseña"
+            placeholderTextColor="#EBEBEB"
+            secureTextEntry={!showPassword}
+            autoCapitalize="none"
+            autoCorrect={false}
+          />
+          <TouchableOpacity onPress={toggleShowPassword}>
+            <FontAwesome
+              style={styles.showPasswordIcon}
+              name={showPassword ? "eye-slash" : "eye"}
+              size={20}
+              color="#fff"
+            />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.inputContainer}>
+          <FontAwesome
+            style={styles.inputIcon}
+            name="lock"
+            size={20}
+            color="#fff"
+          />
+          <TextInput
+            style={styles.input}
+            value={confirmPassword}
+            onChangeText={setConfirmPassword}
+            onFocus={() => setMessage("")}
+            placeholder="Repetir Contraseña"
+            placeholderTextColor="#EBEBEB"
+            secureTextEntry={!showPassword}
+            autoCapitalize="none"
+            autoCorrect={false}
+          />
+          <TouchableOpacity onPress={toggleShowPassword}>
+            <FontAwesome
+              style={styles.showPasswordIcon}
+              name={showPassword ? "eye-slash" : "eye"}
+              size={20}
+              color="#fff"
+            />
+          </TouchableOpacity>
+        </View>
+        <Text style={styles.mess}>{message}</Text>
+        <TouchableOpacity style={styles.button} onPress={handleLogin}>
+          <Text style={styles.buttonText}>Registrarse</Text>
         </TouchableOpacity>
       </View>
-      <Text style={styles.mess}>{message}</Text>
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Registrarse</Text>
-      </TouchableOpacity>
-    </View>
+    </KeyboardAwareScrollView>
   );
 }
 
@@ -169,9 +240,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderBottomWidth: 1,
     borderBottomColor: "#fff",
-    paddingBottom: 5,
-    marginBottom: 20,
-    width: 300,
+
+    marginBottom: "5%",
+    width: "100%",
   },
   inputIcon: {
     marginRight: 10,
@@ -189,9 +260,12 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: "rgba(6,18,38,0.3)",
     borderRadius: 20,
-    paddingHorizontal: 100,
-    paddingVertical: 20,
-    margin: 10,
+    width: 250,
+    height: 60,
+    justifyContent: "center",
+    // paddingHorizontal: "40%",
+    //paddingVertical: "5%",
+    // margin: 10,
   },
   buttonText: {
     color: "white",
@@ -212,12 +286,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#fff",
   },
-  mess:
-  {
-
+  mess: {
     fontSize: 16,
-    color: "purple", 
-  }
+    color: "purple",
+  },
 });
 
 export default Register;

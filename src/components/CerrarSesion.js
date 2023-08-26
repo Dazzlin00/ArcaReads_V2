@@ -1,10 +1,13 @@
 import React from 'react'
 import { StyleSheet, TouchableOpacity, View, Image, Text, } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
-
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
 export default CerrarSesion = () => {
   
   const navigation = useNavigation();
+  const { logout } = useContext(AuthContext); //AUTENTICACION
+
   return (
     <View style={styles.container}>
       <Image
@@ -15,7 +18,7 @@ export default CerrarSesion = () => {
       <Text style={styles.description}>
       El amor por los libros es algo así como el amor romántico. Cuando se lee realmente un buen libro, las cargas y preocupaciones parecen ser más pequeñas. (Steve Leveen)
       </Text>
-      <TouchableOpacity style={[styles.buttonContainer, styles.loginButton]} onPress={() => navigation.navigate('Login')}>
+      <TouchableOpacity style={[styles.buttonContainer, styles.loginButton]} onPress={() => logout()}>
         <Text style={styles.buttonText}>Cerrar Sesion</Text>
       </TouchableOpacity>
     </View>
