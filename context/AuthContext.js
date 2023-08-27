@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { createContext, useEffect, useState } from "react";
 import axios from "react-native-axios/lib/axios";
 import { useNavigation } from "@react-navigation/native";
-
+import { BASE_URL } from "../config";
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }) => {
     setIsLoading(true);
   
     axios
-      .post("http://10.0.2.2:8800/api/auth/getAccessToken", {
+      .post(`${BASE_URL}/auth/getAccessToken`, {
         email,
         password,
       })

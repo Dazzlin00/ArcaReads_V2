@@ -15,6 +15,7 @@ import { useNavigation } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { FontAwesome } from "react-native-vector-icons";
 import axios from "react-native-axios";
+import { BASE_URL } from "../../config";
 
 function Register() {
   const navigation = useNavigation();
@@ -29,8 +30,8 @@ function Register() {
 
   const [showPassword, setShowPassword] = React.useState(false);
   console.log(email, username, name, password);
-
-  const handleLogin = () => {
+  
+  const handleRegister = () => {
     if (!email || !password || !confirmPassword) {
       setMessage("Por favor complete todos los campos.");
       return;
@@ -40,29 +41,25 @@ function Register() {
       setMessage("Las contraseñas no coinciden.");
       return;
     }
+  
     const data = {
       username: username,
       email: email,
       password: password,
       name: name,
     };
-   
   
-    fetch("http://192.168.0.106:8800/api/auth/register", {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json",
-      },
-      
-    })
+    axios.post(`${BASE_URL}/auth/register`, data)
       .then((response) => {
         if (response.status === 200) {
           setMessage("Registrado correctamente");
-          navigation.navigate("Login");
+          setTimeout(() => {
+            navigation.navigate("Login");
+          }, 2000);
+         
         } else {
           console.log(JSON);
-          setMessage(response.json.message);
+          setMessage(response.data.message);
         }
       })
       .catch((error) => {
@@ -204,7 +201,7 @@ function Register() {
           </TouchableOpacity>
         </View>
         <Text style={styles.mess}>{message}</Text>
-        <TouchableOpacity style={styles.button} onPress={handleLogin}>
+        <TouchableOpacity style={styles.button} onPress={handleRegister}>
           <Text style={styles.buttonText}>Registrarse</Text>
         </TouchableOpacity>
       </View>
