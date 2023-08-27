@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   Field,
   Dimensions,
+  Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -24,21 +25,20 @@ function Login() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [showPassword, setShowPassword] = React.useState(false);
-  const [error, setError] = useState(null);
-  const { login } = useContext(AuthContext); //AUTENTICACION
+  const { login,error} = useContext(AuthContext); //AUTENTICACION
 
-  const handleLogin = () => {
+  const handleLogin = () => 
+  {
     if (!email || !password) {
       setMessage("Por favor complete todos los campos.");
       return;
-
-      
     }
-      login(email, password);
+    login(email, password);
    
-  
   };
+
   
+
 
   const windowWidth = Dimensions.get("window").width;
   const windowHeight = Dimensions.get("window").height;
@@ -59,7 +59,6 @@ function Login() {
         />
       </View>
 
-      <Text>{login} </Text>
       <View style={styles.inputContainer}>
         <FontAwesome
           style={styles.inputIcon}
@@ -108,14 +107,12 @@ function Login() {
         </TouchableOpacity>
       </View>
 
-      <Text style={styles.mess}>{message}</Text>
-
-    
-
+      <Text >{message}</Text>
+      {error && <Text style={styles.mess}>{error}</Text>}
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>Iniciar sesión</Text>
       </TouchableOpacity>
-      
+
       <View style={styles.linkContainer}>
         <Text style={styles.linkText}>¿No tienes cuenta todavía?</Text>
         <TouchableOpacity

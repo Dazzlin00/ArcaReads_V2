@@ -9,20 +9,19 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [userToken, setUserToken] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
-  const [message, setMessage] = useState(" ");
-  const [error, setError] = useState(null);
+  const [error, setError] = useState("");
 
   const login = (email, password) => {
     setIsLoading(true);
-    
-     axios
+  
+    axios
       .post("http://10.0.2.2:8800/api/auth/getAccessToken", {
         email,
         password,
       })
+
       .then((res) => {
-        
-       //INFORMACION DEL USUARIO
+        //INFORMACION DEL USUARIO
         let userInfo = res.data;
         setUserInfo(userInfo);
         //TOKEN
@@ -32,16 +31,15 @@ export const AuthProvider = ({ children }) => {
         AsyncStorage.setItem("userInfo", JSON.stringify(userInfo)); // Almacenar el token en AsyncStorage
         console.log(userInfo);
         AsyncStorage.setItem("accessToken", token); // Almacenar el token en AsyncStorage
-        
-       
       })
+
       .catch((e) => {
-       
-        console.log( `Error al logearse ${e}`);
-       
         
+        console.log(`Error al logearse ${e}`);
+        setError("El email o la contraseña son incorrectos");
       });
-      setIsLoading(false);
+     
+    setIsLoading(false);
   };
 
   const logout = () => {
@@ -63,7 +61,6 @@ export const AuthProvider = ({ children }) => {
         setUserToken(userToken);
         setUserInfo(userInfo);
       }
-      
 
       setIsLoading(false);
     } catch (e) {
@@ -71,14 +68,28 @@ export const AuthProvider = ({ children }) => {
     }
   };
   useEffect(() => {
-    
     isLoggetIn();
-    
   }, []);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setError("")
+    }, 2000);
 
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [error]);
   return (
     <AuthContext.Provider
-      value={{ login, logout, isLoading, userToken, isLoggetIn,userInfo }}
+      value={{
+        login,
+        logout,
+        isLoading,
+        userToken,
+        isLoggetIn,
+        userInfo,
+        error
+      }}
     >
       {children}
     </AuthContext.Provider>
