@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { View, Text, Image, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { AuthContext } from "../../context/AuthContext";
 
 const EditProfileView = () => {
   const profile = {

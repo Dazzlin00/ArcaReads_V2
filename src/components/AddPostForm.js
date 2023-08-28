@@ -1,4 +1,4 @@
-import React, { useState,useEffect,useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   View,
   Text,
@@ -11,9 +11,9 @@ import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { LinearGradient } from "expo-linear-gradient";
 import { AuthContext } from "../../context/AuthContext";
+import { util } from "react-native";
 
 const AddPostForm = ({ onSubmit }) => {
- 
   const { userInfo } = useContext(AuthContext); //AUTENTICACION
 
   const [showForm, setShowForm] = useState(false); // Estado para controlar si mostrar el formulario
@@ -22,9 +22,9 @@ const AddPostForm = ({ onSubmit }) => {
   const [title, setTitle] = useState("");
 
   const [image, setImage] = useState(null);
-  const [avatar, setAvatar] = useState(require("../../assets/eli.jpg")); // Nombre de usuario predeterminado
+  const [avatar, setAvatar] = useState(userInfo.profilepic); // Nombre de usuario predeterminado
 
-  const [username, setUsername] = useState(""); // Nombre de usuario predeterminado
+  const [name, setName] = useState(""); // Nombre de usuario predeterminado
   const [timestamp, setTimestamp] = useState(
     new Date().toLocaleTimeString("en-US", {
       hour: "numeric",
@@ -54,7 +54,7 @@ const AddPostForm = ({ onSubmit }) => {
       title,
       image,
       avatar,
-      username,
+      name,
       timestamp,
     });
     setText("");
@@ -64,10 +64,9 @@ const AddPostForm = ({ onSubmit }) => {
 
   useEffect(() => {
     // Realizar una llamada a la API para obtener el nombre de usuario
-    
-        setUsername(userInfo.name); // Actualizar el estado con el nombre de usuario
-      
-  }, []); 
+
+    setName(userInfo.name); // Actualizar el estado con el nombre de usuario
+  }, []);
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.addButton} onPress={handleToggleForm}>
@@ -76,9 +75,9 @@ const AddPostForm = ({ onSubmit }) => {
       {showForm && (
         <View>
           <View style={styles.header}>
-            <Image source={avatar} style={styles.avatar} />
+          <Image style={styles.avatar} source={{ uri: avatar }} />
 
-            <Text style={styles.username}>{username}</Text>
+            <Text style={styles.username}>{name}</Text>
 
             <TouchableOpacity
               style={styles.attachButton}
@@ -208,8 +207,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    height:42,
-    
+    height: 42,
+
     backgroundColor: "rgba(6,18,38,0.2)",
     borderRadius: 10,
     width: "100%",

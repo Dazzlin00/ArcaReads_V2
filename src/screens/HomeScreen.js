@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import {
   View,
   Text,
@@ -18,8 +18,9 @@ import { Ionicons } from 'react-native-vector-icons';
 import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import StoriesBar from "../components/StoriesBar";
+import { BASE_URL } from "../../config";
+import axios from "react-native-axios";
 
-import Home from "../components/Home";
 import moment from "moment";
 import "moment/locale/es";
 
@@ -29,8 +30,8 @@ function HomeScreen({ navigation }) {
   const formatDate = (date) => {
     return moment(date).format("D [de] MMMM YYYY");
   };
-  const [posts, setPosts] = useState([
-    {
+  const [posts, setPosts] = useState([""
+  /*  {
       id: 1,
       title:"Harry Potter",
       text: "Harry  es un joven mago que descubre su destino mientras asiste a la escuela de magia Hogwarts, luchando contra el malvado Voldemort.",
@@ -59,8 +60,17 @@ function HomeScreen({ navigation }) {
       image: require("../../assets/instituto.jpeg"),
       timestamp: "12:34 AM",
       
-    },
+    },*/
   ]);
+
+  useEffect(() => {
+    axios.get(`${BASE_URL}/posts/getPost`).then((response) => {
+      setPosts(response.data);
+      console.log(response.data)
+    });
+  }, []);
+
+
   const handleAddPost = (post) => {
     setPosts([post, ...posts]);
     console.log("New post HOme:", post);
@@ -98,7 +108,7 @@ function HomeScreen({ navigation }) {
             </LinearGradient>
             <StoriesBar />
             <AddPostForm onSubmit={handleAddPost} />
-            <Home navigation={navigation} />
+        
           </>
         }
       />

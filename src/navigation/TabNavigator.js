@@ -8,7 +8,6 @@ import NotificationsScreen from "../screens/NotificationsScreen";
 import { View, Text, StyleSheet } from "react-native";
 import SearchScreen from "../screens/SearchScreen";
 import Icon from "react-native-vector-icons/FontAwesome";
-import AddScreen from "../screens/AddScreen";
 
 const Tab = createBottomTabNavigator();
 
