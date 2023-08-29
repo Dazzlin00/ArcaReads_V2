@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useContext,useEffect } from "react";
 import {
   View,
   Text,
@@ -12,9 +12,11 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons, FontAwesome, MaterialIcons } from "@expo/vector-icons";
+import { AuthContext } from "../../context/AuthContext";
 
 const PostCard = ({ post }) => {
   const navigation = useNavigation();
+  const { userInfo } = useContext(AuthContext); //AUTENTICACION
 
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
@@ -86,13 +88,13 @@ const PostCard = ({ post }) => {
  <View style={styles.header}>
   <View style={{ flexDirection: "row", alignItems: "center" }}>
     <TouchableOpacity onPress={() => navigation.navigate("PerfilUsuario")}>
-      <Image source={post.avatar} style={styles.avatar} />
+      <Image source={{ uri: post.profilepic }} style={styles.avatar} />
     </TouchableOpacity>
     <View style={{ marginLeft: 10 }}>
       <TouchableOpacity onPress={() => navigation.navigate("PerfilUsuario")}>
-        <Text style={styles.username}>{post.username}</Text>
+        <Text style={styles.username}>{post.name}</Text>
       </TouchableOpacity>
-      <Text style={styles.timestamp}>{post.timestamp}</Text>
+      <Text style={styles.timestamp}>{post.createdAt}</Text>
     </View>
   </View>
   <View style={styles.popupContainer}>
@@ -104,10 +106,10 @@ const PostCard = ({ post }) => {
 
       <Text style={styles.text}>{post.title}</Text>
 
-      <Text style={styles.text}>{post.text}</Text>
+      <Text style={styles.text}>{post.desc}</Text>
       <View>
         <TouchableOpacity onPress={toggleImageModal}>
-          <Image source={post.image} style={styles.image} />
+          <Image source={{ uri: post.img }} style={styles.image} />
         </TouchableOpacity>
       </View>
 
@@ -175,7 +177,7 @@ const PostCard = ({ post }) => {
           style={styles.modalContainer}
           onPress={toggleImageModal}
         >
-          <Image source={post.image} style={styles.modalImage} />
+          <Image source={{ uri: post.img }} style={styles.modalImage} />
         </TouchableOpacity>
       </Modal>
     </View>

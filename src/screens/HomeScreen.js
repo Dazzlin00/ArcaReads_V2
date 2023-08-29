@@ -30,38 +30,10 @@ function HomeScreen({ navigation }) {
   const formatDate = (date) => {
     return moment(date).format("D [de] MMMM YYYY");
   };
-  const [posts, setPosts] = useState([""
-  /*  {
-      id: 1,
-      title:"Harry Potter",
-      text: "Harry  es un joven mago que descubre su destino mientras asiste a la escuela de magia Hogwarts, luchando contra el malvado Voldemort.",
-      avatar: require("../../assets/eli.jpg"),
-      username: "Elizabeth Gomez",
-      timestamp: "11:34 AM",
-      image: require("../../assets/harry.jpeg"),
-     
-    },
-    {
-      id: 2,
-      title:"El Hobbit",
-      text: "Bilbo, un hobbit, se une a una expedición para recuperar un tesoro custodiado por un dragón solitario en la Montaña Solitaria.",
-      avatar: require("../../assets/panda.jpg"),
-      username: "Omerly Mendoza",
-      timestamp: "12:34 AM",
-      image: require("../../assets/hobbit.jpeg"),
-    
-    },
-    {
-      id: 3,
-      title:"El instituto",
-      text: "Un grupo de jóvenes con habilidades psíquicas son secuestrados y encerrados en un centro de investigación secreto.",
-      avatar: require("../../assets/eliza.jpg"),
-      username: "Eliza Graterol",
-      image: require("../../assets/instituto.jpeg"),
-      timestamp: "12:34 AM",
-      
-    },*/
-  ]);
+
+  const [posts, setPosts] = useState("");
+
+
 
   useEffect(() => {
     axios.get(`${BASE_URL}/posts/getPost`).then((response) => {
