@@ -48,7 +48,11 @@ function ResetPassword() {
   };
 
   return (
-    <View style={styles.container}>
+
+
+    <KeyboardAwareScrollView>
+
+<View style={styles.container}>
       <View style={styles.Imagecontainer}>
         <Image
           source={require("../../assets/candado.png")}
@@ -155,19 +159,23 @@ function ResetPassword() {
         <Text style={styles.buttonText}>Reestablecer</Text>
       </TouchableOpacity>
     </View>
+
+
+    </KeyboardAwareScrollView>
+    
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 50,
+    marginTop: 20,
     marginBottom: 10,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 10,
     backgroundColor: "rgba(255, 255, 255, 0.3)",
-    padding: 45,
+    padding: 20,
     borderRadius: 50,
   },
   Imagecontainer: {
@@ -210,7 +218,7 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: "rgba(6,18,38,0.3)",
     borderRadius: 20,
-    paddingHorizontal: 100,
+    paddingHorizontal: 50,
     paddingVertical: 20,
     margin: 10,
   },

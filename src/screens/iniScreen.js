@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
 
     padding: 20,
     position: "absolute", // Posición absoluta
-    top: 600, // Posición vertical desde la parte superior
+    bottom: 10, // Posición en la parte inferior del contenedor
     
   },
   buttonText: {
