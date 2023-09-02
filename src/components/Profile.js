@@ -13,14 +13,19 @@ export default ProfileView = () => {
     // Realizar una llamada a la API para obtener el nombre de usuario
 
     setName(userInfo.name); // Actualizar el estado con el nombre de usuario
-    // setAvatar(userInfo.profilepic)//muestra la foto de perfil
-    setAvatar(userInfo.profilepic);
+   
   }, []);
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.headerContent}>
-        <Image style={styles.avatar} source={{ uri: userInfo.profilepic }} />
+          
+          <Image
+            style={styles.avatar}
+            source={{
+              uri: userInfo.profilepic 
+            }}
+          />
           <Text style={styles.name}>{name}</Text>
         </View>
       </View>
