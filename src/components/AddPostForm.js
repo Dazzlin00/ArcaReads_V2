@@ -12,26 +12,24 @@ import * as ImagePicker from "expo-image-picker";
 import { LinearGradient } from "expo-linear-gradient";
 import { AuthContext } from "../../context/AuthContext";
 import { util } from "react-native";
+import { BASE_URL } from "../../config";
+import axios from "react-native-axios";
+import { useMutation, useQueryClient } from "react-query";
 
 const AddPostForm = ({ onSubmit }) => {
   const { userInfo } = useContext(AuthContext); //AUTENTICACION
+  const [message, setMessage] = React.useState("");
 
   const [showForm, setShowForm] = useState(false); // Estado para controlar si mostrar el formulario
 
-  const [text, setText] = useState("");
+  const [desc, setDesc] = useState("");
   const [title, setTitle] = useState("");
 
-  const [image, setImage] = useState(null);
+  const [img, setImage] = useState(null);
   const [avatar, setAvatar] = useState(userInfo.profilepic); // Nombre de usuario predeterminado
 
   const [name, setName] = useState(""); // Nombre de usuario predeterminado
-  const [timestamp, setTimestamp] = useState(
-    new Date().toLocaleTimeString("en-US", {
-      hour: "numeric",
-      minute: "numeric",
-      hour12: true,
-    })
-  );
+
   const handleChooseImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -48,18 +46,34 @@ const AddPostForm = ({ onSubmit }) => {
   const handleToggleForm = () => {
     setShowForm(!showForm); // Cambiar el estado de mostrar/ocultar el formulario
   };
+  const queryClient = useQueryClient();
+  const { mutate, error, isLoading } = useMutation( {
+    mutationFn: compartir,
+    onSuccess: () => {
+      queryClient.invalidateQueries(["posts"]);
+    },
+  });
+
+  function compartir(post) {
+    return axios
+      .post(`${BASE_URL}/posts/addPost`, post)
+      .then((response) => {
+        if (response.status === 200) {
+          return response.data;
+        } else {
+          throw new Error(response.statusText);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        throw error;
+      });
+  }
+
   const handleSubmit = () => {
-    onSubmit({
-      text,
-      title,
-      image,
-      avatar,
-      name,
-      timestamp,
-    });
-    setText("");
-    setTitle("");
-    setImage(null);
+    
+    mutate({ title, desc, img });
+    
   };
 
   useEffect(() => {
@@ -75,7 +89,7 @@ const AddPostForm = ({ onSubmit }) => {
       {showForm && (
         <View>
           <View style={styles.header}>
-          <Image style={styles.avatar} source={{ uri: avatar }} />
+            <Image style={styles.avatar} source={{ uri: avatar }} />
 
             <Text style={styles.username}>{name}</Text>
 
@@ -86,7 +100,7 @@ const AddPostForm = ({ onSubmit }) => {
               <Ionicons name="attach-outline" size={24} color="gray" />
             </TouchableOpacity>
           </View>
-          {image && <Image source={{ uri: image }} style={styles.image} />}
+          {img && <Image source={{ uri: img }} style={styles.image} />}
           <TextInput
             style={styles.title}
             valuea={title}
@@ -98,8 +112,8 @@ const AddPostForm = ({ onSubmit }) => {
           />
           <TextInput
             style={styles.input}
-            value={text}
-            onChangeText={setText}
+            value={desc}
+            onChangeText={setDesc}
             placeholder="¡Danos tu opinion!"
             maxLength={141}
             multiline={true}

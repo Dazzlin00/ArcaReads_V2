@@ -5,12 +5,16 @@ import { StyleSheet, Text, View } from "react-native";
 import { AuthProvider } from "./context/AuthContext"; //Autenticacion
 import AppNav from "./src/navigation/AppNav";
 //import AppStack from "./src/navigation/AppStack";
+import { QueryClientProvider, QueryClient, } from "react-query";
+const queryClient = new QueryClient()
 
 export default function App() {
   return (
-    <AuthProvider>
-      <AppNav />
-    </AuthProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <AppNav />
+      </AuthProvider>
+    </QueryClientProvider>
   );
 }
 
