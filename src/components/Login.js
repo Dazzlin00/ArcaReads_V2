@@ -108,6 +108,7 @@ function Login() {
       </View>
 
       <Text >{message}</Text>
+      
       {error && <Text style={styles.mess}>{error}</Text>}
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>Iniciar sesión</Text>

@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -14,48 +14,39 @@ import {
 } from "react-native";
 import AddPostForm from "../components/AddPostForm";
 import PostCard from "../components/PostCard";
-import { Ionicons } from 'react-native-vector-icons';
+import { Ionicons } from "react-native-vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import StoriesBar from "../components/StoriesBar";
 import { BASE_URL } from "../../config";
 import axios from "react-native-axios";
-
 import moment from "moment";
 import "moment/locale/es";
 
+import { useQuery } from "react-query";
+
 function HomeScreen({ navigation }) {
   moment.locale("es");
-
-  const formatDate = (date) => {
-    return moment(date).format("D [de] MMMM YYYY");
-  };
-
   const [posts, setPosts] = useState("");
 
-
-
-  useEffect(() => {
-    axios.get(`${BASE_URL}/posts/getPost`).then((response) => {
-      setPosts(response.data);
-      console.log(response.data)
-    });
-  }, []);
-
-
-  const handleAddPost = (post) => {
-    setPosts([post, ...posts]);
-    console.log("New post HOme:", post);
-  };
+  const { isLoading, error, data } = useQuery({
+    queryKey: ["posts"],
+    queryFn: async () => {
+      const response = await axios.get(`${BASE_URL}/posts/getPost`);
+      return response.data;
+    },
+  });
 
   return (
     <SafeAreaView style={styles.Container}>
       <FlatList
-        data={posts}
-        renderItem={({ item }) => <PostCard post={item} />}
-        keyExtractor={(item) =>
-          item.id ? item.id.toString() : Math.random().toString()
-        } // generar una clave aleatoria si el id no está definido
+        data={data}
+        renderItem={({ item }) =>
+          error ? "error" : isLoading ? "loading..." : <PostCard post={item} />
+        }
+        keyExtractor={(item) => {
+          return item.id || Math.random().toString();
+        }} // generar una clave aleatoria si el id no está definido
         ListHeaderComponent={
           <>
             <LinearGradient
@@ -79,8 +70,7 @@ function HomeScreen({ navigation }) {
               </TouchableOpacity>
             </LinearGradient>
             <StoriesBar />
-            <AddPostForm onSubmit={handleAddPost} />
-        
+            <AddPostForm />
           </>
         }
       />
@@ -98,12 +88,11 @@ const styles = StyleSheet.create({
   logocontainer: {
     height: 80,
     flexDirection: "row",
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
     alignItems: "center",
   },
   logoWrapper: {
     width: 160,
-    
   },
   imagelogo: {
     resizeMode: "contain",

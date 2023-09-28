@@ -1,4 +1,4 @@
-import React, { useState,useContext,useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   View,
   Text,
@@ -13,35 +13,56 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons, FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import { AuthContext } from "../../context/AuthContext";
+import { useQuery } from "react-query";
+import { BASE_URL } from "../../config";
+import axios from "react-native-axios";
+import { useMutation, useQueryClient } from "react-query";
 
-const PostCard = ({ post }) => {
+function PostCard({ post }) {
   const navigation = useNavigation();
   const { userInfo } = useContext(AuthContext); //AUTENTICACION
 
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
   const [likes, setLikes] = useState(0);
+
   const [liked, setLiked] = useState(false);
   const [isImageModalVisible, setIsImageModalVisible] = useState(false);
   const [saved, setSaved] = useState(false);
   const [isPopupVisible, setIsPopupVisible] = useState(false);
 
-  const handleComment = () => {
-    if (newComment.trim() !== "") {
-      setComments([...comments, newComment]);
-      setNewComment("");
-    }
-  };
+  const { isLoading, error, data } = useQuery({
+    queryKey: ["likes", post.id],
+    queryFn: async () => {
+      const response = await axios.get(
+        `${BASE_URL}/likes/getLikes?postId=${post.id}`
+      );
+      return response.data;
+    },
+  });
+
+  console.log(data + "Likes");
+  const queryClient = useQueryClient();
+
+  const { mutate, errors, isLoadings } = useMutation({
+    mutationFn: (liked) => {
+      if (liked) {
+        return axios.delete(`${BASE_URL}/likes/deleteLikes?postId=${post.id}`);
+      } else {
+        return axios.post(`${BASE_URL}/likes/addLikes`, { postId: post.id });
+      }
+    },
+
+    onSuccess: () => {
+      queryClient.invalidateQueries(["likes"]);
+    },
+  });
+
   const handleLike = () => {
-    if (liked) {
-      setLikes(likes - 1);
-    } else {
-      setLikes(likes + 1);
-    }
-    setLiked(!liked);
+    mutate(data?.includes(userInfo.id));
   };
   const handleOpenComments = () => {
-    navigation.navigate("Comentarios");
+    //navigation.navigate("Comentarios",{ post});
   };
   const toggleImageModal = () => {
     setIsImageModalVisible(!isImageModalVisible);
@@ -49,7 +70,6 @@ const PostCard = ({ post }) => {
   const handleSave = () => {
     setSaved(!saved);
   };
-
 
   const handlePopup = () => {
     setIsPopupVisible(!isPopupVisible);
@@ -72,37 +92,41 @@ const PostCard = ({ post }) => {
       ]
     );
   };
-  const handleEdit = () => 
+  const handleEdit = () =>
     // Navegue a la pantalla de edición de publicación con los detalles de la publicación actual
-{
-
-}
+    {};
   const handleUsernameClick = () => {
     navigation.navigate("PerfilUsuario"); // Me dirige al perfil de usuario
   };
 
-  console.log("Postcard:", post);
+  // console.log("Postcard:",post);
+
+  console.log("Postcard:", post.id);
 
   return (
     <View style={styles.container}>
- <View style={styles.header}>
-  <View style={{ flexDirection: "row", alignItems: "center" }}>
-    <TouchableOpacity onPress={() => navigation.navigate("PerfilUsuario")}>
-      <Image source={{ uri: post.profilepic }} style={styles.avatar} />
-    </TouchableOpacity>
-    <View style={{ marginLeft: 10 }}>
-      <TouchableOpacity onPress={() => navigation.navigate("PerfilUsuario")}>
-        <Text style={styles.username}>{post.name}</Text>
-      </TouchableOpacity>
-      <Text style={styles.timestamp}>{post.createdAt}</Text>
-    </View>
-  </View>
-  <View style={styles.popupContainer}>
-    <TouchableOpacity style={styles.button} onPress={handlePopup}>
-      <MaterialIcons name="more-horiz" size={30} color="gray" />
-    </TouchableOpacity>
-  </View>
-</View>
+      <View style={styles.header}>
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("PerfilUsuario")}
+          >
+            <Image source={{ uri: post.profilepic }} style={styles.avatar} />
+          </TouchableOpacity>
+          <View style={{ marginLeft: 10 }}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("PerfilUsuario")}
+            >
+              <Text style={styles.username}>{post.name}</Text>
+            </TouchableOpacity>
+            <Text style={styles.timestamp}>{post.createdAt}</Text>
+          </View>
+        </View>
+        <View style={styles.popupContainer}>
+          <TouchableOpacity style={styles.button} onPress={handlePopup}>
+            <MaterialIcons name="more-horiz" size={30} color="gray" />
+          </TouchableOpacity>
+        </View>
+      </View>
 
       <Text style={styles.text}>{post.title}</Text>
 
@@ -117,12 +141,18 @@ const PostCard = ({ post }) => {
         <View style={styles.leftButtonsContainer}>
           <TouchableOpacity style={styles.button} onPress={handleLike}>
             <Ionicons
-              name={liked ? "heart" : "heart-outline"}
+              name={ isLoadings ? "loading..." : data?.includes(userInfo.id) ? "heart" : "heart-outline"}
               size={30}
-              color={liked ? "#ba6bad" : "gray"}
+              color={ isLoadings ? "loading..." : data?.includes(userInfo.id) ? "#ba6bad" : "gray"}
             />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={handleOpenComments}>
+          {/*--------------------------------------COMENTARIOS---------------------*/}
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() =>
+              navigation.navigate("Comentarios", { postId: post.id })
+            }
+          >
             <Ionicons name="chatbubble-outline" size={29} color="gray" />
           </TouchableOpacity>
         </View>
@@ -136,14 +166,7 @@ const PostCard = ({ post }) => {
       </View>
 
       <View style={styles.commentContainer}>
-        <Text style={styles.likesText}>{likes} Me gusta</Text>
-        {comments.map((comment, index) => (
-          <View key={index} style={{ flexDirection: "row" }}>
-            <Text style={styles.username}>{post.username} </Text>
-            <Text>{comment}</Text>
-          </View>
-        ))}
-    
+        <Text style={styles.likesText}>{data?.length} Me gusta</Text>
       </View>
 
       {/* Ventana emergente del menú */}
@@ -157,10 +180,16 @@ const PostCard = ({ post }) => {
             <TouchableOpacity style={styles.popupMenuItem} onPress={handleEdit}>
               <Text style={styles.popupMenuText}>Modificar</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.popupMenuItem} onPress={handleDelete}>
+            <TouchableOpacity
+              style={styles.popupMenuItem}
+              onPress={handleDelete}
+            >
               <Text style={styles.popupMenuText}>Eliminar</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.popupMenuItem} onPress={handlePopup}>
+            <TouchableOpacity
+              style={styles.popupMenuItem}
+              onPress={handlePopup}
+            >
               <Text style={styles.popupMenuText}>Cancelar</Text>
             </TouchableOpacity>
           </View>
@@ -182,7 +211,7 @@ const PostCard = ({ post }) => {
       </Modal>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
