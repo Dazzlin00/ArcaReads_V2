@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, Image, Modal, TouchableOpacity } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { AuthContext } from "../../context/AuthContext";
 
@@ -8,6 +8,7 @@ export default ProfileView = () => {
 
   const [name, setName] = useState(""); // Nombre de usuario predeterminado
   const [avatar, setAvatar] = useState(""); // Nombre de usuario predeterminado
+  const [isPhotoModalVisible, setIsPhotoModalVisible] = useState(false); // Estado para controlar si la foto en grande está visible o no
 
   useEffect(() => {
     // Realizar una llamada a la API para obtener el nombre de usuario
@@ -15,17 +16,23 @@ export default ProfileView = () => {
     setName(userInfo.name); // Actualizar el estado con el nombre de usuario
    
   }, []);
+
+  const openPhotoModal = () => {
+    setIsPhotoModalVisible(true);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.headerContent}>
-          
-          <Image
-            style={styles.avatar}
-            source={{
-              uri: userInfo.profilepic 
-            }}
-          />
+          <TouchableOpacity onPress={openPhotoModal}>
+            <Image
+              style={styles.avatar}
+              source={{
+                uri: userInfo.profilepic 
+              }}
+            />
+          </TouchableOpacity>
           <Text style={styles.name}>{name}</Text>
         </View>
       </View>
@@ -36,7 +43,7 @@ export default ProfileView = () => {
         style={styles.profileDetail}
       >
         <View style={styles.detailContent}>
-          <Text style={styles.title}>Fotos</Text>
+          <Text style={styles.title}>Post</Text>
           <Text style={styles.count}>200</Text>
         </View>
         <View style={styles.detailContent}>
@@ -57,34 +64,47 @@ export default ProfileView = () => {
           </Text>
         </View>
       </View>
+
+      {/* Modal para mostrar la foto en grande */}
+      <Modal
+        visible={isPhotoModalVisible}
+        onRequestClose={() => setIsPhotoModalVisible(false)}
+      >
+        <View style={styles.photoModal}>
+          <Image
+            style={styles.photo}
+            source={{ uri: userInfo.profilepic }}
+          />
+        </View>
+      </Modal>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   header: {
     backgroundColor: "rgba(93,135,218,0.6)",
   },
   headerContent: {
-    padding: 30,
+    padding: -20,
     alignItems: "center",
   },
   avatar: {
-    width: 130,
-    height: 130,
+    width: 90,
+    height: 90,
     borderRadius: 63,
     borderWidth: 2,
     borderColor: "white",
-    marginBottom: 10,
+    marginBottom: -5,//mueve la parte del nombre ESTABA en -6
   },
   name: {
-    fontSize: 22,
+    fontSize: 19,
     color: "#FFFFFF",
     fontWeight: "600",
   },
   profileDetail: {
     alignSelf: "center",
-    marginTop: 200,
+    marginTop: 110, //200
     alignItems: "center",
     flexDirection: "row",
     position: "absolute",
@@ -92,11 +112,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   detailContent: {
-    margin: 10,
+    margin: 3, //antes en 10
     alignItems: "center",
   },
   title: {
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: "bold",
     color: "#FFFFFF",
   },
@@ -108,7 +128,7 @@ const styles = StyleSheet.create({
   bodyContent: {
     flex: 1,
     alignItems: "center",
-    padding: 30,
+    padding: 30, //30
     marginTop: -11,
   },
   textInfo: {
@@ -117,7 +137,7 @@ const styles = StyleSheet.create({
     color: "#696969",
   },
   buttonContainer: {
-    marginTop: 10,
+    marginTop: 10, //10
     height: 45,
     flexDirection: "row",
     justifyContent: "center",
@@ -133,4 +153,19 @@ const styles = StyleSheet.create({
     marginTop: 10,
     textAlign: "center",
   },
+
+  photoModal: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "white",
+  },
+  photo: {
+    width: 200,
+    height: 200,
+    borderRadius: 100,
+  },
 });
+
+
+
