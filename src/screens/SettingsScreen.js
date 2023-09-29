@@ -23,10 +23,16 @@ export default function SettingsScreen() {
         </LinearGradient>
    
 
+        <LinearGradient
+          colors={["rgba(238,174,202,0.7)", "rgba(93,135,218,0.9)"]}
+          
+        >
+         <Settings />
+        </LinearGradient>
+      
      
-      <Settings />
-     
-     
+      
+
     </SafeAreaView>
 
   );

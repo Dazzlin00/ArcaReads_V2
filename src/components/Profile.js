@@ -21,6 +21,14 @@ export default ProfileView = () => {
     setIsPhotoModalVisible(true);
   };
 
+  const handleButton1Press = () => {
+    console.log('Botón 1 presionado');
+  };
+
+  const handleButton2Press = () => {
+    console.log('Botón 2 presionado');
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -36,25 +44,30 @@ export default ProfileView = () => {
           <Text style={styles.name}>{name}</Text>
         </View>
       </View>
-      <LinearGradient
-        colors={["rgba(238,174,202,0.4)", "rgba(93,135,218,0.7)"]}
-        start={{ x: 1, y: 0 }}
-        end={{ x: 0, y: 1 }}
-        style={styles.profileDetail}
-      >
-        <View style={styles.detailContent}>
-          <Text style={styles.title}>Post</Text>
-          <Text style={styles.count}>200</Text>
-        </View>
-        <View style={styles.detailContent}>
-          <Text style={styles.title}>Seguidores</Text>
-          <Text style={styles.count}>200</Text>
-        </View>
-        <View style={styles.detailContent}>
-          <Text style={styles.title}>Siguiendo</Text>
-          <Text style={styles.count}>200</Text>
-        </View>
-      </LinearGradient>
+
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+        <LinearGradient
+          colors={["rgba(238,174,202,0.4)", "rgba(93,135,218,0.7)"]}
+          start={{ x: 1, y: 0 }}
+          end={{ x: 0, y: 1 }}
+          style={styles.button}
+        >
+          <TouchableOpacity onPress={handleButton1Press}>
+            <Text style={styles.buttonText}>Seguidores</Text>
+          </TouchableOpacity>
+        </LinearGradient>
+
+        <LinearGradient
+          colors={["rgba(238,174,202,0.4)", "rgba(93,135,218,0.7)"]}
+          start={{ x: 1, y: 0 }}
+          end={{ x: 0, y: 1 }}
+          style={styles.button}
+        >
+          <TouchableOpacity onPress={handleButton2Press}>
+            <Text style={styles.buttonText}>Seguidos</Text>
+          </TouchableOpacity>
+        </LinearGradient>
+      </View>
 
       <View style={styles.body}>
         <View style={styles.bodyContent}>
@@ -77,11 +90,31 @@ export default ProfileView = () => {
           />
         </View>
       </Modal>
+
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+ 
+
+  
+  button: {
+    width: '50%',
+    padding: 8,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginVertical: 0.50,//mueve los botones hacia arriba o abajo 
+  },
+
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+ 
+
   header: {
     backgroundColor: "rgba(93,135,218,0.6)",
   },
@@ -90,12 +123,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   avatar: {
-    width: 90,
-    height: 90,
+    width: 80,
+    height: 80,//mueve el tamanno del avatar
     borderRadius: 63,
     borderWidth: 2,
     borderColor: "white",
-    marginBottom: -5,//mueve la parte del nombre ESTABA en -6
+    marginBottom: -5, //mueve la parte del nombre ESTABA en -6
   },
   name: {
     fontSize: 19,
@@ -104,7 +137,7 @@ const styles = StyleSheet.create({
   },
   profileDetail: {
     alignSelf: "center",
-    marginTop: 110, //200
+    marginTop: 100, //mueve la posicion del boton de seguidores y seguidos
     alignItems: "center",
     flexDirection: "row",
     position: "absolute",
@@ -112,7 +145,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   detailContent: {
-    margin: 3, //antes en 10
+    margin: 2, //antes en 10 mueve el tamanno del detalle de seguidores 
     alignItems: "center",
   },
   title: {
@@ -129,7 +162,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     padding: 30, //30
-    marginTop: -11,
+    marginTop: -60, //mueve la parte de los post
   },
   textInfo: {
     fontSize: 18,
@@ -161,9 +194,9 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   photo: {
-    width: 200,
-    height: 200,
-    borderRadius: 100,
+    width: 350,
+    height: 350,
+    borderRadius: 250,
   },
 });
 
