@@ -21,21 +21,20 @@ import { useMutation, useQueryClient } from "react-query";
 function PostCard({ post }) {
   const navigation = useNavigation();
   const { userInfo } = useContext(AuthContext); //AUTENTICACION
-
-  const [comments, setComments] = useState([]);
-  const [newComment, setNewComment] = useState("");
-  const [likes, setLikes] = useState(0);
-
-  const [liked, setLiked] = useState(false);
   const [isImageModalVisible, setIsImageModalVisible] = useState(false);
   const [saved, setSaved] = useState(false);
   const [isPopupVisible, setIsPopupVisible] = useState(false);
 
+  //------------------------------------------------------------------------------------------------------------//
+//----------------------------------------------MUESTRA LA CANTIDAD DE LIKES-------------------------------------------------------//
+//------------------------------------------------------------------------------------------------------------//
   const { isLoading, error, data } = useQuery({
     queryKey: ["likes", post.id],
     queryFn: async () => {
       const response = await axios.get(
         `${BASE_URL}/likes/getLikes?postId=${post.id}`
+      
+
       );
       return response.data;
     },
@@ -43,8 +42,10 @@ function PostCard({ post }) {
 
   console.log(data + "Likes");
   const queryClient = useQueryClient();
-
-  const { mutate, errors, isLoadings } = useMutation({
+//------------------------------------------------------------------------------------------------------------//
+//----------------------------------------------ELIMINA Y AGREGA LIKES-------------------------------------------------------//
+//------------------------------------------------------------------------------------------------------------//
+  const { mutate } = useMutation({
     mutationFn: (liked) => {
       if (liked) {
         return axios.delete(`${BASE_URL}/likes/deleteLikes?postId=${post.id}`);
@@ -55,11 +56,16 @@ function PostCard({ post }) {
 
     onSuccess: () => {
       queryClient.invalidateQueries(["likes"]);
+      
     },
   });
-
+//------------------------------------------------------------------------------------------------------------//
+//----------------------------------------------DAR ME GUSTA--------------------------------------------------//
+//------------------------------------------------------------------------------------------------------------//
   const handleLike = () => {
     mutate(data?.includes(userInfo.id));
+   
+
   };
   const handleOpenComments = () => {
     //navigation.navigate("Comentarios",{ post});
@@ -74,7 +80,9 @@ function PostCard({ post }) {
   const handlePopup = () => {
     setIsPopupVisible(!isPopupVisible);
   };
-
+//------------------------------------------------------------------------------------------------------------//
+//----------------------------------------------ELIMINA-------------------------------------------------------//
+//------------------------------------------------------------------------------------------------------------//
   const handleDelete = () => {
     Alert.alert(
       "Eliminar publicación",
@@ -141,9 +149,9 @@ function PostCard({ post }) {
         <View style={styles.leftButtonsContainer}>
           <TouchableOpacity style={styles.button} onPress={handleLike}>
             <Ionicons
-              name={ isLoadings ? "loading..." : data?.includes(userInfo.id) ? "heart" : "heart-outline"}
+              name={ isLoading ? "loading..." : data?.includes(userInfo.id) ? "heart" : "heart-outline"}
               size={30}
-              color={ isLoadings ? "loading..." : data?.includes(userInfo.id) ? "#ba6bad" : "gray"}
+              color={ isLoading ? "loading..." : data?.includes(userInfo.id) ? "#ba6bad" : "gray"}
             />
           </TouchableOpacity>
           {/*--------------------------------------COMENTARIOS---------------------*/}

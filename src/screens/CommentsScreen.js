@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   View,
   Text,
@@ -29,14 +29,13 @@ const CommentsScreen = ({ id }) => {
   const [nuevoComentario2, setNuevoComentario2] = useState("");
   const [datosComent, setDatosComent] = useState("");
 
-  const [mostrarCajaRespuesta, setMostrarCajaRespuesta] = useState(false);
-  const [idComentarioRespuesta, setIdComentarioRespuesta] = useState("");
-
+  //------------------------------------------------------------------------------------------------------------//
+  //----------------------------------MUESTRA LOS COMENTARIOS---------------------------------------------------//
+  //------------------------------------------------------------------------------------------------------------//
   const { isLoading, error, data } = useQuery({
     queryKey: ["comments"],
     queryFn: async () => {
       const response = await axios.get(
-        // `${BASE_URL}/comments/getComments?postId=3`
         `${BASE_URL}/comments/getComments?postId=${postId}`
       );
       setDatosComent(response);
@@ -47,7 +46,11 @@ const CommentsScreen = ({ id }) => {
   const [comentarios, setComentarios] = useState(data);
 
   const queryClient = useQueryClient();
-  const { mutate, errors, isLoadings } = useMutation({
+
+  //------------------------------------------------------------------------------------------------------------//
+  //------------------------------------AGREGAR COMENTARIO-------------------------------------------------------//
+  //------------------------------------------------------------------------------------------------------------//
+  const { mutate } = useMutation({
     mutationFn: compartir,
     onSuccess: () => {
       queryClient.invalidateQueries(["comments"]);
@@ -62,7 +65,6 @@ const CommentsScreen = ({ id }) => {
       .post(`${BASE_URL}/comments/addComments`, datos)
       .then((response) => {
         if (response.status === 200) {
-         
           return response.data;
         } else {
           throw new Error(response.statusText);
@@ -75,24 +77,17 @@ const CommentsScreen = ({ id }) => {
   }
 
   const agregarComentario = () => {
-    /*if (nuevoComentario2.trim() !== "") {
-      const comentario = {
-        id: Math.random().toString(),
-     //   name: "Elizabeth Gomez",
-        comment: nuevoComentario2,
-        reply: "",
-        likes: 0,
-      };
-     // setComentarios([...comentarios, comentario]);
-      setNuevoComentario2("");
-    }*/
-
     mutate({ nuevoComentario2, postId });
   };
-  console.log(nuevoComentario2);
-  console.log(postId);
+ 
+  //------------------------------------------------------------------------------------------------------------//
+  //----------------------------------------------likes-------------------------------------------------------//
+  //------------------------------------------------------------------------------------------------------------//
+
   const agregarMeGusta = (id) => {
-    const comentarioIndex = comentarios.findIndex(
+   
+   console.log (id+"ide coment")
+    /*const comentarioIndex = comentarios.findIndex(
       (comentario) => comentario.id === id
     );
     if (comentarioIndex !== -1) {
@@ -104,17 +99,36 @@ const CommentsScreen = ({ id }) => {
         comentario.likes = 0; // Quitar "me gusta" (dislike)
       }
       setComentarios(comentariosActualizados);
-    }
+    }*/
   };
 
-  const mostrarCajaTextoRespuesta = (id) => {
-    setMostrarCajaRespuesta(true);
-    setIdComentarioRespuesta(id);
-  };
+  //------------------------------------------------------------------------------------------------------------//
+  //----------------------------------------------ELIMINA-------------------------------------------------------//
+  //------------------------------------------------------------------------------------------------------------//
+  async function EliminarComentario(id) {
+    return await axios
+      .delete(`${BASE_URL}/comments/deleteComent?id=${id}`)
 
-  
-  console.log(datosComent.name+"nombre");
-  const handleDelete = () => {
+      .then((response) => {
+        if (response.status === 200) {
+          Alert.alert("Comentario eliminado", "El comentario se ha eliminado", [
+            { text: "OK", onPress: () => console.log("OK Pressed") },
+           
+          ]);
+        } else {
+          Alert.alert("Error", "El comentario no pudo ser eliminado", [
+            { text: "OK", onPress: () => console.log("OK Pressed") },
+          ]);
+        }
+        queryClient.refetchQueries("comments")
+      })
+      .catch((error) => {
+        console.log(error);
+        throw error;
+      });
+  }
+
+  const handleDelete = (id) => {
     Alert.alert(
       "Eliminar Comentario",
       "¿Está seguro de que desea eliminar este comentario?",
@@ -125,15 +139,16 @@ const CommentsScreen = ({ id }) => {
         },
         {
           text: "Eliminar",
-          onPress: () => console.log("Comentario eliminado"),
+          onPress: () => {
+            EliminarComentario(id);
+           
+          },
+
           style: "destructive",
-          
         },
-        console.log(datosComent.id+"id")
       ]
     );
   };
-
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -161,10 +176,15 @@ const CommentsScreen = ({ id }) => {
                   style={styles.likeButton}
                   onPress={() => agregarMeGusta(item.id)}
                 >
-                  <Ionicons name="heart" size={24} color="#ba6bad" />
+                  {/* <Ionicons name="heart" size={24} color="#ba6bad" />*/}
+                  <Ionicons
+              name={ isLoading ? "loading..." : data?.includes(userInfo.id) ? "heart" : "heart-outline"}
+              size={24}
+              color={ isLoading ? "loading..." : data?.includes(userInfo.id) ? "#ba6bad" : "gray"}
+            />
                   <Text style={styles.likeCount}>{item.likes}</Text>
                 </TouchableOpacity>
-             
+
                 <TouchableOpacity
                   style={styles.popupMenuItem}
                   onPress={() => handleDelete(item.id)}
@@ -172,12 +192,11 @@ const CommentsScreen = ({ id }) => {
                   <Ionicons name="trash-outline" size={22} color="black" />
                 </TouchableOpacity>
               </View>
-              
             </View>
           )
         }
       />
-              {/*------------------------------------------RESPUESTA------------------------------------------------------------- */}
+      {/*------------------------------------------RESPUESTA------------------------------------------------------------- */}
 
       <View style={styles.inputContainer}>
         <TextInput
@@ -235,11 +254,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     //justifyContent: "space-between",
     marginTop: 8,
-    
-    
   },
   likeButton: {
-   // flexDirection: "row",
+    // flexDirection: "row",
     alignItems: "center",
     marginRight: 20,
   },

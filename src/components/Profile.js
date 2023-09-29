@@ -1,5 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
-import { StyleSheet, Text, View, Image, Modal, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  Modal,
+  TouchableOpacity,
+} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { AuthContext } from "../../context/AuthContext";
 
@@ -8,17 +15,17 @@ export default ProfileView = () => {
 
   const [name, setName] = useState(""); // Nombre de usuario predeterminado
   const [avatar, setAvatar] = useState(""); // Nombre de usuario predeterminado
-  const [isPhotoModalVisible, setIsPhotoModalVisible] = useState(false); // Estado para controlar si la foto en grande está visible o no
+  const [isImageModalVisible, setIsImageModalVisible] = useState(false);
 
   useEffect(() => {
     // Realizar una llamada a la API para obtener el nombre de usuario
 
     setName(userInfo.name); // Actualizar el estado con el nombre de usuario
-   
   }, []);
 
   const openPhotoModal = () => {
-    setIsPhotoModalVisible(true);
+    setIsImageModalVisible(!isImageModalVisible);
+
   };
 
   const handleButton1Press = () => {
@@ -37,7 +44,7 @@ export default ProfileView = () => {
             <Image
               style={styles.avatar}
               source={{
-                uri: userInfo.profilepic 
+                uri: userInfo.profilepic,
               }}
             />
           </TouchableOpacity>
@@ -80,20 +87,25 @@ export default ProfileView = () => {
 
       {/* Modal para mostrar la foto en grande */}
       <Modal
-        visible={isPhotoModalVisible}
-        onRequestClose={() => setIsPhotoModalVisible(false)}
+        visible={isImageModalVisible}
+        transparent={true}
+        onRequestClose={openPhotoModal}
       >
-        <View style={styles.photoModal}>
-          <Image
-            style={styles.photo}
-            source={{ uri: userInfo.profilepic }}
-          />
-        </View>
+        <TouchableOpacity
+          style={styles.modalContainer}
+          onPress={openPhotoModal}
+        >
+          <Image source={{  uri: userInfo.profilepic }} style={styles.modalImage} />
+        </TouchableOpacity>
       </Modal>
+<<<<<<< HEAD
+=======
+   
+>>>>>>> fcfa96ecec48fed7a175156adcd504f38dd9b07f
 
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
  
@@ -139,22 +151,28 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginTop: 100, //mueve la posicion del boton de seguidores y seguidos
     alignItems: "center",
+    justifyContent: "center",
     flexDirection: "row",
+    width: "70%",
     position: "absolute",
     backgroundColor: "#4D194D",
     borderRadius: 10,
   },
   detailContent: {
+<<<<<<< HEAD
     margin: 2, //antes en 10 mueve el tamanno del detalle de seguidores 
+=======
+    margin: 5, //antes en 10
+>>>>>>> fcfa96ecec48fed7a175156adcd504f38dd9b07f
     alignItems: "center",
   },
   title: {
-    fontSize: 16,
+    fontSize: 12,
     fontWeight: "bold",
     color: "#FFFFFF",
   },
   count: {
-    fontSize: 16,
+    fontSize: 12,
     fontWeight: "bold",
     color: "white",
   },
@@ -187,18 +205,21 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
 
-  photoModal: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "white",
-  },
+
   photo: {
     width: 350,
     height: 350,
     borderRadius: 250,
   },
+  modalContainer: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.7)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalImage: {
+    width: "80%",
+    height: "80%",
+    resizeMode: "contain",
+  },
 });
-
-
-

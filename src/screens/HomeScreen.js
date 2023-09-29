@@ -27,8 +27,9 @@ import { useQuery } from "react-query";
 
 function HomeScreen({ navigation }) {
   moment.locale("es");
-  const [posts, setPosts] = useState("");
-
+//------------------------------------------------------------------------------------------------------------//
+//-------------------------------------MUESTRA LOS POST-------------------------------------------------------//
+//------------------------------------------------------------------------------------------------------------//
   const { isLoading, error, data } = useQuery({
     queryKey: ["posts"],
     queryFn: async () => {
@@ -42,7 +43,7 @@ function HomeScreen({ navigation }) {
       <FlatList
         data={data}
         renderItem={({ item }) =>
-          error ? "error" : isLoading ? "loading..." : <PostCard post={item} />
+          error ? "error" : isLoading ?   <ActivityIndicator size={"large"} /> : <PostCard post={item} />
         }
         keyExtractor={(item) => {
           return item.id || Math.random().toString();
