@@ -1,36 +1,50 @@
 import React, { useState } from 'react';
 import { View, Text, Image, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { ScrollView } from 'react-native';
+import { LinearGradient } from "expo-linear-gradient";
 
 const Despedida = ({onSubmit}) => {
   const [code, setCode] = useState('');
 
   const navigation = useNavigation();
   return (
-    <View style={styles.container}>
-      <View style={styles.logoContainer}>
-        <Image
-          style={styles.logo}
-          source={require("../../assets/li.jpg")}
-        />
-      </View>
-      <Text style={styles.title}>Gracias Por Haber Formado Parte De Nuestra Familia ArcaReads, Hasta Pronto Elizabeth</Text>
+   <ScrollView>
+   <View style={styles.container}>
+      
+      <Image
+        style={styles.icon}
+        source={require('../../assets/A.png')}
+      />
+
+      <Text style={styles.title}>Gracias Por Haber Formado                                     Parte De Nuestra Familia ArcaReads,                 Hasta Pronto </Text>
       <Text style={styles.description}>
-        Porfavor, Antes de irte Podrias Indicarnos el motivo de tu partida
+                                                                            
+      </Text>
+
+      <Text style={styles.description}>
+        Porfavor, Antes de irte:                                                                          ¿Podrias Indicarnos el motivo de tu partida?
       </Text>
       <View style={styles.card}>
         <TextInput
           style={styles.input}
-          placeholder="Comentario"
+          placeholder="Motivo"
           value={code}
           onChangeText={setCode}
           maxLength={20}
         />
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Login')}>
+       
+       <LinearGradient colors={["rgba(238,174,202,0.4)", "rgba(93,135,218,0.7)"]} style={[styles.button]}>
+        <TouchableOpacity  onPress={() => navigation.navigate('Login')}>
           <Text style={styles.buttonText}>Desactivar</Text>
         </TouchableOpacity>
+        </LinearGradient>
+      
       </View>
+
+
     </View>
+    </ScrollView>
   );
 };
 
@@ -39,12 +53,13 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    paddingTop: 50,
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
+    fontSize: 20,
     textAlign: 'center',
+    marginTop: 22,
+    color: '#4D194D',
   },
   logoContainer: {
     overflow: 'hidden',
@@ -87,6 +102,11 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#fff',
     fontSize: 18,
+  },
+
+  icon: {
+    width: 120,
+    height: 120,
   },
 });
 

@@ -3,59 +3,73 @@ import React, { useState } from 'react';
 import { View, Text, Image, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { AuthContext } from "../../context/AuthContext";
+import { ScrollView } from 'react-native';
+import { LinearGradient } from "expo-linear-gradient";
 
 const EditProfileView = () => {
   const profile = {
+    name2: 'Jane Doe',
     name: 'Jane Doe',
     email: 'jane.doe@example.com',
     bio: 'Software engineer and cat lover',
     avatar: 'https://example.com/jane-doe-avatar.png',
   }
-  const [name, setName] = useState("Elizabeth Gomez");
-  const [email, setEmail] = useState("eligomez@gmail.com");
-  const [bio, setBio] = useState("Telefono");
+  const [name2, setName2] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [bio, setBio] = useState("");
   const [avatar, setAvatar] = useState(profile.avatar);
 
   const navigation = useNavigation();
   return (
-    <View style={styles.container}>
+    <ScrollView>
+   <View style={styles.container}>
       <View style={styles.avatarContainer}>
-        <Image
-          style={styles.avatar}
-          source={require("../../assets/li.jpg")}
-        />
-        <TouchableOpacity style={styles.changeAvatarButton} onPress={() => navigation.navigate('CambiarFoto')}>
-          <Text style={styles.changeAvatarButtonText}>Cambiar Foto</Text>
-        </TouchableOpacity>
+        
+          <Text style={styles.changeAvatarButtonText}>Información Personal</Text>
+      
       </View>
       <View style={styles.form}>
+      
+      <Text style={styles.label}>Nombre de Usuario </Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Escribe el Nombre de Usuario"
+          value={name2}
+          onChangeText={setName2}
+        />
+        
         <Text style={styles.label}>Nombre y Apellido </Text>
         <TextInput
           style={styles.input}
-          placeholder="Enter Name"
+          placeholder="Escribe el Nombre y Apellido"
           value={name}
           onChangeText={setName}
         />
         <Text style={styles.label}>Correo</Text>
         <TextInput
           style={styles.input}
-          placeholder="Enter Email"
+          placeholder="Escribe el correo"
           value={email}
           onChangeText={setEmail}
         />
         <Text style={styles.label}>Telefono</Text>
         <TextInput
           style={styles.input}
-          placeholder="Enter Bio"
+          placeholder="Escribe el telefono"
           value={bio}
           onChangeText={setBio}
         />
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Settings')}>
+       
+       <LinearGradient colors={["rgba(238,174,202,0.4)", "rgba(93,135,218,0.7)"]} style={styles.button}>
+       <TouchableOpacity  onPress={() => navigation.navigate('Settings')}>
           <Text style={styles.buttonText}>Guardar Cambios</Text>
         </TouchableOpacity>
+        </LinearGradient>
       </View>
 
     </View>
+    </ScrollView>
   );
 };
 
@@ -79,11 +93,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   button: {
+   
     marginTop: 20,
     backgroundColor: '#4D194D',
-    borderRadius: 5,
+    borderRadius: 30,
     paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingHorizontal: 30,
   },
   buttonText: {
     color: '#fff',
@@ -91,7 +106,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   avatarContainer: {
-    marginTop: 20,
+    marginTop: 44,
     alignItems: 'center',
   },
   avatar: {
@@ -104,7 +119,7 @@ const styles = StyleSheet.create({
   },
   changeAvatarButtonText: {
     color: '#4D194D',
-    fontSize: 18,
+    fontSize: 25,
   },
 });
 

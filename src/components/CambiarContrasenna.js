@@ -1,24 +1,31 @@
-import React, { useState } from 'react';
-import { View, Text, Image, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useState,useContext} from 'react';
+import { View, Text, Image, TextInput, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { LinearGradient } from "expo-linear-gradient";
+import { AuthContext } from "../../context/AuthContext";
+
 
 const ChangePassword = () => {
 
+  const { userInfo } = useContext(AuthContext); //AUTENTICACION
   const [currentPassword, setCurrentPassword] = useState();
   const [newPassword, setNewPassword] = useState();
   const [repeatPassword, setRepeatPassword] = useState();
-
-  const handleSubmit = () => {
-
-  }
+  const handleSubmit = () => {}
   const navigation = useNavigation();
+  
+  
   return (
+    <ScrollView>
     <View style={styles.container}>
       <View style={styles.avatarContainer}>
         <Image
-          style={styles.avatar}
-          source={require("../../assets/li.jpg")}
-        />
+           style={styles.avatar}
+           source={{
+             uri: userInfo.profilepic 
+           }}
+         />
+       
       </View>
       <View style={styles.form}>
         <Text style={styles.label}>Contraseña Actual</Text>
@@ -45,12 +52,18 @@ const ChangePassword = () => {
           onChangeText={setRepeatPassword}
           secureTextEntry={true}
         />
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Settings')}>
+       
+       <LinearGradient
+      colors={["rgba(238,174,202,0.7)", "rgba(93,135,218,0.9)"]}
+      style={styles.button}>
+        <TouchableOpacity  onPress={() => navigation.navigate('Settings')}>
           <Text style={styles.buttonText}>Cambiar Contraseña</Text>
         </TouchableOpacity>
+        </LinearGradient>
       </View>
-
     </View>
+    
+    </ScrollView>
   );
 };
 
@@ -78,7 +91,7 @@ const styles = StyleSheet.create({
   button: {
     marginTop: 20,
     backgroundColor: '#4D194D',
-    borderRadius: 5,
+    borderRadius: 30,
     paddingVertical: 10,
     paddingHorizontal: 20,
   },
@@ -88,7 +101,7 @@ const styles = StyleSheet.create({
     textAlign:'center',
   },
   avatarContainer: {
-    marginTop: 10,
+    marginTop: 30,
     alignItems: 'center',
 
     shadowColor: '#000',
@@ -98,8 +111,8 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   avatar: {
-    width: 150,
-    height: 150,
+    width: 100,
+    height: 100,
     borderRadius: 75,
     borderColor: '#4D194D',
   },

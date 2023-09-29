@@ -37,7 +37,7 @@ export default function EditarPerfilScreen() {
 const styles = StyleSheet.create({
   Container: {
     flex: 1,
-    marginTop: 20,
+    marginTop: -1,
 
     
     backgroundColor: "white",

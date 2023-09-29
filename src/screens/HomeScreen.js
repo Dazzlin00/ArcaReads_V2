@@ -81,7 +81,7 @@ console.log(data)
 
 const styles = StyleSheet.create({
   Container: {
-    marginTop: 20,
+    marginTop: -1,
 
     flex: 1,
     backgroundColor: "white",
