@@ -37,7 +37,7 @@ function HomeScreen({ navigation }) {
       return response.data;
     },
   });
-
+console.log(data)
   return (
     <SafeAreaView style={styles.Container}>
       <FlatList

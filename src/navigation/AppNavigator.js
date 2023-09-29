@@ -41,6 +41,11 @@ export default function AppNavigator() {
           component={ProfileScreen}
           options={{ headerShown: false }}
         />
+          <Stack.Screen
+          name="PerfilUsuario"
+          component={PerfilUsuarioScreen}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen
           name="Messages"
           component={MessagesScreen}
@@ -77,11 +82,7 @@ export default function AppNavigator() {
           component={CambiarFotoSreen}
           options={{ headerShown: false }}
         />
-        <Stack.Screen
-          name="PerfilUsuario"
-          component={PerfilUsuarioScreen}
-          options={{ headerShown: false }}
-        />
+      
          <Stack.Screen
           name="Botones"
           component={ButtonsProfile}

@@ -109,20 +109,23 @@ function PostCard({ post }) {
 
   // console.log("Postcard:",post);
 
-  console.log("Postcard:", post.id);
+  console.log("Postcard:", post.userId);
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <TouchableOpacity
-            onPress={() => navigation.navigate("PerfilUsuario")}
+            onPress={() => navigation.navigate("PerfilUsuario",{ userId: post.userId })}
           >
             <Image source={{ uri: post.profilepic }} style={styles.avatar} />
           </TouchableOpacity>
           <View style={{ marginLeft: 10 }}>
+            
             <TouchableOpacity
-              onPress={() => navigation.navigate("PerfilUsuario")}
+              onPress={() => navigation.navigate("PerfilUsuario",{ userId: post.userId })
+            
+            }
             >
               <Text style={styles.username}>{post.name}</Text>
             </TouchableOpacity>

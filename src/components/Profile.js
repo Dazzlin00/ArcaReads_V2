@@ -13,6 +13,8 @@ import { AuthContext } from "../../context/AuthContext";
 export default ProfileView = () => {
   const { userInfo } = useContext(AuthContext); //AUTENTICACION
 
+
+
   const [name, setName] = useState(""); // Nombre de usuario predeterminado
   const [avatar, setAvatar] = useState(""); // Nombre de usuario predeterminado
   const [isImageModalVisible, setIsImageModalVisible] = useState(false);
@@ -40,6 +42,7 @@ export default ProfileView = () => {
               }}
             />
           </TouchableOpacity>
+
           <Text style={styles.name}>{name}</Text>
         </View>
       </View>
