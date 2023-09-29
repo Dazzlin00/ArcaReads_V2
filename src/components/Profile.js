@@ -98,11 +98,6 @@ export default ProfileView = () => {
           <Image source={{  uri: userInfo.profilepic }} style={styles.modalImage} />
         </TouchableOpacity>
       </Modal>
-<<<<<<< HEAD
-=======
-   
->>>>>>> fcfa96ecec48fed7a175156adcd504f38dd9b07f
-
     </View>
   );
 };
@@ -159,11 +154,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   detailContent: {
-<<<<<<< HEAD
     margin: 2, //antes en 10 mueve el tamanno del detalle de seguidores 
-=======
-    margin: 5, //antes en 10
->>>>>>> fcfa96ecec48fed7a175156adcd504f38dd9b07f
     alignItems: "center",
   },
   title: {
