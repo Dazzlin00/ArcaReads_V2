@@ -109,32 +109,20 @@ const styles = StyleSheet.create({
  
 
   
-  button: {
-    width: '50%',
-    padding: 8,
-    borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginVertical: 0.50,//mueve los botones hacia arriba o abajo 
-  },
 
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
  
 
   header: {
     backgroundColor: "rgba(93,135,218,0.6)",
   },
   headerContent: {
-    padding: -20,
+    justifyContent:"center",
+    
     alignItems: "center",
   },
   avatar: {
-    width: 80,
-    height: 80,//mueve el tamanno del avatar
+    width: 90,
+    height: 90,
     borderRadius: 63,
     borderWidth: 2,
     borderColor: "white",
@@ -147,7 +135,7 @@ const styles = StyleSheet.create({
   },
   profileDetail: {
     alignSelf: "center",
-    marginTop: 100, //mueve la posicion del boton de seguidores y seguidos
+    marginTop: 110, //200
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
@@ -157,7 +145,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   detailContent: {
-    margin: 2, //antes en 10 mueve el tamanno del detalle de seguidores 
+    margin: 5, //antes en 10
     alignItems: "center",
   },
   title: {
@@ -172,9 +160,10 @@ const styles = StyleSheet.create({
   },
   bodyContent: {
     flex: 1,
+   
     alignItems: "center",
-    padding: 30, //30
-    marginTop: -60, //mueve la parte de los post
+    
+   
   },
   textInfo: {
     fontSize: 18,
@@ -199,11 +188,10 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
 
-
   photo: {
-    width: 350,
-    height: 350,
-    borderRadius: 250,
+    width: 200,
+    height: 200,
+    borderRadius: 100,
   },
   modalContainer: {
     flex: 1,
@@ -215,5 +203,19 @@ const styles = StyleSheet.create({
     width: "80%",
     height: "80%",
     resizeMode: "contain",
+  },
+  button: {
+    width: '50%',
+    padding: 8,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginVertical: 0.50,//mueve los botones hacia arriba o abajo 
+  },
+
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });

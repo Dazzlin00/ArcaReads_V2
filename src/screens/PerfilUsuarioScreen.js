@@ -29,7 +29,7 @@ export default function ProfileUsuarioScreen() {
 
   return (
     <SafeAreaView style={styles.Container}>
-      <LinearGradient
+     {/*  <LinearGradient
         colors={["rgba(238,174,202,0.7)", "rgba(93,135,218,0.9)"]}
         start={{ x: 1, y: 0 }}
         end={{ x: 0, y: 1 }}
@@ -41,13 +41,15 @@ export default function ProfileUsuarioScreen() {
             style={styles.imagelogo}
           />
         </View>
+{}
         <TouchableOpacity
           onPress={() => navigation.navigate("Settings")}
           style={styles.notificationButton}
         >
           <Ionicons name="settings-outline" size={30} color="white" />
         </TouchableOpacity>
-      </LinearGradient>
+
+      </LinearGradient>*/}
 
       <PerfilUsuario />
      

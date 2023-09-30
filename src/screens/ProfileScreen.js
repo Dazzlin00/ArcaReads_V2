@@ -84,12 +84,12 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   Container: {
     flex: 1,
-    marginTop: -1,
+    marginTop: 20,
 
     backgroundColor: "white",
   },
   logocontainer: {
-    height: 80,
+    height: 50,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",

@@ -151,6 +151,8 @@ function PostCard({ post }) {
       <View style={styles.actionsContainer}>
         <View style={styles.leftButtonsContainer}>
           <TouchableOpacity style={styles.button} onPress={handleLike}>
+         
+         
             <Ionicons
               name={ isLoading ? "loading..." : data?.includes(userInfo.id) ? "heart" : "heart-outline"}
               size={30}
