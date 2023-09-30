@@ -85,28 +85,32 @@ export default PerfilUsuario = () => {
   //----------------------------------------------Seguir--------------------------------------------------//
   //------------------------------------------------------------------------------------------------------------//
 
-  const { mutate, isLoading: isLoadingmutacion } = useMutation({
-    mutationFn: (following) => {
+  const { mutateAsync, isLoading: isLoadingmutacion } = useMutation({
+    mutationFn:async  (following) => {
       if (following) {
-        return axios.delete(
+        await  axios.delete(
           `${BASE_URL}/relations/deleteRelations?followedUserId=${userId}`
         );
       } else {
-        return axios.post(`${BASE_URL}/relations/addRelations`, {
+        await  axios.post(`${BASE_URL}/relations/addRelations`, {
           followedUserId: userId,
         });
       }
     },
 
     onSuccess: () => {
-      queryClient.invalidateQueries(["following"]);
+      queryClient.invalidateQueries(["relations"]);
     },
   });
-  const [cargando, setCargando] = useState(!relationData.includes(userInfo.id));
+  const [cargando, setCargando] = useState(!relationData?.includes(userInfo.id));
 
-  const handleFollow = () => {
-    mutate(relationData?.includes(userInfo.id));
-    setCargando(!cargando);
+  const handleFollow = async () => {
+    try {
+      await mutateAsync(relationData?.includes(userInfo.id));
+      setCargando(!cargando);
+    } catch (error) {
+      console.error("Error al realizar la mutación:", error);
+    }
   };
 
   console.log(userId + "este es el id del usuario");
@@ -133,7 +137,7 @@ export default PerfilUsuario = () => {
               style={styles.imagelogo}
             />
           </View>
-          {console.log(userId + "userinfo" + userInfo.id)}
+         
           {userId === userInfo.id ? (
             <TouchableOpacity
               onPress={() => navigation.navigate("Settings")}
@@ -142,30 +146,17 @@ export default PerfilUsuario = () => {
               <Ionicons name="settings-outline" size={30} color="white" />
             </TouchableOpacity>
           ) : (
-            <View>
+            
             <TouchableOpacity onPress={handleFollow}>
               {
-               cargando ? <Text>Following</Text>  : <Text>Seguir</Text>}
+               cargando ? <Ionicons name="ios-person-add" size={30} color="white" />  : <Ionicons name="person" size={30} color="white" />}
             </TouchableOpacity>
-
-            </View>
+         
+        
            
           )}
 
-          <TouchableOpacity
-            onPress={handleFollow}
-            style={styles.notificationButton}
-          >
-            <Ionicons name="person" size={30} color="white" />
-            {/*  {isLoadingmutacion ? 
-              (
-                <ActivityIndicator size="small" color="#0000ff" />
-              ) : cargando && mutate.following !== true ? (
-                <Ionicons name="person" size={30} color="white" />
-              ) : (
-                <Ionicons name="ios-person-add" size={30} color="white" />
-              )}*/}
-          </TouchableOpacity>
+
         </LinearGradient>
       </View>
 
