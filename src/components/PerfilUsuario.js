@@ -147,7 +147,7 @@ export default PerfilUsuario = () => {
             </TouchableOpacity>
           ) : (
             
-            <TouchableOpacity onPress={handleFollow}>
+            <TouchableOpacity onPress={handleFollow} style={styles.notificationButton}>
               {
                cargando ? <Ionicons name="ios-person-add" size={30} color="white" />  : <Ionicons name="person" size={30} color="white" />}
             </TouchableOpacity>
