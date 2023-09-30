@@ -122,6 +122,11 @@ export default PerfilUsuario = () => {
   const handleButton2Press = () => {
     console.log("Botón 2 presionado");
   };
+
+  useEffect(() => {
+    // Cuando userId cambie, actualiza cargando en función de la relación
+    setCargando(!relationData?.includes(userInfo.id));
+  }, [userId, relationData, userInfo.id]);
   return (
     <View style={styles.container}>
       <View style={styles.contain}>
@@ -149,7 +154,9 @@ export default PerfilUsuario = () => {
             
             <TouchableOpacity onPress={handleFollow} style={styles.notificationButton}>
               {
-               cargando ? <Ionicons name="ios-person-add" size={30} color="white" />  : <Ionicons name="person" size={30} color="white" />}
+             isLoadingmutacion?  (
+              <ActivityIndicator size="small" color="#0000ff" />
+            ) :cargando ? <Ionicons name="ios-person-add" size={30} color="white" />  : <Ionicons name="person" size={30} color="white" />}
             </TouchableOpacity>
          
         
