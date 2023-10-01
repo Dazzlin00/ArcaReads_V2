@@ -9,10 +9,13 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { AuthContext } from "../../context/AuthContext";
+import { useNavigation } from "@react-navigation/native";
+import SeguidoresScreen from "../screens/SeguidoresScreen";
+
 
 export default ProfileView = () => {
   const { userInfo } = useContext(AuthContext); //AUTENTICACION
-
+  const navigation = useNavigation();
 
 
   const [name, setName] = useState(""); // Nombre de usuario predeterminado
@@ -31,7 +34,8 @@ export default ProfileView = () => {
   };
 
   const handleButton1Press = () => {
-    console.log('Botón 1 presionado');
+    //console.log('Botón 1 presionado');
+    navigation.navigate("SeguidoresScreen");
   };
 
   const handleButton2Press = () => {
@@ -72,7 +76,7 @@ export default ProfileView = () => {
           start={{ x: 1, y: 0 }}
           end={{ x: 0, y: 1 }}
           style={styles.button}
-        >
+         >
           <TouchableOpacity onPress={handleButton2Press}>
             <Text style={styles.buttonText}>Seguidos</Text>
           </TouchableOpacity>

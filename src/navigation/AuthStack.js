@@ -18,6 +18,7 @@ import CerrarSesionScreen from "../screens/CerrarSesionScreen";
 import DespedidaScreen from "../screens/DespedidaScreen";
 import CambiarFotoSreen from "../screens/CambiarFotoScreen";
 import PerfilUsuarioScreen from "../screens/PerfilUsuarioScreen";
+import SeguidoresScreen from "../screens/SeguidoresScreen";
 
 const Stack = createNativeStackNavigator();
 

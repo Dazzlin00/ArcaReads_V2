@@ -19,6 +19,7 @@ import DespedidaScreen from "../screens/DespedidaScreen";
 import CambiarFotoSreen from "../screens/CambiarFotoScreen";
 import PerfilUsuarioScreen from "../screens/PerfilUsuarioScreen";
 import ButtonsProfile from "../components/ButtonsProfile";
+import SeguidoresScreen from "../screens/SeguidoresScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -88,6 +89,14 @@ export default function AppNavigator() {
           component={ButtonsProfile}
           options={{ headerShown: false }}
         />
+
+        <Stack.Screen
+          name="SeguidoresScreen"
+          component={SeguidoresScreen}
+          options={{ headerShown: false }}
+        />
+
+
       </Stack.Navigator>
   );
 }

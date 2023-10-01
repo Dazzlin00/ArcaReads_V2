@@ -102,7 +102,7 @@ export default PerfilUsuario = () => {
       queryClient.invalidateQueries(["following"]);
     },
   });
-  const [cargando, setCargando] = useState(!relationData.includes(userInfo.id));
+  const [cargando, setCargando] = useState(!relationData?.includes(userInfo.id));
 
   const handleFollow = () => {
     mutate(relationData?.includes(userInfo.id));
