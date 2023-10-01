@@ -18,17 +18,13 @@ import { useMutation, useQueryClient } from "react-query";
 
 const AddPostForm = ({ onSubmit }) => {
   const { userInfo } = useContext(AuthContext); //AUTENTICACION
-  const [message, setMessage] = React.useState("");
-
   const [showForm, setShowForm] = useState(false); // Estado para controlar si mostrar el formulario
-
   const [desc, setDesc] = useState("");
   const [title, setTitle] = useState("");
-
   const [img, setImage] = useState(null);
   const [avatar, setAvatar] = useState(userInfo.profilepic); // Nombre de usuario predeterminado
-
   const [name, setName] = useState(""); // Nombre de usuario predeterminado
+
 
   const handleChooseImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -46,6 +42,10 @@ const AddPostForm = ({ onSubmit }) => {
   const handleToggleForm = () => {
     setShowForm(!showForm); // Cambiar el estado de mostrar/ocultar el formulario
   };
+
+   //------------------------------------------------------------------------------------------------------------//
+  //--------------------------------------PETICION QUE AGREGA POST NUEVOS---------------------------------------//
+  //------------------------------------------------------------------------------------------------------------//
   const queryClient = useQueryClient();
   const { mutate, error, isLoading } = useMutation( {
     mutationFn: compartir,
@@ -77,8 +77,6 @@ const AddPostForm = ({ onSubmit }) => {
   };
 
   useEffect(() => {
-    // Realizar una llamada a la API para obtener el nombre de usuario
-
     setName(userInfo.name); // Actualizar el estado con el nombre de usuario
   }, []);
   return (

@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   FlatList,
   ActivityIndicator,
+  ScrollView,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { AuthContext } from "../../context/AuthContext";
@@ -21,8 +22,10 @@ import PostCard from "../components/PostCard";
 import { useNavigation } from "@react-navigation/native";
 import { useMutation, useQueryClient } from "react-query";
 import { Button } from "@mui/material";
+import AddPostForm from "../components/AddPostForm";
 
 export default PerfilUsuario = () => {
+
   const navigation = useNavigation();
   const { userInfo } = useContext(AuthContext); //AUTENTICACION
   const route = useRoute();
@@ -34,9 +37,6 @@ export default PerfilUsuario = () => {
   const [avatar, setAvatar] = useState(""); // Nombre de usuario predeterminado
   const [isImageModalVisible, setIsImageModalVisible] = useState(false);
 
-  const openPhotoModal = () => {
-    setIsImageModalVisible(!isImageModalVisible);
-  };
   //------------------------------------------------------------------------------------------------------------//
   //-------------------------------------INFORMACION DEL USUARIO------------------------------------------------//
   //------------------------------------------------------------------------------------------------------------//
@@ -61,13 +61,12 @@ export default PerfilUsuario = () => {
       const response = await axios.get(
         `${BASE_URL}/posts/getPostUserId?userId=${userId}`
       );
-      console.log(response.data.name + "desde post");
       return response.data;
     },
   });
 
-  //------------------------------------------------------------------------------------------------------------//
-  //-------------------------------------Muestra la cantidad de seguidores--------------------------------------//
+  //-----------------------------------------------------------------------------------------------------------//
+  //---------------------------------PETICION QUE PERMITE TENER LA CANTIDAD DE SEGUIDORES----------------------//
   //------------------------------------------------------------------------------------------------------------//
 
   const { data: relationData } = useQuery({
@@ -82,34 +81,42 @@ export default PerfilUsuario = () => {
 
   const queryClient = useQueryClient();
   //------------------------------------------------------------------------------------------------------------//
-  //----------------------------------------------Seguir--------------------------------------------------//
+  //-----------------------------------SEGUIR Y ELIMINAR USUARIOS-----------------------------------------------//
   //------------------------------------------------------------------------------------------------------------//
 
-  const { mutate, isLoading: isLoadingmutacion } = useMutation({
-    mutationFn: (following) => {
+  const { mutateAsync, isLoading: isLoadingmutacion } = useMutation({
+    mutationFn: async (following) => {
       if (following) {
-        return axios.delete(
+        await axios.delete(
           `${BASE_URL}/relations/deleteRelations?followedUserId=${userId}`
         );
       } else {
-        return axios.post(`${BASE_URL}/relations/addRelations`, {
+        await axios.post(`${BASE_URL}/relations/addRelations`, {
           followedUserId: userId,
         });
       }
     },
 
     onSuccess: () => {
-      queryClient.invalidateQueries(["following"]);
+      queryClient.invalidateQueries(["relations"]);
     },
   });
+<<<<<<< HEAD
   const [cargando, setCargando] = useState(!relationData?.includes(userInfo.id));
+=======
+  const [cargando, setCargando] = useState(
+    !relationData?.includes(userInfo.id)
+  );
+>>>>>>> 937d847fc1d9d5e203382d3dd54155ec8ef960b9
 
-  const handleFollow = () => {
-    mutate(relationData?.includes(userInfo.id));
-    setCargando(!cargando);
+  const handleFollow = async () => {
+    try {
+      await mutateAsync(relationData?.includes(userInfo.id));
+      setCargando(!cargando);
+    } catch (error) {
+      console.error("Error al realizar la mutación:", error);
+    }
   };
-
-  console.log(userId + "este es el id del usuario");
 
   const handleButton1Press = () => {
     console.log("Botón 1 presionado");
@@ -118,115 +125,20 @@ export default PerfilUsuario = () => {
   const handleButton2Press = () => {
     console.log("Botón 2 presionado");
   };
+
+  const openPhotoModal = () => {
+    setIsImageModalVisible(!isImageModalVisible);
+  };
+
+  useEffect(() => {
+    // Cuando userId cambie, actualiza cargando en función de la relación
+    setCargando(!relationData?.includes(userInfo.id));
+  }, [userId, relationData, userInfo.id]);
+
+  
   return (
     <View style={styles.container}>
-      <View style={styles.contain}>
-        <LinearGradient
-          colors={["rgba(238,174,202,0.7)", "rgba(93,135,218,0.9)"]}
-          start={{ x: 1, y: 0 }}
-          end={{ x: 0, y: 1 }}
-          style={styles.logocontainer}
-        >
-          <View style={styles.logoWrapper}>
-            <Image
-              source={require("../../assets/logoblanco.png")}
-              style={styles.imagelogo}
-            />
-          </View>
-          {console.log(userId + "userinfo" + userInfo.id)}
-          {userId === userInfo.id ? (
-            <TouchableOpacity
-              onPress={() => navigation.navigate("Settings")}
-              style={styles.notificationButton}
-            >
-              <Ionicons name="settings-outline" size={30} color="white" />
-            </TouchableOpacity>
-          ) : (
-            <View>
-            <TouchableOpacity onPress={handleFollow}>
-              {
-               cargando ? <Text>Following</Text>  : <Text>Seguir</Text>}
-            </TouchableOpacity>
-
-            </View>
-           
-          )}
-
-          <TouchableOpacity
-            onPress={handleFollow}
-            style={styles.notificationButton}
-          >
-            <Ionicons name="person" size={30} color="white" />
-            {/*  {isLoadingmutacion ? 
-              (
-                <ActivityIndicator size="small" color="#0000ff" />
-              ) : cargando && mutate.following !== true ? (
-                <Ionicons name="person" size={30} color="white" />
-              ) : (
-                <Ionicons name="ios-person-add" size={30} color="white" />
-              )}*/}
-          </TouchableOpacity>
-        </LinearGradient>
-      </View>
-
-      <View style={styles.header}>
-        <View style={styles.headerContent}>
-          {isLoadinguser ? (
-            <ActivityIndicator size="large" color="#0000ff" />
-          ) : (
-            userdata?.map((item) => (
-              <View>
-                <TouchableOpacity onPress={openPhotoModal}>
-                  <Image
-                    key={item.id}
-                    style={styles.avatar}
-                    source={{
-                      uri: item.profilepic,
-                    }}
-                  />
-                </TouchableOpacity>
-                <Text key={item.id} style={styles.name}>
-                  {item.name}
-                </Text>
-              </View>
-            ))
-          )}
-        </View>
-      </View>
-      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-        <LinearGradient
-          colors={["rgba(238,174,202,0.4)", "rgba(93,135,218,0.7)"]}
-          start={{ x: 1, y: 0 }}
-          end={{ x: 0, y: 1 }}
-          style={styles.button}
-        >
-          <TouchableOpacity onPress={handleButton1Press}>
-            <Text style={styles.buttonText}>Seguidores</Text>
-          </TouchableOpacity>
-        </LinearGradient>
-
-        <LinearGradient
-          colors={["rgba(238,174,202,0.4)", "rgba(93,135,218,0.7)"]}
-          start={{ x: 1, y: 0 }}
-          end={{ x: 0, y: 1 }}
-          style={styles.button}
-        >
-          <TouchableOpacity onPress={handleButton2Press}>
-            <Text style={styles.buttonText}>Seguidos</Text>
-          </TouchableOpacity>
-        </LinearGradient>
-      </View>
-
-      <View style={styles.body}>
-        <View style={styles.bodyContent}>
-          <Text style={styles.description}>
-            Lorem ipsum dolor sit amet, saepe sapientem eu nam. Qui ne assum
-            electram expetendis, omittam deseruisse consequuntur ius an,
-          </Text>
-        </View>
-      </View>
-
-      {/* Modal para mostrar la foto en grande */}
+      {/*---------------------------- Modal para mostrar la foto en grande------------------------------------------------------- */}
       <Modal
         visible={isImageModalVisible}
         transparent={true}
@@ -246,7 +158,9 @@ export default PerfilUsuario = () => {
         </TouchableOpacity>
       </Modal>
 
-      <View style={{ height: 390 }}>
+      {/*------------------------------------------------POST DEL USUARIO-----------------------------------------------*/}
+
+      <View >
         <FlatList
           data={data}
           renderItem={({ item }) =>
@@ -255,13 +169,122 @@ export default PerfilUsuario = () => {
             ) : isLoading ? (
               <ActivityIndicator size={"large"} />
             ) : (
-              <View>
+              
                 <PostCard post={item} />
-              </View>
+              
             )
           }
-          keyExtractor={(item) =>
-            item.id ? item.id.toString() : Math.random().toString()
+          keyExtractor={(item) => {
+            return item.id || Math.random().toString();
+          }}
+          ListHeaderComponent={
+            <View>
+              <View style={styles.contain}>
+                {/*-----------------------------------HEADER-----------------------------------------------*/}
+
+                <LinearGradient
+                  colors={["rgba(238,174,202,0.7)", "rgba(93,135,218,0.9)"]}
+                  start={{ x: 1, y: 0 }}
+                  end={{ x: 0, y: 1 }}
+                  style={styles.logocontainer}
+                >
+                  <View style={styles.logoWrapper}>
+                    <Image
+                      source={require("../../assets/logoblanco.png")}
+                      style={styles.imagelogo}
+                    />
+                  </View>
+                  {/*-----------------------------------MUESTRA SEGUN EL USUARIO EL ICONO CORRESPONDIENTE-----------------------------------------------*/}
+
+                  {userId === userInfo.id ? (
+                    <TouchableOpacity
+                      onPress={() => navigation.navigate("Settings")}
+                      style={styles.notificationButton}
+                    >
+                      <Ionicons
+                        name="settings-outline"
+                        size={30}
+                        color="white"
+                      />
+                    </TouchableOpacity>
+                  ) : (
+                    <TouchableOpacity
+                      onPress={handleFollow}
+                      style={styles.notificationButton}
+                    >
+                      {isLoadingmutacion ? (
+                        <ActivityIndicator size="small" />
+                      ) : cargando ? (
+                        <Ionicons
+                          name="ios-person-add"
+                          size={30}
+                          color="white"
+                        />
+                      ) : (
+                        <Ionicons name="person" size={30} color="white" />
+                      )}
+                    </TouchableOpacity>
+                  )}
+                </LinearGradient>
+              </View>
+              <View style={styles.header}>
+                <View style={styles.headerContent}>
+                  {/*-----------------------------------MUESTRA EL NOMBRE Y LA FOTO DEL USUARIO-----------------------------------------------*/}
+
+                  {isLoadinguser ? (
+                    <ActivityIndicator size="large" color="#0000ff" />
+                  ) : (
+                    userdata?.map((item) => (
+                      <View>
+                        <TouchableOpacity onPress={openPhotoModal}>
+                          <Image
+                            key={item.id}
+                            style={styles.avatar}
+                            source={{
+                              uri: item.profilepic,
+                            }}
+                          />
+                        </TouchableOpacity>
+                        <Text key={item.id} style={styles.name}>
+                          {item.name}
+                        </Text>
+                      </View>
+                    ))
+                  )}
+                </View>
+              </View>
+              {/*-----------------------------------BOTONES PARA VER LOS SEGUIDORES Y LOS SEGUIDOS-----------------------------------------------*/}
+
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+              >
+                <LinearGradient
+                  colors={["rgba(238,174,202,0.4)", "rgba(93,135,218,0.7)"]}
+                  start={{ x: 1, y: 0 }}
+                  end={{ x: 0, y: 1 }}
+                  style={styles.button}
+                >
+                  <TouchableOpacity onPress={handleButton1Press}>
+                    <Text style={styles.buttonText}>Seguidores</Text>
+                  </TouchableOpacity>
+                </LinearGradient>
+
+                <LinearGradient
+                  colors={["rgba(238,174,202,0.4)", "rgba(93,135,218,0.7)"]}
+                  start={{ x: 1, y: 0 }}
+                  end={{ x: 0, y: 1 }}
+                  style={styles.button}
+                >
+                  <TouchableOpacity onPress={handleButton2Press}>
+                    <Text style={styles.buttonText}>Seguidos</Text>
+                  </TouchableOpacity>
+                </LinearGradient>
+              </View>
+              <AddPostForm />
+            </View>
           }
         />
       </View>
@@ -270,6 +293,7 @@ export default PerfilUsuario = () => {
 };
 
 const styles = StyleSheet.create({
+
   header: {
     backgroundColor: "rgba(93,135,218,0.6)",
   },

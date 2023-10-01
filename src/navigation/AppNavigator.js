@@ -18,8 +18,11 @@ import CerrarSesionScreen from "../screens/CerrarSesionScreen";
 import DespedidaScreen from "../screens/DespedidaScreen";
 import CambiarFotoSreen from "../screens/CambiarFotoScreen";
 import PerfilUsuarioScreen from "../screens/PerfilUsuarioScreen";
+<<<<<<< HEAD
 import ButtonsProfile from "../components/ButtonsProfile";
 import SeguidoresScreen from "../screens/SeguidoresScreen";
+=======
+>>>>>>> 937d847fc1d9d5e203382d3dd54155ec8ef960b9
 
 const Stack = createNativeStackNavigator();
 
@@ -84,6 +87,7 @@ export default function AppNavigator() {
           options={{ headerShown: false }}
         />
       
+<<<<<<< HEAD
          <Stack.Screen
           name="Botones"
           component={ButtonsProfile}
@@ -97,6 +101,9 @@ export default function AppNavigator() {
         />
 
 
+=======
+         
+>>>>>>> 937d847fc1d9d5e203382d3dd54155ec8ef960b9
       </Stack.Navigator>
   );
 }

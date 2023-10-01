@@ -17,7 +17,6 @@ function AppNav() {
     );
   }
 
-  // {userToken !== null ? <IniScreen /> :<AppNavigator /> }
   return (
     <NavigationContainer>
       {userToken !== null ? <AppNavigator /> : <AuthStack />}
