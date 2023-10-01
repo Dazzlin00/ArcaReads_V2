@@ -24,6 +24,7 @@ const CommentsScreen = ({ id }) => {
 
   //const postId = ; // Obtiene el ID del post pasado como parámetro
   const [postId, setPosId] = useState(route.params.postId);
+  const [userId, setUserId] = useState(route.params.userId);
 
   const [nuevoComentario, setNuevoComentario] = useState("");
   const [nuevoComentario2, setNuevoComentario2] = useState("");
@@ -79,14 +80,13 @@ const CommentsScreen = ({ id }) => {
   const agregarComentario = () => {
     mutate({ nuevoComentario2, postId });
   };
- 
+
   //------------------------------------------------------------------------------------------------------------//
   //----------------------------------------------likes-------------------------------------------------------//
   //------------------------------------------------------------------------------------------------------------//
 
   const agregarMeGusta = (id) => {
-   
-   console.log (id+"ide coment")
+    console.log(id + "ide coment");
     /*const comentarioIndex = comentarios.findIndex(
       (comentario) => comentario.id === id
     );
@@ -113,14 +113,13 @@ const CommentsScreen = ({ id }) => {
         if (response.status === 200) {
           Alert.alert("Comentario eliminado", "El comentario se ha eliminado", [
             { text: "OK", onPress: () => console.log("OK Pressed") },
-           
           ]);
         } else {
           Alert.alert("Error", "El comentario no pudo ser eliminado", [
             { text: "OK", onPress: () => console.log("OK Pressed") },
           ]);
         }
-        queryClient.refetchQueries("comments")
+        queryClient.refetchQueries("comments");
       })
       .catch((error) => {
         console.log(error);
@@ -141,7 +140,6 @@ const CommentsScreen = ({ id }) => {
           text: "Eliminar",
           onPress: () => {
             EliminarComentario(id);
-           
           },
 
           style: "destructive",
@@ -149,6 +147,18 @@ const CommentsScreen = ({ id }) => {
       ]
     );
   };
+  const {
+    isLoading: isLoadingPost,
+    error: errorPost,
+    data: dataPost,
+  } = useQuery({
+    queryKey: ["posts"],
+    queryFn: async () => {
+      const response = await axios.get(`${BASE_URL}/posts/getPost`);
+      return response.data;
+    },
+  });
+  console.log(postId + "este es el post" + userId);
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -178,19 +188,33 @@ const CommentsScreen = ({ id }) => {
                 >
                   {/* <Ionicons name="heart" size={24} color="#ba6bad" />*/}
                   <Ionicons
-              name={ isLoading ? "loading..." : data?.includes(userInfo.id) ? "heart" : "heart-outline"}
-              size={24}
-              color={ isLoading ? "loading..." : data?.includes(userInfo.id) ? "#ba6bad" : "gray"}
-            />
+                    name={
+                      isLoading
+                        ? "loading..."
+                        : data?.includes(userInfo.id)
+                        ? "heart"
+                        : "heart-outline"
+                    }
+                    size={24}
+                    color={
+                      isLoading
+                        ? "loading..."
+                        : data?.includes(userInfo.id)
+                        ? "#ba6bad"
+                        : "gray"
+                    }
+                  />
                   <Text style={styles.likeCount}>{item.likes}</Text>
                 </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={styles.popupMenuItem}
-                  onPress={() => handleDelete(item.id)}
-                >
-                  <Ionicons name="trash-outline" size={22} color="black" />
-                </TouchableOpacity>
+                <Text>{item.userId} HOLAAAA</Text>
+                {userId === userInfo.id ||( item.userId===userInfo.id  )? (
+                  <TouchableOpacity
+                    style={styles.popupMenuItem}
+                    onPress={() => handleDelete(item.id)}
+                  >
+                    <Ionicons name="trash-outline" size={22} color="black" />
+                  </TouchableOpacity>
+                ) : null}
               </View>
             </View>
           )

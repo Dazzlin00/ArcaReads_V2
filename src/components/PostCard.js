@@ -73,9 +73,32 @@ function PostCard({ post }) {
   const handlePopup = () => {
     setIsPopupVisible(!isPopupVisible);
   };
+  const {
+    isLoading: isLoadingPost,
+    error: errorPost,
+    data: dataPost,
+  } = useQuery({
+    queryKey: ["posts"],
+    queryFn: async () => {
+      const response = await axios.get(`${BASE_URL}/posts/getPost`);
+      return response.data;
+    },
+  });
   //------------------------------------------------------------------------------------------------------------//
   //----------------------------------------------ELIMINA-------------------------------------------------------//
   //------------------------------------------------------------------------------------------------------------//
+
+  const { mutate: postmutation } = useMutation({
+    mutationFn: (postId) => {
+      return axios.delete(`${BASE_URL}/posts/deletePost?id=${post.id}`);
+    },
+
+    onSuccess: () => {
+      queryClient.invalidateQueries(["posts"]);
+      
+    },
+  });
+  
   const handleDelete = () => {
     Alert.alert(
       "Eliminar publicación",
@@ -87,16 +110,21 @@ function PostCard({ post }) {
         },
         {
           text: "Eliminar",
-          onPress: () => console.log("Publicación eliminada"),
+          onPress: () =>
+            postmutation(dataPost?.includes(userInfo.id)),
+
           style: "destructive",
         },
       ]
     );
+    
+    queryClient.refetchQueries("posts");
+    
+
   };
   const handleEdit = () =>
     // Navegue a la pantalla de edición de publicación con los detalles de la publicación actual
     {};
-
 
   console.log("Postcard:", post.userId);
 
@@ -104,7 +132,7 @@ function PostCard({ post }) {
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
-      {/*-----------------------------------------BOTON QUE PERMITE IR AL PERFIL DE USUARIOS-------------------------------------------------*/}
+          {/*-----------------------------------------BOTON QUE PERMITE IR AL PERFIL DE USUARIOS-------------------------------------------------*/}
 
           <TouchableOpacity
             onPress={() =>
@@ -170,7 +198,7 @@ function PostCard({ post }) {
           <TouchableOpacity
             style={styles.button}
             onPress={() =>
-              navigation.navigate("Comentarios", { postId: post.id })
+              navigation.navigate("Comentarios", { postId: post.id,userId: post.userId})
             }
           >
             <Ionicons name="chatbubble-outline" size={29} color="gray" />
@@ -199,15 +227,30 @@ function PostCard({ post }) {
           activeOpacity={1}
         >
           <View style={styles.popupMenu}>
-            <TouchableOpacity style={styles.popupMenuItem} onPress={handleEdit}>
-              <Text style={styles.popupMenuText}>Modificar</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.popupMenuItem}
-              onPress={handleDelete}
-            >
-              <Text style={styles.popupMenuText}>Eliminar</Text>
-            </TouchableOpacity>
+            {post.userId === userInfo.id ? (
+              <TouchableOpacity
+                style={styles.popupMenuItem}
+                onPress={handleEdit}
+              >
+                <Text style={styles.popupMenuText}>Modificar</Text>
+              </TouchableOpacity>
+            ) : null}
+            {post.userId === userInfo.id ? (
+              <TouchableOpacity
+                style={styles.popupMenuItem}
+                onPress={handleDelete}
+              >
+                <Text style={styles.popupMenuText}>Eliminar</Text>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                style={styles.popupMenuItem}
+                //   onPress={() => handleDelete(post.id)}
+              >
+                <Text style={styles.popupMenuText}>Ocultar</Text>
+              </TouchableOpacity>
+            )}
+
             <TouchableOpacity
               style={styles.popupMenuItem}
               onPress={handlePopup}

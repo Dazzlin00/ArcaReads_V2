@@ -101,13 +101,7 @@ export default PerfilUsuario = () => {
       queryClient.invalidateQueries(["relations"]);
     },
   });
-<<<<<<< HEAD
   const [cargando, setCargando] = useState(!relationData?.includes(userInfo.id));
-=======
-  const [cargando, setCargando] = useState(
-    !relationData?.includes(userInfo.id)
-  );
->>>>>>> 937d847fc1d9d5e203382d3dd54155ec8ef960b9
 
   const handleFollow = async () => {
     try {

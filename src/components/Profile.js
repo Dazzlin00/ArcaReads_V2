@@ -10,26 +10,20 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { AuthContext } from "../../context/AuthContext";
-<<<<<<< HEAD
 import { useNavigation } from "@react-navigation/native";
 import SeguidoresScreen from "../screens/SeguidoresScreen";
-=======
 import axios from "react-native-axios";
 import { BASE_URL } from "../../config";
 import { useQuery } from "react-query";
 import { Ionicons } from "react-native-vector-icons";
 import AddPostForm from "../components/AddPostForm";
 import PostCard from "../components/PostCard";
->>>>>>> 937d847fc1d9d5e203382d3dd54155ec8ef960b9
 
 
 export default ProfileView = () => {
   const { userInfo } = useContext(AuthContext); //AUTENTICACION
-<<<<<<< HEAD
   const navigation = useNavigation();
 
-=======
->>>>>>> 937d847fc1d9d5e203382d3dd54155ec8ef960b9
 
   const [name, setName] = useState(""); // Nombre de usuario predeterminado
   const [avatar, setAvatar] = useState(""); // Nombre de usuario predeterminado
@@ -44,12 +38,8 @@ export default ProfileView = () => {
   };
 
   const handleButton1Press = () => {
-<<<<<<< HEAD
     //console.log('Botón 1 presionado');
     navigation.navigate("SeguidoresScreen");
-=======
-    console.log("Botón 1 presionado");
->>>>>>> 937d847fc1d9d5e203382d3dd54155ec8ef960b9
   };
 
   const handleButton2Press = () => {
@@ -67,57 +57,6 @@ export default ProfileView = () => {
   });
   return (
     <View style={styles.container}>
-<<<<<<< HEAD
-      <View style={styles.header}>
-        <View style={styles.headerContent}>
-          <TouchableOpacity onPress={openPhotoModal}>
-            <Image
-              style={styles.avatar}
-              source={{
-                uri: userInfo.profilepic,
-              }}
-            />
-          </TouchableOpacity>
-
-          <Text style={styles.name}>{name}</Text>
-        </View>
-      </View>
-
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-        <LinearGradient
-          colors={["rgba(238,174,202,0.4)", "rgba(93,135,218,0.7)"]}
-          start={{ x: 1, y: 0 }}
-          end={{ x: 0, y: 1 }}
-          style={styles.button}
-        >
-          <TouchableOpacity onPress={handleButton1Press}>
-            <Text style={styles.buttonText}>Seguidores</Text>
-          </TouchableOpacity>
-        </LinearGradient>
-
-        <LinearGradient
-          colors={["rgba(238,174,202,0.4)", "rgba(93,135,218,0.7)"]}
-          start={{ x: 1, y: 0 }}
-          end={{ x: 0, y: 1 }}
-          style={styles.button}
-         >
-          <TouchableOpacity onPress={handleButton2Press}>
-            <Text style={styles.buttonText}>Seguidos</Text>
-          </TouchableOpacity>
-        </LinearGradient>
-      </View>
-
-      <View style={styles.body}>
-        <View style={styles.bodyContent}>
-          <Text style={styles.description}>
-            Lorem ipsum dolor sit amet, saepe sapientem eu nam. Qui ne assum
-            electram expetendis, omittam deseruisse consequuntur ius an,
-          </Text>
-        </View>
-      </View>
-
-=======
->>>>>>> 937d847fc1d9d5e203382d3dd54155ec8ef960b9
       {/* Modal para mostrar la foto en grande */}
       <Modal
         visible={isImageModalVisible}
