@@ -18,7 +18,6 @@ import CerrarSesionScreen from "../screens/CerrarSesionScreen";
 import DespedidaScreen from "../screens/DespedidaScreen";
 import CambiarFotoSreen from "../screens/CambiarFotoScreen";
 import PerfilUsuarioScreen from "../screens/PerfilUsuarioScreen";
-import ButtonsProfile from "../components/ButtonsProfile";
 
 const Stack = createNativeStackNavigator();
 
@@ -83,11 +82,7 @@ export default function AppNavigator() {
           options={{ headerShown: false }}
         />
       
-         <Stack.Screen
-          name="Botones"
-          component={ButtonsProfile}
-          options={{ headerShown: false }}
-        />
+         
       </Stack.Navigator>
   );
 }

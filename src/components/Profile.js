@@ -6,88 +6,52 @@ import {
   Image,
   Modal,
   TouchableOpacity,
+  FlatList,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { AuthContext } from "../../context/AuthContext";
+import axios from "react-native-axios";
+import { BASE_URL } from "../../config";
+import { useQuery } from "react-query";
+import { Ionicons } from "react-native-vector-icons";
+import AddPostForm from "../components/AddPostForm";
+import PostCard from "../components/PostCard";
+
 
 export default ProfileView = () => {
   const { userInfo } = useContext(AuthContext); //AUTENTICACION
-
-
 
   const [name, setName] = useState(""); // Nombre de usuario predeterminado
   const [avatar, setAvatar] = useState(""); // Nombre de usuario predeterminado
   const [isImageModalVisible, setIsImageModalVisible] = useState(false);
 
   useEffect(() => {
-    // Realizar una llamada a la API para obtener el nombre de usuario
-
     setName(userInfo.name); // Actualizar el estado con el nombre de usuario
   }, []);
 
   const openPhotoModal = () => {
     setIsImageModalVisible(!isImageModalVisible);
-
   };
 
   const handleButton1Press = () => {
-    console.log('Botón 1 presionado');
+    console.log("Botón 1 presionado");
   };
 
   const handleButton2Press = () => {
-    console.log('Botón 2 presionado');
+    console.log("Botón 2 presionado");
   };
-
+  //------------------------------------------------------------------------------------------------------------//
+  //-------------------------------------MUESTRA LOS POST-------------------------------------------------------//
+  //------------------------------------------------------------------------------------------------------------//
+  const { isLoading, error, data } = useQuery({
+    queryKey: ["postsuser"],
+    queryFn: async () => {
+      const response = await axios.get(`${BASE_URL}/posts/getPostUser`);
+      return response.data;
+    },
+  });
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <View style={styles.headerContent}>
-          <TouchableOpacity onPress={openPhotoModal}>
-            <Image
-              style={styles.avatar}
-              source={{
-                uri: userInfo.profilepic,
-              }}
-            />
-          </TouchableOpacity>
-
-          <Text style={styles.name}>{name}</Text>
-        </View>
-      </View>
-
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-        <LinearGradient
-          colors={["rgba(238,174,202,0.4)", "rgba(93,135,218,0.7)"]}
-          start={{ x: 1, y: 0 }}
-          end={{ x: 0, y: 1 }}
-          style={styles.button}
-        >
-          <TouchableOpacity onPress={handleButton1Press}>
-            <Text style={styles.buttonText}>Seguidores</Text>
-          </TouchableOpacity>
-        </LinearGradient>
-
-        <LinearGradient
-          colors={["rgba(238,174,202,0.4)", "rgba(93,135,218,0.7)"]}
-          start={{ x: 1, y: 0 }}
-          end={{ x: 0, y: 1 }}
-          style={styles.button}
-        >
-          <TouchableOpacity onPress={handleButton2Press}>
-            <Text style={styles.buttonText}>Seguidos</Text>
-          </TouchableOpacity>
-        </LinearGradient>
-      </View>
-
-      <View style={styles.body}>
-        <View style={styles.bodyContent}>
-          <Text style={styles.description}>
-            Lorem ipsum dolor sit amet, saepe sapientem eu nam. Qui ne assum
-            electram expetendis, omittam deseruisse consequuntur ius an,
-          </Text>
-        </View>
-      </View>
-
       {/* Modal para mostrar la foto en grande */}
       <Modal
         visible={isImageModalVisible}
@@ -98,26 +62,115 @@ export default ProfileView = () => {
           style={styles.modalContainer}
           onPress={openPhotoModal}
         >
-          <Image source={{  uri: userInfo.profilepic }} style={styles.modalImage} />
+          <Image
+            source={{ uri: userInfo.profilepic }}
+            style={styles.modalImage}
+          />
         </TouchableOpacity>
       </Modal>
+
+      {/*------------------------------------------------POST DEL USUARIO-----------------------------------------------*/}
+
+      <View>
+        <FlatList
+          data={data}
+          renderItem={({ item }) =>
+            error ? (
+              "error"
+            ) : isLoading ? (
+              <ActivityIndicator size={"small"} />
+            ) : (
+              <PostCard post={item} />
+            )
+          }
+          keyExtractor={(item) => {
+            return item.id || Math.random().toString();
+          }}
+          ListHeaderComponent={
+            <View>
+              <View style={styles.contain}>
+                {/*-----------------------------------HEADER-----------------------------------------------*/}
+
+                <LinearGradient
+                  colors={["rgba(238,174,202,0.7)", "rgba(93,135,218,0.9)"]}
+                  start={{ x: 1, y: 0 }}
+                  end={{ x: 0, y: 1 }}
+                  style={styles.logocontainer}
+                >
+                  <View style={styles.logoWrapper}>
+                    <Image
+                      source={require("../../assets/logoblanco.png")}
+                      style={styles.imagelogo}
+                    />
+                  </View>
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate("Settings")}
+                    style={styles.notificationButton}
+                  >
+                    <Ionicons name="settings-outline" size={30} color="white" />
+                  </TouchableOpacity>
+                </LinearGradient>
+              </View>
+              <View style={styles.header}>
+                <View style={styles.headerContent}>
+                  <TouchableOpacity onPress={openPhotoModal}>
+                    <Image
+                      style={styles.avatar}
+                      source={{
+                        uri: userInfo.profilepic,
+                      }}
+                    />
+                  </TouchableOpacity>
+
+                  <Text style={styles.name}>{name}</Text>
+                </View>
+              </View>
+              {/*-----------------------------------BOTONES PARA VER LOS SEGUIDORES Y LOS SEGUIDOS-----------------------------------------------*/}
+
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+              >
+                <LinearGradient
+                  colors={["rgba(238,174,202,0.4)", "rgba(93,135,218,0.7)"]}
+                  start={{ x: 1, y: 0 }}
+                  end={{ x: 0, y: 1 }}
+                  style={styles.button}
+                >
+                  <TouchableOpacity onPress={handleButton1Press}>
+                    <Text style={styles.buttonText}>Seguidores</Text>
+                  </TouchableOpacity>
+                </LinearGradient>
+
+                <LinearGradient
+                  colors={["rgba(238,174,202,0.4)", "rgba(93,135,218,0.7)"]}
+                  start={{ x: 1, y: 0 }}
+                  end={{ x: 0, y: 1 }}
+                  style={styles.button}
+                >
+                  <TouchableOpacity onPress={handleButton2Press}>
+                    <Text style={styles.buttonText}>Seguidos</Text>
+                  </TouchableOpacity>
+                </LinearGradient>
+              </View>
+              <AddPostForm />
+            </View>
+          }
+        />
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
- 
-
-  
-
- 
-
   header: {
     backgroundColor: "rgba(93,135,218,0.6)",
   },
   headerContent: {
-    justifyContent:"center",
-    
+    justifyContent: "center",
+
     alignItems: "center",
   },
   avatar: {
@@ -160,10 +213,8 @@ const styles = StyleSheet.create({
   },
   bodyContent: {
     flex: 1,
-   
+
     alignItems: "center",
-    
-   
   },
   textInfo: {
     fontSize: 18,
@@ -204,18 +255,49 @@ const styles = StyleSheet.create({
     height: "80%",
     resizeMode: "contain",
   },
+
+  Contain: {
+    flex: 1,
+    marginTop: 20,
+
+    backgroundColor: "white",
+  },
+  logocontainer: {
+    height: 50,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  logoWrapper: {
+    width: 160,
+  },
+  imagelogo: {
+    resizeMode: "contain",
+    margin: 20,
+
+    width: "100%",
+    height: "100%",
+  },
+
+  notificationButton: {
+    marginRight: 10,
+  },
+  logo: {
+    width: 150,
+    height: 50,
+  },
   button: {
-    width: '50%',
+    width: "50%",
     padding: 8,
     borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginVertical: 0.50,//mueve los botones hacia arriba o abajo 
+    alignItems: "center",
+    justifyContent: "center",
+    marginVertical: 0.5, //mueve los botones hacia arriba o abajo
   },
 
   buttonText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
 });

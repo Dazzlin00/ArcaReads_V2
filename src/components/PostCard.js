@@ -26,15 +26,13 @@ function PostCard({ post }) {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
 
   //------------------------------------------------------------------------------------------------------------//
-//----------------------------------------------MUESTRA LA CANTIDAD DE LIKES-------------------------------------------------------//
-//------------------------------------------------------------------------------------------------------------//
+  //----------------------------------------------MUESTRA LA CANTIDAD DE LIKES-----------------------------------//
+  //------------------------------------------------------------------------------------------------------------//
   const { isLoading, error, data } = useQuery({
     queryKey: ["likes", post.id],
     queryFn: async () => {
       const response = await axios.get(
         `${BASE_URL}/likes/getLikes?postId=${post.id}`
-      
-
       );
       return response.data;
     },
@@ -42,9 +40,9 @@ function PostCard({ post }) {
 
   console.log(data + "Likes");
   const queryClient = useQueryClient();
-//------------------------------------------------------------------------------------------------------------//
-//----------------------------------------------ELIMINA Y AGREGA LIKES-------------------------------------------------------//
-//------------------------------------------------------------------------------------------------------------//
+  //------------------------------------------------------------------------------------------------------------//
+  //-------------------------------------------ELIMINA Y AGREGA LIKES-------------------------------------------//
+  //------------------------------------------------------------------------------------------------------------//
   const { mutate } = useMutation({
     mutationFn: (liked) => {
       if (liked) {
@@ -56,20 +54,15 @@ function PostCard({ post }) {
 
     onSuccess: () => {
       queryClient.invalidateQueries(["likes"]);
-      
     },
   });
-//------------------------------------------------------------------------------------------------------------//
-//----------------------------------------------DAR ME GUSTA--------------------------------------------------//
-//------------------------------------------------------------------------------------------------------------//
+  //------------------------------------------------------------------------------------------------------------//
+  //----------------------------------------------DAR ME GUSTA--------------------------------------------------//
+  //------------------------------------------------------------------------------------------------------------//
   const handleLike = () => {
     mutate(data?.includes(userInfo.id));
-   
+  };
 
-  };
-  const handleOpenComments = () => {
-    //navigation.navigate("Comentarios",{ post});
-  };
   const toggleImageModal = () => {
     setIsImageModalVisible(!isImageModalVisible);
   };
@@ -80,9 +73,9 @@ function PostCard({ post }) {
   const handlePopup = () => {
     setIsPopupVisible(!isPopupVisible);
   };
-//------------------------------------------------------------------------------------------------------------//
-//----------------------------------------------ELIMINA-------------------------------------------------------//
-//------------------------------------------------------------------------------------------------------------//
+  //------------------------------------------------------------------------------------------------------------//
+  //----------------------------------------------ELIMINA-------------------------------------------------------//
+  //------------------------------------------------------------------------------------------------------------//
   const handleDelete = () => {
     Alert.alert(
       "Eliminar publicación",
@@ -103,11 +96,7 @@ function PostCard({ post }) {
   const handleEdit = () =>
     // Navegue a la pantalla de edición de publicación con los detalles de la publicación actual
     {};
-  const handleUsernameClick = () => {
-    navigation.navigate("PerfilUsuario"); // Me dirige al perfil de usuario
-  };
 
-  // console.log("Postcard:",post);
 
   console.log("Postcard:", post.userId);
 
@@ -115,17 +104,20 @@ function PostCard({ post }) {
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
+      {/*-----------------------------------------BOTON QUE PERMITE IR AL PERFIL DE USUARIOS-------------------------------------------------*/}
+
           <TouchableOpacity
-            onPress={() => navigation.navigate("PerfilUsuario",{ userId: post.userId })}
+            onPress={() =>
+              navigation.navigate("PerfilUsuario", { userId: post.userId })
+            }
           >
             <Image source={{ uri: post.profilepic }} style={styles.avatar} />
           </TouchableOpacity>
           <View style={{ marginLeft: 10 }}>
-            
             <TouchableOpacity
-              onPress={() => navigation.navigate("PerfilUsuario",{ userId: post.userId })
-            
-            }
+              onPress={() =>
+                navigation.navigate("PerfilUsuario", { userId: post.userId })
+              }
             >
               <Text style={styles.username}>{post.name}</Text>
             </TouchableOpacity>
@@ -138,10 +130,13 @@ function PostCard({ post }) {
           </TouchableOpacity>
         </View>
       </View>
+      {/*-----------------------------------------TITULO Y DESCRIPCION DEL POST-------------------------------------------------*/}
 
       <Text style={styles.text}>{post.title}</Text>
 
       <Text style={styles.text}>{post.desc}</Text>
+      {/*-----------------------------------------BOTON PARA VER LA IMAGEN EN UNA MODAL-------------------------------------------------*/}
+
       <View>
         <TouchableOpacity onPress={toggleImageModal}>
           <Image source={{ uri: post.img }} style={styles.image} />
@@ -150,16 +145,28 @@ function PostCard({ post }) {
 
       <View style={styles.actionsContainer}>
         <View style={styles.leftButtonsContainer}>
+          {/*-----------------------------------------BOTON PARA DAR O QUITAR ME GUSTA-------------------------------------------------*/}
+
           <TouchableOpacity style={styles.button} onPress={handleLike}>
-         
-         
             <Ionicons
-              name={ isLoading ? "loading..." : data?.includes(userInfo.id) ? "heart" : "heart-outline"}
+              name={
+                isLoading
+                  ? "loading..."
+                  : data?.includes(userInfo.id)
+                  ? "heart"
+                  : "heart-outline"
+              }
               size={30}
-              color={ isLoading ? "loading..." : data?.includes(userInfo.id) ? "#ba6bad" : "gray"}
+              color={
+                isLoading
+                  ? "loading..."
+                  : data?.includes(userInfo.id)
+                  ? "#ba6bad"
+                  : "gray"
+              }
             />
           </TouchableOpacity>
-          {/*--------------------------------------COMENTARIOS---------------------*/}
+          {/*-----------------------------------------------BOTON PARA COMENTARIOS-------------------------------------------------*/}
           <TouchableOpacity
             style={styles.button}
             onPress={() =>
@@ -169,6 +176,8 @@ function PostCard({ post }) {
             <Ionicons name="chatbubble-outline" size={29} color="gray" />
           </TouchableOpacity>
         </View>
+        {/*------------------------------------------------------BOTON PARA GUARDAR-------------------------------------------------*/}
+
         <TouchableOpacity style={styles.button} onPress={handleSave}>
           <FontAwesome
             name={saved ? "star" : "star-o"}
@@ -182,7 +191,7 @@ function PostCard({ post }) {
         <Text style={styles.likesText}>{data?.length} Me gusta</Text>
       </View>
 
-      {/* Ventana emergente del menú */}
+      {/*----------------------- Ventana emergente del menú ------------------*/}
       <Modal visible={isPopupVisible} transparent={true}>
         <TouchableOpacity
           style={styles.popupModal}

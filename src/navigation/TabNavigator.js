@@ -8,6 +8,7 @@ import NotificationsScreen from "../screens/NotificationsScreen";
 import { View, Text, StyleSheet } from "react-native";
 import SearchScreen from "../screens/SearchScreen";
 import Icon from "react-native-vector-icons/FontAwesome";
+import PerfilUsuarioScreen from "../screens/PerfilUsuarioScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -59,6 +60,7 @@ export default function TabNavigator() {
           headerShown: false,
         }}
       />
+ 
     </Tab.Navigator>
   );
 }

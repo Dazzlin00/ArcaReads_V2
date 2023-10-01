@@ -16,12 +16,10 @@ import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useState, useEffect } from "react";
 
-import ButtonsProfile from "../components/ButtonsProfile";
 import PerfilUsuario from "../components/PerfilUsuario";
 
 export default function ProfileUsuarioScreen() {
   const navigation = useNavigation();
-  const [posts, setPosts] = useState("");
 
 
 
@@ -29,28 +27,7 @@ export default function ProfileUsuarioScreen() {
 
   return (
     <SafeAreaView style={styles.Container}>
-     {/*  <LinearGradient
-        colors={["rgba(238,174,202,0.7)", "rgba(93,135,218,0.9)"]}
-        start={{ x: 1, y: 0 }}
-        end={{ x: 0, y: 1 }}
-        style={styles.logocontainer}
-      >
-        <View style={styles.logoWrapper}>
-          <Image
-            source={require("../../assets/logoblanco.png")}
-            style={styles.imagelogo}
-          />
-        </View>
-{}
-        <TouchableOpacity
-          onPress={() => navigation.navigate("Settings")}
-          style={styles.notificationButton}
-        >
-          <Ionicons name="settings-outline" size={30} color="white" />
-        </TouchableOpacity>
-
-      </LinearGradient>*/}
-
+    
       <PerfilUsuario />
      
      
