@@ -3,7 +3,7 @@ import { StyleSheet, Text, TextInput,View, TouchableOpacity, Image, Alert, FlatL
 import { LinearGradient } from "expo-linear-gradient";
 
 
-export default Seguidos = () => {
+export default SeguidoresPerfilUsuario = () => {
   const data = [
     {
       id: 1,
@@ -114,7 +114,7 @@ export default Seguidos = () => {
                 <Text style={styles.name}>{item.name}</Text>
                 <LinearGradient colors={["rgba(238,174,202,0.7)", "rgba(93,135,218,0.9)"]} style={styles.followButton}>
                   <TouchableOpacity onPress={() => clickEventListener()}>
-                    <Text style={styles.followButtonText}>Siguiendo</Text>
+                    <Text style={styles.followButtonText}>Seguir</Text>
                   </TouchableOpacity>
                 </LinearGradient>
               </View>
