@@ -19,7 +19,8 @@ import DespedidaScreen from "../screens/DespedidaScreen";
 import CambiarFotoSreen from "../screens/CambiarFotoScreen";
 import PerfilUsuarioScreen from "../screens/PerfilUsuarioScreen";
 import SeguidoresScreen from "../screens/SeguidoresScreen";
-
+import SeguidosScreen from "../screens/SeguidosScreen";
+import Usuarios from "../screens/UsuariosScreen";
 const Stack = createNativeStackNavigator();
 
 export default function AuthStack() {

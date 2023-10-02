@@ -43,7 +43,8 @@ export default ProfileView = () => {
   };
 
   const handleButton2Press = () => {
-    console.log("Botón 2 presionado");
+    //console.log("Botón 2 presionado");
+    navigation.navigate("SeguidosScreen");
   };
   //------------------------------------------------------------------------------------------------------------//
   //-------------------------------------MUESTRA LOS POST-------------------------------------------------------//
