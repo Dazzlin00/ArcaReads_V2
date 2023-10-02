@@ -131,7 +131,10 @@ export default PerfilUsuario = () => {
     // Cuando userId cambie, actualiza cargando en función de la relación
     setCargando(!relationData?.includes(userInfo.id));
   }, [userId, relationData, userInfo.id]);
+  useEffect(() => {
+    queryClient.refetchQueries("posts");
 
+  }, []);
   
   return (
     <View style={styles.container}>

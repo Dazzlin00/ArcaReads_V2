@@ -78,6 +78,8 @@ function PostCard({ post }) {
 
     onSuccess: () => {
       queryClient.invalidateQueries(["posts"]);
+      queryClient.invalidateQueries(["postss"]);
+
     },
   });
 
@@ -100,6 +102,8 @@ function PostCard({ post }) {
     );
 
     queryClient.refetchQueries("posts");
+    queryClient.refetchQueries("postss");
+
   };
   //------------------------------------------------------------------------------------------------------------//
   //----------------------------------------------MUESTRA LA CANTIDAD DE LIKES-----------------------------------//
@@ -170,6 +174,8 @@ function PostCard({ post }) {
 
     onSuccess: () => {
       queryClient.invalidateQueries(["posts"]);
+     queryClient.invalidateQueries(["postss"]);
+
     },
   });
 
@@ -192,6 +198,8 @@ function PostCard({ post }) {
     );
 
     queryClient.refetchQueries("posts");
+    queryClient.refetchQueries("postss");
+
   };
 
   return (

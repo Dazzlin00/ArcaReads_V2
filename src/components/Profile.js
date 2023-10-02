@@ -50,7 +50,7 @@ export default ProfileView = () => {
   //-------------------------------------MUESTRA LOS POST-------------------------------------------------------//
   //------------------------------------------------------------------------------------------------------------//
   const { isLoading, error, data } = useQuery({
-    queryKey: ["postsuser"],
+    queryKey: ["postss"],
     queryFn: async () => {
       const response = await axios.get(`${BASE_URL}/posts/getPostUser`);
       return response.data;
