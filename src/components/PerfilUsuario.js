@@ -56,7 +56,7 @@ export default PerfilUsuario = () => {
   //------------------------------------------------------------------------------------------------------------//
 
   const { isLoading, error, data } = useQuery({
-    queryKey: ["posts"],
+    queryKey: ["postss"],
     queryFn: async () => {
       const response = await axios.get(
         `${BASE_URL}/posts/getPostUserId?userId=${userId}`
@@ -99,6 +99,7 @@ export default PerfilUsuario = () => {
 
     onSuccess: () => {
       queryClient.invalidateQueries(["relations"]);
+
     },
   });
   const [cargando, setCargando] = useState(!relationData?.includes(userInfo.id));

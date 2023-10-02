@@ -8,17 +8,20 @@ import NotificationsScreen from "../screens/NotificationsScreen";
 import { View, Text, StyleSheet } from "react-native";
 import SearchScreen from "../screens/SearchScreen";
 import Icon from "react-native-vector-icons/FontAwesome";
-import PerfilUsuarioScreen from "../screens/PerfilUsuarioScreen";
+import UsuariosScreen from "../screens/UsuariosScreen";
 
 const Tab = createBottomTabNavigator();
 
 export default function TabNavigator() {
   return (
-
-
     <Tab.Navigator
-      tabBarStyle={{  height: 60, position: "absolute", bottom: 0,borderTopWidth: 1,
-      borderTopColor: "black", }}
+      tabBarStyle={{
+        height: 60,
+        position: "absolute",
+        bottom: 0,
+        borderTopWidth: 1,
+        borderTopColor: "black",
+      }}
       tabBarOptions={{
         activeTintColor: "#ba6bad",
         inactiveTintColor: "gray",
@@ -48,7 +51,17 @@ export default function TabNavigator() {
           headerShown: false,
         }}
       />
- 
+      <Tab.Screen
+        name="Usuarios"
+        component={UsuariosScreen}
+        options={{
+          title: "",
+          tabBarIcon: ({ color, size }) => (
+            <Icon name="user-plus"size={size} color={color}/>
+          ),
+          headerShown: false,
+        }}
+      />
       <Tab.Screen
         name="Perfil"
         component={ProfileScreen}
@@ -60,7 +73,6 @@ export default function TabNavigator() {
           headerShown: false,
         }}
       />
- 
     </Tab.Navigator>
   );
 }
@@ -74,5 +86,5 @@ const styles = StyleSheet.create({
     height: 60,
     width: "100%",
     marginTop: 20,
-  }
+  },
 });

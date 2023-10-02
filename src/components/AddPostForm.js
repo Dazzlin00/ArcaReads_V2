@@ -51,6 +51,7 @@ const AddPostForm = ({ onSubmit }) => {
     mutationFn: compartir,
     onSuccess: () => {
       queryClient.invalidateQueries(["posts"]);
+
     },
   });
 

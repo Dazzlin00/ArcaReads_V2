@@ -7,7 +7,8 @@ import {
   FlatList,
   Alert,
   TextInput,
-  TouchableOpacity,ActivityIndicator
+  TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import { Ionicons } from "react-native-vector-icons";
 import { useQuery } from "react-query";
@@ -79,35 +80,73 @@ const CommentsScreen = () => {
 
   const agregarComentario = () => {
     mutate({ nuevoComentario2, postId });
+    setNuevoComentario2("");
   };
 
   //------------------------------------------------------------------------------------------------------------//
   //----------------------------------------------likes-------------------------------------------------------//
   //------------------------------------------------------------------------------------------------------------//
+  
 
-  const agregarMeGusta = (idcoment) => {
-    console.log(idcoment + " ide coment");
-    
-  };
+  const { mutate: likemutate } = useMutation({
+    mutationFn: (liked) => {
+      if (liked) {
+        return  quitarMeGusta(id);
+      } else {
+        return  agregarMeGusta(id);
+      }
+    },
 
+    onSuccess: () => {
+      queryClient.invalidateQueries(["likes"]);
+    },
+  });
 
-  const likes = () => {
-    
-    return axios.get(`${BASE_URL}/likes/getLikesComent?comentId=${5}`)
+  const agregarMeGusta = (comentId) => {
+    console.log(comentId + " ide coment");
+    return axios
+      .post(`${BASE_URL}/likes/addLikesComent`, { comentId })
       .then((response) => {
         console.log("Respuesta de agregarMeGusta:", response.data);
+        //   queryClient.refetchQueries("comments");
         return response.data;
       })
       .catch((error) => {
         console.error("Error en agregarMeGusta:", error);
         throw error; // Propagar el error para que se maneje adecuadamente
-  });
+      });
   };
-  const {
-    isLoading: isLoadingLikeComent,
+  const quitarMeGusta = (comentId) => {
+    console.log(comentId + " ide coment");
+    return axios
+      .delete(`${BASE_URL}/likes/deleteLikesComent?postId=${comentId}`)
+      .then((response) => {
+        console.log("Respuesta de agregarMeGusta:", response.data);
+        queryClient.refetchQueries("comments");
+        return response.data;
+      })
+      .catch((error) => {
+        console.error("Error en agregarMeGusta:", error);
+        throw error; // Propagar el error para que se maneje adecuadamente
+      });
+  };
+  const handleLiked = (id) => {
+    
+    likemutate({liked:dataLikes?.includes(userInfo.id)});
+
+  };
+
+
+  const {  isLoading: isLoadingLikeComent,
     error: errorLike,
-    data: dataLikes,
-  } = useQuery(["likescoment"], () => likes);
+    data: dataLikes, } = useQuery({
+    queryKey: ["likescoment"],
+    queryFn: async () => {
+      const response = await axios .get(`${BASE_URL}/likes/getLikesComent`);
+      return response.data;
+    },
+  });
+  const [cargando, setCargando] = useState(dataLikes?.includes(userInfo.id));
   //------------------------------------------------------------------------------------------------------------//
   //----------------------------------------------ELIMINA-------------------------------------------------------//
   //------------------------------------------------------------------------------------------------------------//
@@ -164,7 +203,6 @@ const CommentsScreen = () => {
       return response.data;
     },
   });
-  //console.log(data.map(comment => comment.id));
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -177,56 +215,81 @@ const CommentsScreen = () => {
           error ? (
             "error"
           ) : isLoading ? (
-            <ActivityIndicator size="small"  />
+            <ActivityIndicator size="small" />
           ) : (
             <View style={styles.comentarioContainer}>
-              {/*COMENTARIO Y nombre del usuario */}
-              <Text style={styles.username}>{item.name}</Text>
-              <Text style={styles.comment}>{item.desc}</Text>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                {/*-----------------------------------------BOTON QUE PERMITE IR AL PERFIL DE USUARIOS-------------------------------------------------*/}
+
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate("PerfilUsuario", {
+                      userId: item.userId,
+                    })
+                  }
+                >
+                  <Image
+                    source={{ uri: item.profilepic }}
+                    style={styles.avatar}
+                  />
+                </TouchableOpacity>
+                <View style={{ marginLeft: 10 }}>
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate("PerfilUsuario", {
+                        userId: item.userId,
+                      })
+                    }
+                  >
+                    <Text style={styles.username}>{item.name}</Text>
+                  </TouchableOpacity>
+                  <Text style={styles.timestamp}>{item.createdAt}</Text>
+                </View>
+              </View>
 
               {item.reply !== "" && (
                 <Text style={styles.reply}>{item.reply}</Text>
               )}
-              <View style={styles.buttonsContainer}>
-                <TouchableOpacity
-                  style={styles.likeButton}
-                  onPress={() => agregarMeGusta(item.id)}
-                >
-                  {/* <Ionicons name="heart" size={24} color="#ba6bad" />*/}
-                  <Ionicons
-                    name={
-                      isLoading
-                        ?  <ActivityIndicator size="small"  />
-                        : data?.includes(userInfo.id)
-                        ? "heart"
-                        : "heart-outline"
-                    }
-                    size={24}
-                    color={
-                      isLoading
-                        ?  <ActivityIndicator size="small"  />
-                        : data?.includes(userInfo.id)
-                        ? "#ba6bad"
-                        : "gray"
-                    }
-                  />
-                  <Text style={styles.likeCount}>{item.likes}</Text>
-                </TouchableOpacity>
-                <Text>{item.userId} HOLAAAA</Text>
-                {userId === userInfo.id || item.userId === userInfo.id ? (
-                  <TouchableOpacity
-                    style={styles.popupMenuItem}
-                    onPress={() => handleDelete(item.id)}
-                  >
-                    <Ionicons name="trash-outline" size={22} color="black" />
-                  </TouchableOpacity>
-                ) : null}
-              </View>
+              <Text>{item.desc}</Text>
               <View style={styles.commentContainer}>
-                {console.log(dataLikes?.length + "cantidaddd")}
-                <Text style={styles.likesText}>
-                  {dataLikes?.length} Me gusta
-                </Text>
+                <View style={styles.buttonsContainer}>
+                  <TouchableOpacity
+                    style={styles.likeButton}
+                    onPress={() => handleLiked(item.id)}
+                  >
+                    <Ionicons
+                      name={
+                        isLoading ? (
+                          <ActivityIndicator size="small" />
+                        ) : cargando ? (
+                          "heart"
+                        ) : (
+                          "heart-outline"
+                        )
+                      }
+                      size={24}
+                      color={
+                        isLoading ? (
+                          <ActivityIndicator size="small" />
+                        ) : cargando ? (
+                          "#ba6bad"
+                        ) : (
+                          "gray"
+                        )
+                      }
+                    />
+                    <Text style={styles.likeCount}>{item.likes}</Text>
+                  </TouchableOpacity>
+
+                  {userId === userInfo.id || item.userId === userInfo.id ? (
+                    <TouchableOpacity
+                      style={styles.popupMenuItem}
+                      onPress={() => handleDelete(item.id)}
+                    >
+                      <Ionicons name="trash-outline" size={22} color="black" />
+                    </TouchableOpacity>
+                  ) : null}
+                </View>
               </View>
             </View>
           )
@@ -263,6 +326,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     textAlign: "center",
+  },
+  avatar: {
+    width: 50,
+    height: 50,
+    borderRadius: 50,
+    marginRight: 10,
   },
   container: {
     flex: 1,
