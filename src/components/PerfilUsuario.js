@@ -114,11 +114,13 @@ export default PerfilUsuario = () => {
   };
 
   const handleButton1Press = () => {
-    console.log("Botón 1 presionado");
+    //console.log("Botón 1 presionado");
+    navigation.navigate("SeguidoresPerfilUsuarioScreen");
   };
 
   const handleButton2Press = () => {
-    console.log("Botón 2 presionado");
+   // console.log("Botón 2 presionado");
+    navigation.navigate("SeguidosPerfilUsuarioScreen");
   };
 
   const openPhotoModal = () => {

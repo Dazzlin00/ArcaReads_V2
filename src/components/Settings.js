@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  Modal,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
@@ -17,8 +18,19 @@ export default Settings = () => {
   const [name, setName] = useState(""); // Nombre de usuario predeterminado
   const [email, setEmail] = useState(""); // Nombre de usuario predeterminado
   const [address, setAdress] = useState(""); // Nombre de usuario predeterminado
-
+  const [isImageModalVisible, setIsImageModalVisible] = useState(false);
   const navigation = useNavigation();
+  
+
+  const openPhotoModal = () => {
+    setIsImageModalVisible(!isImageModalVisible);
+  };
+
+  const handleModalButtonPress = () => {
+    console.log('Botón del modal presionado');
+    // Aquí puedes agregar la lógica que quieras ejecutar cuando se presione el botón del modal
+  };
+
   const handleModifyProfilePicture = () => {
     navigation.navigate("EditarPerfil");
   };
@@ -44,13 +56,49 @@ export default Settings = () => {
    
   }, []);
   return (
+
     <ScrollView>
       <LinearGradient colors={["rgba(238,174,202,0.4)", "rgba(93,135,218,0.7)"]} style={styles.container}>
       <View style={styles.container}>
       
+      <Modal
+        visible={isImageModalVisible}
+        transparent={true}
+        onRequestClose={openPhotoModal}
+      >
+        <TouchableOpacity
+          style={styles.modalContainer}
+          onPress={openPhotoModal}
+        >
+          <Image
+            source={{ uri: userInfo.profilepic }}
+            style={styles.modalImage}
+          />
+        
+        <TouchableOpacity
+        style={styles.modalButton}
+        onPress={handleModalButtonPress}
+        >
+          <Text style={styles.modalButtonText}>Cambiar Foto</Text>
+          </TouchableOpacity>
+        </TouchableOpacity>
+      
+      </Modal>
+
+
+
+
+
         <View style={styles.header}>
           <View style={styles.headerContent}>
-            <Image style={styles.avatar} source={{ uri: userInfo.profilepic }} />
+          <TouchableOpacity onPress={openPhotoModal}>
+                    <Image
+                      style={styles.avatar}
+                      source={{
+                        uri: userInfo.profilepic,
+                      }}
+                    />
+                  </TouchableOpacity>
 
             <Text style={styles.name}>{name} </Text>
             <Text style={styles.userInfo}>{email} </Text>
@@ -181,4 +229,48 @@ const styles = StyleSheet.create({
     marginTop: 20,
     color: "#4D194D",
   },
+
+  button: {
+    width: "50%",
+    padding: 8,
+    borderRadius: 8,
+    alignItems: "center",
+    justifyContent: "center",
+    marginVertical: 0.5, //mueve los botones hacia arriba o abajo
+  },
+
+  buttonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+ 
+  modalButton: {
+    marginTop: -150, //mueve el boton hacia arriba o hacia abajo
+    height: 35,
+    width: 130,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 30,
+    backgroundColor: '#00BFFF',
+  },
+  modalButtonText: {
+    color: '#FFFFFF',
+    fontSize: 15,
+  },
+
+  modalContainer: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.7)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalImage: {
+    width: "80%",
+    height: "80%",
+    resizeMode: "contain",
+  },
+
+
 });

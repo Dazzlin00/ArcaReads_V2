@@ -21,6 +21,8 @@ import PerfilUsuarioScreen from "../screens/PerfilUsuarioScreen";
 import SeguidoresScreen from "../screens/SeguidoresScreen";
 import SeguidosScreen from "../screens/SeguidosScreen";
 import Usuarios from "../screens/UsuariosScreen";
+import SeguidoresPerfilUsuarioScreen from "../screens/SeguidoresPerfilUsuarioScreen";
+import SeguidosPerfilUsuarioScreen from "../screens/SeguidosPerfilUsuarioScreen";
 const Stack = createNativeStackNavigator();
 
 export default function AuthStack() {
