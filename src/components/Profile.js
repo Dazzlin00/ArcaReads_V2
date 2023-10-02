@@ -56,6 +56,10 @@ export default ProfileView = () => {
       return response.data;
     },
   });
+ 
+ 
+
+
   return (
     <View style={styles.container}>
       {/* Modal para mostrar la foto en grande */}
@@ -72,7 +76,9 @@ export default ProfileView = () => {
             source={{ uri: userInfo.profilepic }}
             style={styles.modalImage}
           />
+        
         </TouchableOpacity>
+      
       </Modal>
 
       {/*------------------------------------------------POST DEL USUARIO-----------------------------------------------*/}
@@ -306,4 +312,22 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
+ 
+  modalButton: {
+    marginTop: -150, //mueve el boton hacia arriba o hacia abajo
+    height: 35,
+    width: 130,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 30,
+    backgroundColor: '#00BFFF',
+  },
+  modalButtonText: {
+    color: '#FFFFFF',
+    fontSize: 15,
+  },
+
+
+
 });

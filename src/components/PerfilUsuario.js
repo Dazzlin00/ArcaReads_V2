@@ -56,7 +56,7 @@ export default PerfilUsuario = () => {
   //------------------------------------------------------------------------------------------------------------//
 
   const { isLoading, error, data } = useQuery({
-    queryKey: ["posts"],
+    queryKey: ["postss"],
     queryFn: async () => {
       const response = await axios.get(
         `${BASE_URL}/posts/getPostUserId?userId=${userId}`
@@ -113,11 +113,13 @@ export default PerfilUsuario = () => {
   };
 
   const handleButton1Press = () => {
-    console.log("Botón 1 presionado");
+    //console.log("Botón 1 presionado");
+    navigation.navigate("SeguidoresPerfilUsuarioScreen");
   };
 
   const handleButton2Press = () => {
-    console.log("Botón 2 presionado");
+   // console.log("Botón 2 presionado");
+    navigation.navigate("SeguidosPerfilUsuarioScreen");
   };
 
   const openPhotoModal = () => {
