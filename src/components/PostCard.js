@@ -17,6 +17,7 @@ import { useQuery } from "react-query";
 import { BASE_URL } from "../../config";
 import axios from "react-native-axios";
 import { useMutation, useQueryClient } from "react-query";
+import { ScrollView } from "react-native-web";
 
 function PostCard({ post }) {
   const navigation = useNavigation();
@@ -24,7 +25,82 @@ function PostCard({ post }) {
   const [isImageModalVisible, setIsImageModalVisible] = useState(false);
   const [saved, setSaved] = useState(false);
   const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const [isEditModalVisible, setIsEditModalVisible] = useState(false);
+  const [editTitle, setEditTitle] = useState(post.title);
+  const [editDescription, setEditDescription] = useState(post.desc);
 
+  const toggleEditModal = () => {
+    setEditTitle(post.title);
+    setEditDescription(post.desc);
+
+    setIsEditModalVisible(!isEditModalVisible);
+  };
+  const handleEditTitleChange = (text) => {
+    setEditTitle(text);
+  };
+
+  const handleEditDescriptionChange = (text) => {
+    setEditDescription(text);
+  };
+
+  //------------------------------------------------------------------------------------------------------------//
+  //-------------------------------------------ACTUALIZAR POST-------------------------------------------//
+  //------------------------------------------------------------------------------------------------------------//
+  const datos = {
+    title: editTitle,
+    desc: editDescription,
+  };
+  function actualizar() {
+    return axios
+      .put(`${BASE_URL}/posts/updatePost?id=${post.id}`, datos)
+
+      .then((response) => {
+        if (response.status === 200) {
+          Alert.alert("Post Actualizado", "El post se ha actualizado", [
+            { text: "OK", onPress: () => console.log("OK Pressed") },
+          ]);
+          return response.data;
+        } else {
+          Alert.alert("Error", "El post no pudo ser actualizado", [
+            { text: "OK", onPress: () => console.log("OK Pressed") },
+          ]);
+          throw new Error(response.statusText);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        throw error;
+      });
+  }
+
+  const { mutate: mutatepost } = useMutation({
+    mutationFn: actualizar,
+
+    onSuccess: () => {
+      queryClient.invalidateQueries(["posts"]);
+    },
+  });
+
+  const handleEdit = () => {
+    Alert.alert(
+      "Actualizar publicación",
+      "¿Está seguro de que desea actualizar esta publicación?",
+      [
+        {
+          text: "Cancelar",
+          style: "cancel",
+        },
+        {
+          text: "Actualizar",
+          onPress: () => mutatepost({ editTitle, editDescription }),
+
+          style: "default",
+        },
+      ]
+    );
+
+    queryClient.refetchQueries("posts");
+  };
   //------------------------------------------------------------------------------------------------------------//
   //----------------------------------------------MUESTRA LA CANTIDAD DE LIKES-----------------------------------//
   //------------------------------------------------------------------------------------------------------------//
@@ -38,7 +114,6 @@ function PostCard({ post }) {
     },
   });
 
-  console.log(data + "Likes");
   const queryClient = useQueryClient();
   //------------------------------------------------------------------------------------------------------------//
   //-------------------------------------------ELIMINA Y AGREGA LIKES-------------------------------------------//
@@ -95,10 +170,9 @@ function PostCard({ post }) {
 
     onSuccess: () => {
       queryClient.invalidateQueries(["posts"]);
-      
     },
   });
-  
+
   const handleDelete = () => {
     Alert.alert(
       "Eliminar publicación",
@@ -110,23 +184,15 @@ function PostCard({ post }) {
         },
         {
           text: "Eliminar",
-          onPress: () =>
-            postmutation(dataPost?.includes(userInfo.id)),
+          onPress: () => postmutation(dataPost?.includes(userInfo.id)),
 
           style: "destructive",
         },
       ]
     );
-    
+
     queryClient.refetchQueries("posts");
-    
-
   };
-  const handleEdit = () =>
-    // Navegue a la pantalla de edición de publicación con los detalles de la publicación actual
-    {};
-
-  console.log("Postcard:", post.userId);
 
   return (
     <View style={styles.container}>
@@ -178,17 +244,14 @@ function PostCard({ post }) {
           <TouchableOpacity style={styles.button} onPress={handleLike}>
             <Ionicons
               name={
-                isLoading
-                  ? "loading..."
-                  : data?.includes(userInfo.id)
+                
+                 data?.includes(userInfo.id)
                   ? "heart"
                   : "heart-outline"
               }
               size={30}
               color={
-                isLoading
-                  ? "loading..."
-                  : data?.includes(userInfo.id)
+               data?.includes(userInfo.id)
                   ? "#ba6bad"
                   : "gray"
               }
@@ -198,7 +261,10 @@ function PostCard({ post }) {
           <TouchableOpacity
             style={styles.button}
             onPress={() =>
-              navigation.navigate("Comentarios", { postId: post.id,userId: post.userId})
+              navigation.navigate("Comentarios", {
+                postId: post.id,
+                userId: post.userId,
+              })
             }
           >
             <Ionicons name="chatbubble-outline" size={29} color="gray" />
@@ -230,7 +296,7 @@ function PostCard({ post }) {
             {post.userId === userInfo.id ? (
               <TouchableOpacity
                 style={styles.popupMenuItem}
-                onPress={handleEdit}
+                onPress={toggleEditModal}
               >
                 <Text style={styles.popupMenuText}>Modificar</Text>
               </TouchableOpacity>
@@ -274,6 +340,83 @@ function PostCard({ post }) {
           <Image source={{ uri: post.img }} style={styles.modalImage} />
         </TouchableOpacity>
       </Modal>
+
+      <Modal
+        visible={isEditModalVisible}
+        transparent={true}
+        animationType="slide" // Puedes ajustar la animación según tus necesidades
+        onRequestClose={() => toggleEditModal()} // Cierra el modal cuando se toca fuera de él o se presiona el botón de cierre
+      >
+        <View style={styles.editModalContainer}>
+          <View style={styles.editModalContent}>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate("PerfilUsuario", { userId: post.userId })
+              }
+            >
+              <Image source={{ uri: post.profilepic }} style={styles.avatar} />
+            </TouchableOpacity>
+            <View style={styles.userInfo}>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate("PerfilUsuario", { userId: post.userId })
+                }
+              >
+                <Text style={styles.username}>{post.name}</Text>
+              </TouchableOpacity>
+            </View>
+            {/* Imagen del post */}
+            <Image source={{ uri: post.img }} style={styles.editModalImage} />
+          <View style={styles.inputEdit}>
+          <TextInput
+              multiline
+              placeholder="Editar tu titulo..."
+              style={styles.editModalTextInput}
+              // Aquí debes manejar el valor del texto editado
+              value={editTitle}
+              onChangeText={(text) => setEditTitle(text)}
+              borderBottomWidth={0.7}
+              borderColor="#ba6bad"
+            />
+            <TextInput
+              multiline
+              numberOfLines={2}
+              placeholder="Editar tu descripcion..."
+              style={styles.editModalTextInput}
+              // Aquí debes manejar el valor del texto editado
+              value={editDescription}
+              onChangeText={(text) => setEditDescription(text)}
+              borderBottomWidth={0.7}
+              borderColor="ba6bad"
+            />
+
+          </View>
+            {/* Textarea para editar el contenido del post */}
+           
+            <View style={styles.buttonmodal}>
+              {/* Botón para guardar los cambios */}
+              <TouchableOpacity
+                onPress={handleEdit}
+               
+              >
+                <Ionicons name="save" size={20}>
+                  Guardar
+                </Ionicons>
+              </TouchableOpacity>
+
+              {/* Botón para cerrar el modal */}
+              <TouchableOpacity
+                onPress={toggleEditModal}
+                
+              >
+                <Ionicons name="exit" size={20}>
+                  Salir
+                </Ionicons>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -296,6 +439,20 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     marginBottom: 10,
+  },
+  buttonmodal:{
+    width:"100%",
+    flexDirection: 'row',
+    justifyContent: "space-around"
+  },
+  inputEdit:{
+    marginTop:5,
+    marginBottom:5,
+    width:"100%",
+   
+  },
+  editModalTextInput:{
+
   },
   avatar: {
     width: 50,
@@ -407,6 +564,69 @@ const styles = StyleSheet.create({
   },
   popupMenuText: {
     fontSize: 16,
+  },
+  editModalContainer: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.7)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  editModalContent: {
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 20,
+    width: "80%",
+    alignItems: "center",
+  },
+  editModalImage: {
+    width: "100%",
+    height: 200,
+    borderRadius: 10,
+  },
+  editModalTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginTop: 10,
+  },
+  editModalDescription: {
+    fontSize: 16,
+    marginTop: 10,
+  },
+  editModalCloseButton: {
+    fontSize: 16,
+    color: "blue",
+    marginTop: 20,
+  },
+  card: {
+    // Atributos básicos
+    width: "100%",
+    height: 100,
+    borderRadius: 5,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    borderWidth: 0.5,
+    // Estilos del contenedor
+
+    backgroundColor: "#fff",
+    padding: 15,
+
+    // Estilos del título
+    title: {
+      fontSize: 20,
+      fontWeight: "bold",
+      color: "#000",
+    },
+
+    // Estilos de la descripción
+    description: {
+      fontSize: 16,
+      color: "#000",
+    },
   },
 });
 

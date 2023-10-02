@@ -19,8 +19,8 @@ import { useMutation, useQueryClient } from "react-query";
 const AddPostForm = ({ onSubmit }) => {
   const { userInfo } = useContext(AuthContext); //AUTENTICACION
   const [showForm, setShowForm] = useState(false); // Estado para controlar si mostrar el formulario
-  const [desc, setDesc] = useState("");
   const [title, setTitle] = useState("");
+  const [desc, setDesc] = useState("");
   const [img, setImage] = useState(null);
   const [avatar, setAvatar] = useState(userInfo.profilepic); // Nombre de usuario predeterminado
   const [name, setName] = useState(""); // Nombre de usuario predeterminado
@@ -74,6 +74,11 @@ const AddPostForm = ({ onSubmit }) => {
     
     mutate({ title, desc, img });
     
+    
+    setTitle("");
+    setDesc("");
+    setImage(null);
+    
   };
 
   useEffect(() => {
@@ -101,7 +106,7 @@ const AddPostForm = ({ onSubmit }) => {
           {img && <Image source={{ uri: img }} style={styles.image} />}
           <TextInput
             style={styles.title}
-            valuea={title}
+            value={title}
             onChangeText={setTitle}
             placeholder="Titulo del libro"
             maxLength={39}

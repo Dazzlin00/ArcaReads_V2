@@ -56,7 +56,7 @@ export default PerfilUsuario = () => {
   //------------------------------------------------------------------------------------------------------------//
 
   const { isLoading, error, data } = useQuery({
-    queryKey: ["postsuserid"],
+    queryKey: ["posts"],
     queryFn: async () => {
       const response = await axios.get(
         `${BASE_URL}/posts/getPostUserId?userId=${userId}`
@@ -226,7 +226,7 @@ export default PerfilUsuario = () => {
                   {/*-----------------------------------MUESTRA EL NOMBRE Y LA FOTO DEL USUARIO-----------------------------------------------*/}
 
                   {isLoadinguser ? (
-                    <ActivityIndicator size="large" color="#0000ff" />
+                    <ActivityIndicator size="small"  />
                   ) : (
                     userdata?.map((item) => (
                       <View>
@@ -277,7 +277,8 @@ export default PerfilUsuario = () => {
                   </TouchableOpacity>
                 </LinearGradient>
               </View>
-              <AddPostForm />
+              {userId === userInfo.id ? (  <AddPostForm />):(null)}
+            
             </View>
           }
         />

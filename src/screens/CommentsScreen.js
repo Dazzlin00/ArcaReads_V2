@@ -7,7 +7,7 @@ import {
   FlatList,
   Alert,
   TextInput,
-  TouchableOpacity,
+  TouchableOpacity,ActivityIndicator
 } from "react-native";
 import { Ionicons } from "react-native-vector-icons";
 import { useQuery } from "react-query";
@@ -17,7 +17,7 @@ import { useRoute } from "@react-navigation/native";
 import { AuthContext } from "../../context/AuthContext";
 import { useMutation, useQueryClient } from "react-query";
 
-const CommentsScreen = ({ id }) => {
+const CommentsScreen = () => {
   const { userInfo } = useContext(AuthContext); //AUTENTICACION
 
   const route = useRoute();
@@ -85,29 +85,35 @@ const CommentsScreen = ({ id }) => {
   //----------------------------------------------likes-------------------------------------------------------//
   //------------------------------------------------------------------------------------------------------------//
 
-  const agregarMeGusta = (id) => {
-    console.log(id + "ide coment");
-    /*const comentarioIndex = comentarios.findIndex(
-      (comentario) => comentario.id === id
-    );
-    if (comentarioIndex !== -1) {
-      const comentariosActualizados = [...comentarios];
-      const comentario = comentariosActualizados[comentarioIndex];
-      if (comentario.likes === 0) {
-        comentario.likes = 1; // Dar "me gusta"
-      } else {
-        comentario.likes = 0; // Quitar "me gusta" (dislike)
-      }
-      setComentarios(comentariosActualizados);
-    }*/
+  const agregarMeGusta = (idcoment) => {
+    console.log(idcoment + " ide coment");
+    
   };
 
+
+  const likes = () => {
+    
+    return axios.get(`${BASE_URL}/likes/getLikesComent?comentId=${5}`)
+      .then((response) => {
+        console.log("Respuesta de agregarMeGusta:", response.data);
+        return response.data;
+      })
+      .catch((error) => {
+        console.error("Error en agregarMeGusta:", error);
+        throw error; // Propagar el error para que se maneje adecuadamente
+  });
+  };
+  const {
+    isLoading: isLoadingLikeComent,
+    error: errorLike,
+    data: dataLikes,
+  } = useQuery(["likescoment"], () => likes);
   //------------------------------------------------------------------------------------------------------------//
   //----------------------------------------------ELIMINA-------------------------------------------------------//
   //------------------------------------------------------------------------------------------------------------//
-  async function EliminarComentario(id) {
+  async function EliminarComentario(comentid) {
     return await axios
-      .delete(`${BASE_URL}/comments/deleteComent?id=${id}`)
+      .delete(`${BASE_URL}/comments/deleteComent?id=${comentid}`)
 
       .then((response) => {
         if (response.status === 200) {
@@ -127,7 +133,7 @@ const CommentsScreen = ({ id }) => {
       });
   }
 
-  const handleDelete = (id) => {
+  const handleDelete = (comentid) => {
     Alert.alert(
       "Eliminar Comentario",
       "¿Está seguro de que desea eliminar este comentario?",
@@ -139,7 +145,7 @@ const CommentsScreen = ({ id }) => {
         {
           text: "Eliminar",
           onPress: () => {
-            EliminarComentario(id);
+            EliminarComentario(comentid);
           },
 
           style: "destructive",
@@ -158,7 +164,7 @@ const CommentsScreen = ({ id }) => {
       return response.data;
     },
   });
-  console.log(postId + "este es el post" + userId);
+  //console.log(data.map(comment => comment.id));
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -171,7 +177,7 @@ const CommentsScreen = ({ id }) => {
           error ? (
             "error"
           ) : isLoading ? (
-            "loading..."
+            <ActivityIndicator size="small"  />
           ) : (
             <View style={styles.comentarioContainer}>
               {/*COMENTARIO Y nombre del usuario */}
@@ -190,7 +196,7 @@ const CommentsScreen = ({ id }) => {
                   <Ionicons
                     name={
                       isLoading
-                        ? "loading..."
+                        ?  <ActivityIndicator size="small"  />
                         : data?.includes(userInfo.id)
                         ? "heart"
                         : "heart-outline"
@@ -198,7 +204,7 @@ const CommentsScreen = ({ id }) => {
                     size={24}
                     color={
                       isLoading
-                        ? "loading..."
+                        ?  <ActivityIndicator size="small"  />
                         : data?.includes(userInfo.id)
                         ? "#ba6bad"
                         : "gray"
@@ -207,7 +213,7 @@ const CommentsScreen = ({ id }) => {
                   <Text style={styles.likeCount}>{item.likes}</Text>
                 </TouchableOpacity>
                 <Text>{item.userId} HOLAAAA</Text>
-                {userId === userInfo.id ||( item.userId===userInfo.id  )? (
+                {userId === userInfo.id || item.userId === userInfo.id ? (
                   <TouchableOpacity
                     style={styles.popupMenuItem}
                     onPress={() => handleDelete(item.id)}
@@ -215,6 +221,12 @@ const CommentsScreen = ({ id }) => {
                     <Ionicons name="trash-outline" size={22} color="black" />
                   </TouchableOpacity>
                 ) : null}
+              </View>
+              <View style={styles.commentContainer}>
+                {console.log(dataLikes?.length + "cantidaddd")}
+                <Text style={styles.likesText}>
+                  {dataLikes?.length} Me gusta
+                </Text>
               </View>
             </View>
           )
@@ -326,6 +338,15 @@ const styles = StyleSheet.create({
     borderColor: "gray",
     borderRadius: 4,
     paddingHorizontal: 8,
+  },
+  likesText: {
+    fontWeight: "bold",
+    marginBottom: 5,
+  },
+  commentContainer: {
+    borderTopWidth: 1,
+    borderTopColor: "#e0e0e0",
+    paddingTop: 10,
   },
 });
 
