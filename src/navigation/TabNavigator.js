@@ -46,7 +46,7 @@ export default function TabNavigator() {
         options={{
           title: "",
           tabBarIcon: ({ color, size }) => (
-            <Icon name="search" size={size} color={color} />
+            <Icon name="book" size={size} color={color} />
           ),
           headerShown: false,
         }}

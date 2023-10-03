@@ -114,7 +114,7 @@ export default function AppNavigator() {
 
          <Stack.Screen
           name="SeguidosPerfilUsuarioScreen"
-          component={SeguidoresPerfilUsuarioScreen}
+          component={SeguidosPerfilUsuarioScreen}
           options={{ headerShown: false }}
         />
 

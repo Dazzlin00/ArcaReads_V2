@@ -1,85 +1,65 @@
-import React, { useState } from 'react'
-import { StyleSheet, Text, TextInput,View, TouchableOpacity, Image, Alert, FlatList } from 'react-native'
+import React, { useState, useEffect, useContext } from "react";
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  TouchableOpacity,
+  Image,
+  Alert,
+  FlatList,
+} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-export default Users = () => {
-  const data = [
-    {
-      id: 1,
-      name: 'Mark Doe',
-      image: 'https://bootdey.com/img/Content/avatar/avatar7.png',
-    },
-    {
-      id: 1,
-      name: 'John Doe',
-      image: 'https://bootdey.com/img/Content/avatar/avatar1.png',
-    },
-    {
-      id: 2,
-      name: 'Clark Man',
-      image: 'https://bootdey.com/img/Content/avatar/avatar6.png',
-    },
-    {
-      id: 3,
-      name: 'Jaden Boor',
-      image: 'https://bootdey.com/img/Content/avatar/avatar5.png',
-    },
-    {
-      id: 4,
-      name: 'Srick Tree',
-      image: 'https://bootdey.com/img/Content/avatar/avatar4.png',
-    },
-    {
-      id: 5,
-      name: 'John Doe',
-      image: 'https://bootdey.com/img/Content/avatar/avatar3.png',
-    },
-    {
-      id: 6,
-      name: 'John Doe',
-      image: 'https://bootdey.com/img/Content/avatar/avatar2.png',
-    },
-    {
-      id: 8,
-      name: 'John Doe',
-      image: 'https://bootdey.com/img/Content/avatar/avatar1.png',
-    },
-    {
-      id: 9,
-      name: 'John Doe',
-      image: 'https://bootdey.com/img/Content/avatar/avatar4.png',
-    },
-    {
-      id: 9,
-      name: 'John Doe',
-      image: 'https://bootdey.com/img/Content/avatar/avatar7.png',
-    },
-  ]
+import { useQuery } from "react-query";
+import axios from "react-native-axios";
+import { BASE_URL } from "../../config";
+import { AuthContext } from "../../context/AuthContext";
+import { useMutation, useQueryClient } from "react-query";
 
-  const [users, setUsers] = useState(data)
+export default Seguidores = () => {
+  const { userInfo } = useContext(AuthContext); // AUTENTICACION
 
-  const [searchTerm, setSearchTerm] = useState('')
+  const [users, setUsers] = useState(data);
+
+  const [searchTerm, setSearchTerm] = useState("");
+
 
   const clickEventListener = () => {
-    Alert.alert('Option selected')
-  }
+    Alert.alert("Option selected");
+  };
 
   const searchFilterFunction = (text) => {
-    setSearchTerm(text)
-    const newData = data.filter(item => {
-      const itemData = `${item.name.toUpperCase()}`
-      const textData = text.toUpperCase()
-      return itemData.indexOf(textData) > -1
-    })
-    setUsers(newData)
-  }
+    setSearchTerm(text);
+    const newData = data.filter((item) => {
+      const itemData = `${item.name.toUpperCase()}`;
+      const textData = text.toUpperCase();
+      return itemData.indexOf(textData) > -1;
+    });
+    setUsers(newData);
+  };
 
-
-
-
-
-
+  const { isLoading, error, data } = useQuery({
+    queryKey: ["seguidores"],
+    queryFn: async () => {
+      const response = await axios.get(
+        `${BASE_URL}/users/getAllSeguidores?followerUserId=${userInfo.id}`
+      );
+      return response.data;
+    },
+  });
+  useEffect(() => {
+    if (data) {
+      // Actualizar users cuando data tenga datos válidos
+      setUsers(data);
+    }
+  }, [data]);
+  
   return (
-    <View style={styles.container}>   
+    <View style={styles.container}>
+      <View style={styles.tituloContainer}>
+        <Text style={styles.tituloText}>Total de las personas que te Siguen:<Text>{users?.length}</Text></Text>
+      </View>
+      
       <TextInput
         style={styles.inputStyle}
         onChangeText={(text) => searchFilterFunction(text)}
@@ -94,49 +74,61 @@ export default Users = () => {
         data={users}
         horizontal={false}
         numColumns={2}
-        keyExtractor={item => {
-          return item.id
+        keyExtractor={(item) => {
+          return item.id;
         }}
         renderItem={({ item }) => {
           return (
-            <TouchableOpacity
-            style={styles.card}
-            onPress={() => {
-              clickEventListener()
-            }}>
-            <View style={styles.cardHeader}>
-            </View>
-            <Image style={styles.userImage} source={{ uri: item.image }} />
-            <View style={styles.cardFooter}>
-              <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                <Text style={styles.name}>{item.name}</Text>
-                <LinearGradient colors={["rgba(238,174,202,0.7)", "rgba(93,135,218,0.9)"]} style={styles.followButton}>
-                  <TouchableOpacity onPress={() => clickEventListener()}>
-                    <Text style={styles.followButtonText}>Eliminar</Text>
-                  </TouchableOpacity>
-                </LinearGradient>
+            <TouchableOpacity style={styles.card}>
+              <View style={styles.cardHeader}></View>
+              <Image
+                style={styles.userImage}
+                source={{ uri: item.profilepic }}
+              />
+              <View style={styles.cardFooter}>
+                <View
+                  style={{ alignItems: "center", justifyContent: "center" }}
+                >
+                  <Text style={styles.name}>{item.name}</Text>
+                  <LinearGradient
+                    colors={["rgba(238,174,202,0.7)", "rgba(93,135,218,0.9)"]}
+                    style={styles.followButton}
+                  >
+                    <TouchableOpacity>
+                      <Text style={styles.followButtonText}>Te sigue</Text>
+                    </TouchableOpacity>
+                  </LinearGradient>
+                </View>
               </View>
-            </View>
-          </TouchableOpacity>
-          )
+            </TouchableOpacity>
+          );
         }}
       />
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
- 
   list: {
+    maxHeight: "84%",
     paddingHorizontal: 5,
-    backgroundColor: '#E6E6E6',
+    backgroundColor: "#E6E6E6",
   },
   listContainer: {
+    alignItems: "center",
+  },
+  tituloContainer: {
+    marginTop: -3,
     alignItems: 'center',
+  },
+
+  tituloText: {
+    color: '#4D194D',
+    fontSize: 21,
   },
   /******** card **************/
   card: {
-    shadowColor: '#00000021',
+    shadowColor: "#00000021",
     shadowOffset: {
       width: 0,
       height: 5,
@@ -146,8 +138,8 @@ const styles = StyleSheet.create({
     elevation: 12,
 
     marginVertical: 5,
-    backgroundColor: 'white',
-    flexBasis: '46%',
+    backgroundColor: "white",
+    flexBasis: "46%",
     marginHorizontal: 5,
   },
   cardFooter: {
@@ -155,17 +147,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     borderTopLeftRadius: 1,
     borderTopRightRadius: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
   },
   cardContent: {
     paddingVertical: 12.5,
     paddingHorizontal: 16,
   },
   cardHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     paddingTop: -5,
     paddingBottom: 25,
     paddingHorizontal: 16,
@@ -176,35 +168,35 @@ const styles = StyleSheet.create({
     height: 90,
     width: 90,
     borderRadius: 60,
-    alignSelf: 'center',
-    borderColor: '#DCDCDC',
+    alignSelf: "center",
+    borderColor: "#DCDCDC",
     borderWidth: 3,
   },
   name: {
     fontSize: 16,
     flex: 1,
-    alignSelf: 'center',
-    color: '#4D194D',
-    fontWeight: 'bold',
+    alignSelf: "center",
+    color: "#4D194D",
+    fontWeight: "bold",
   },
   position: {
     fontSize: 14,
     flex: 1,
-    alignSelf: 'center',
-    color: '#696969',
+    alignSelf: "center",
+    color: "#696969",
   },
   followButton: {
     marginTop: 2, //mueve el boton hacia arriba o hacia abajo
     height: 35,
     width: 90,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 30,
-    backgroundColor: '#00BFFF',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 5,
+    backgroundColor: "#00BFFF",
   },
   followButtonText: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 15,
   },
   icon: {
@@ -217,7 +209,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     paddingLeft: 10,
     margin: 5,
-    borderColor: '#009688',
-    backgroundColor: '#FFFFFF',
+    borderColor: "#009688",
+    backgroundColor: "#FFFFFF",
   },
-})
+});

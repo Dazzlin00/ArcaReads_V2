@@ -17,8 +17,20 @@ import { BASE_URL } from "../../config";
 import { useRoute } from "@react-navigation/native";
 import { AuthContext } from "../../context/AuthContext";
 import { useMutation, useQueryClient } from "react-query";
-
+import { useNavigation } from "@react-navigation/native";
+function formatDateTime(inputDate) {
+  const options = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+  };
+  return new Date(inputDate).toLocaleDateString(undefined, options);
+}
 const CommentsScreen = () => {
+  const navigation = useNavigation();
+
   const { userInfo } = useContext(AuthContext); //AUTENTICACION
 
   const route = useRoute();
@@ -30,6 +42,7 @@ const CommentsScreen = () => {
   const [nuevoComentario, setNuevoComentario] = useState("");
   const [nuevoComentario2, setNuevoComentario2] = useState("");
   const [datosComent, setDatosComent] = useState("");
+  const [likedComments, setLikedComments] = useState([]);
 
   //------------------------------------------------------------------------------------------------------------//
   //----------------------------------MUESTRA LOS COMENTARIOS---------------------------------------------------//
@@ -86,67 +99,23 @@ const CommentsScreen = () => {
   //------------------------------------------------------------------------------------------------------------//
   //----------------------------------------------likes-------------------------------------------------------//
   //------------------------------------------------------------------------------------------------------------//
+ 
+ 
+ 
+ 
+  const toggleLike = async(commentId,user) => {
+    if (likedComments.includes(commentId)) {
+      // El usuario ya ha dado "like", quitar el "like"
+      const updatedLikes = likedComments.filter((id) => id !== commentId);
+      setLikedComments(updatedLikes);
+    } else {
+      // El usuario no ha dado "like", agregar el "like"
+      const updatedLikes = [...likedComments, commentId];
+      setLikedComments(updatedLikes);
+    }
+    console.log(commentId+"hola"+user)
+  };
   
-
-  const { mutate: likemutate } = useMutation({
-    mutationFn: (liked) => {
-      if (liked) {
-        return  quitarMeGusta(id);
-      } else {
-        return  agregarMeGusta(id);
-      }
-    },
-
-    onSuccess: () => {
-      queryClient.invalidateQueries(["likes"]);
-    },
-  });
-
-  const agregarMeGusta = (comentId) => {
-    console.log(comentId + " ide coment");
-    return axios
-      .post(`${BASE_URL}/likes/addLikesComent`, { comentId })
-      .then((response) => {
-        console.log("Respuesta de agregarMeGusta:", response.data);
-        //   queryClient.refetchQueries("comments");
-        return response.data;
-      })
-      .catch((error) => {
-        console.error("Error en agregarMeGusta:", error);
-        throw error; // Propagar el error para que se maneje adecuadamente
-      });
-  };
-  const quitarMeGusta = (comentId) => {
-    console.log(comentId + " ide coment");
-    return axios
-      .delete(`${BASE_URL}/likes/deleteLikesComent?postId=${comentId}`)
-      .then((response) => {
-        console.log("Respuesta de agregarMeGusta:", response.data);
-        queryClient.refetchQueries("comments");
-        return response.data;
-      })
-      .catch((error) => {
-        console.error("Error en agregarMeGusta:", error);
-        throw error; // Propagar el error para que se maneje adecuadamente
-      });
-  };
-  const handleLiked = (id) => {
-    
-    likemutate({liked:dataLikes?.includes(userInfo.id)});
-
-  };
-
-
-  const {  isLoading: isLoadingLikeComent,
-    error: errorLike,
-    data: dataLikes, } = useQuery({
-    queryKey: ["likescoment"],
-    queryFn: async () => {
-      const response = await axios .get(`${BASE_URL}/likes/getLikesComent`);
-      return response.data;
-    },
-  });
-  const [cargando, setCargando] = useState(dataLikes?.includes(userInfo.id));
   //------------------------------------------------------------------------------------------------------------//
   //----------------------------------------------ELIMINA-------------------------------------------------------//
   //------------------------------------------------------------------------------------------------------------//
@@ -243,7 +212,8 @@ const CommentsScreen = () => {
                   >
                     <Text style={styles.username}>{item.name}</Text>
                   </TouchableOpacity>
-                  <Text style={styles.timestamp}>{item.createdAt}</Text>
+                  <Text style={styles.timestamp}>{formatDateTime(item.createdAt)}</Text>
+
                 </View>
               </View>
 
@@ -253,32 +223,17 @@ const CommentsScreen = () => {
               <Text>{item.desc}</Text>
               <View style={styles.commentContainer}>
                 <View style={styles.buttonsContainer}>
-                  <TouchableOpacity
-                    style={styles.likeButton}
-                    onPress={() => handleLiked(item.id)}
-                  >
+                  <TouchableOpacity onPress={() => toggleLike(item.id,item.userId)} 
+                  style={styles.popupMenuItem}>
                     <Ionicons
                       name={
-                        isLoading ? (
-                          <ActivityIndicator size="small" />
-                        ) : cargando ? (
-                          "heart"
-                        ) : (
-                          "heart-outline"
-                        )
+                        likedComments.includes(item.id)
+                          ? "heart"
+                          : "heart-outline"
                       }
                       size={24}
-                      color={
-                        isLoading ? (
-                          <ActivityIndicator size="small" />
-                        ) : cargando ? (
-                          "#ba6bad"
-                        ) : (
-                          "gray"
-                        )
-                      }
+                      color={likedComments.includes(item.id) ? "#ba6bad" : "gray"}
                     />
-                    <Text style={styles.likeCount}>{item.likes}</Text>
                   </TouchableOpacity>
 
                   {userId === userInfo.id || item.userId === userInfo.id ? (

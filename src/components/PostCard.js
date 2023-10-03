@@ -19,6 +19,17 @@ import axios from "react-native-axios";
 import { useMutation, useQueryClient } from "react-query";
 import { ScrollView } from "react-native-web";
 
+function formatDateTime(inputDate) {
+  const options = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+  };
+  return new Date(inputDate).toLocaleDateString(undefined, options);
+}
+
 function PostCard({ post }) {
   const navigation = useNavigation();
   const { userInfo } = useContext(AuthContext); //AUTENTICACION
@@ -28,6 +39,7 @@ function PostCard({ post }) {
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
   const [editTitle, setEditTitle] = useState(post.title);
   const [editDescription, setEditDescription] = useState(post.desc);
+  const [isVisible, setIsVisible] = useState(true);
 
   const toggleEditModal = () => {
     setEditTitle(post.title);
@@ -202,7 +214,14 @@ function PostCard({ post }) {
 
   };
 
+  const handleOcultar = (id) => 
+  {
+
+    console.log(id)
+  }
+
   return (
+    
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -223,7 +242,7 @@ function PostCard({ post }) {
             >
               <Text style={styles.username}>{post.name}</Text>
             </TouchableOpacity>
-            <Text style={styles.timestamp}>{post.createdAt}</Text>
+            <Text style={styles.timestamp}>{formatDateTime(post.createdAt)}</Text>
           </View>
         </View>
         <View style={styles.popupContainer}>
@@ -319,7 +338,7 @@ function PostCard({ post }) {
             ) : (
               <TouchableOpacity
                 style={styles.popupMenuItem}
-                //   onPress={() => handleDelete(post.id)}
+               onPress={handleOcultar(post.id)}
               >
                 <Text style={styles.popupMenuText}>Ocultar</Text>
               </TouchableOpacity>

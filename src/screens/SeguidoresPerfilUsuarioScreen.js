@@ -27,9 +27,7 @@ export default function SeguidoresPerfilUsuarioScreen() {
           colors={["rgba(238,174,202,0.7)", "rgba(93,135,218,0.9)"]}
           
         >
-            <View style={styles.tituloContainer}>
-                   <Text style={styles.tituloText}>Total de Seguidores:</Text>
-                </View>
+          
          <SeguidoresPerfilUsuario />
         </LinearGradient>
       

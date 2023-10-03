@@ -29,7 +29,7 @@ function SearchScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
-        <Search />
+      <Text style={styles.heading}>Carrusel de Lecturas</Text>
         <Carrusel images={images} />
         <Gallery  />
       </ScrollView>
@@ -42,6 +42,13 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: 20,
     backgroundColor:'white',
+  },
+  heading: {
+    fontSize: 24, // Tamaño de fuente más grande
+    fontWeight: "bold",
+    color: "black", // Cambiado a negro para mayor visibilidad
+    marginTop: 20,
+    textAlign: 'center', // Texto centrado
   },
   imageBackground: {
     flex: 1,

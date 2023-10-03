@@ -18,7 +18,10 @@ import { AuthContext } from "../../context/AuthContext";
 import { useMutation, useQueryClient } from "react-query";
 
 export default Usuarios = () => {
-  const { userInfo } = useContext(AuthContext); //AUTENTICACION
+  const { userInfo } = useContext(AuthContext); // AUTENTICACION
+  const [id, setId] = useState(userInfo.id);
+
+ 
   const queryClient = useQueryClient();
 
   const { isLoading, error, data } = useQuery({
@@ -37,9 +40,61 @@ export default Usuarios = () => {
     setUsers(data);
   }, [data]);
 
-  const clickEventListener = (id) => {
-    Alert.alert("Option selected" + id);
-    console.log(id);
+
+
+ const [followingUsers, setFollowingUsers] = useState([]); // Estado para realizar un seguimiento de los usuarios seguidos
+ 
+ 
+  const { isLoading:isLoadingfollow,data:datafollow } = useQuery({
+    queryKey: ["follows"],
+    queryFn: async () => {
+      const response = await axios.get(`${BASE_URL}/relations/getAllRelations?followerUserId=${userInfo.id}`);
+      return response.data;
+    },
+  });
+
+console.log(id+"user")
+
+useEffect(() => {
+  // Actualizar users cuando data cambie
+  setId(id);
+}, [id,datafollow]);
+
+
+  const toggleFollow = async (id) => {
+    try {
+      const isCurrentlyFollowing = isFollowing(id);
+
+      if (isCurrentlyFollowing) {
+        // Si ya está siguiendo, eliminar de la lista de seguidores en la base de datos
+        await axios.delete( `${BASE_URL}/relations/deleteRelations?followedUserId=${id}`)
+      } else {
+        // Si no está siguiendo, agregar a la lista de seguidores en la base de datos
+        await axios.post(`${BASE_URL}/relations/addRelations`, {
+          followedUserId: id,
+        });
+      }
+
+      // Actualizar la lista de seguidores en el cliente después de la operación exitosa
+      setFollowingUsers((prevFollowingUsers) =>
+        isCurrentlyFollowing
+          ? prevFollowingUsers.filter((userId) => userId !== id)
+          : [...prevFollowingUsers, id]
+      );
+    } catch (error) {
+      console.error("Error al cambiar el estado de seguimiento:", error);
+      // Aquí puedes mostrar una alerta u otra lógica de manejo de errores
+    }
+  };
+
+
+
+  const isFollowing = (id) => {
+    // Comprobar si el usuario actual está siguiendo a este usuario
+   return followingUsers.includes(id);
+   
+
+    
   };
 
   const searchFilterFunction = (text) => {
@@ -51,6 +106,8 @@ export default Usuarios = () => {
     });
     setUsers(newData);
   };
+
+  console.log(datafollow+ "dataffff")
 
   return (
     <View style={styles.container}>
@@ -68,7 +125,6 @@ export default Usuarios = () => {
         data={users}
         horizontal={false}
         numColumns={2}
-        
         keyExtractor={(item) => {
           return item.id;
         }}
@@ -77,7 +133,7 @@ export default Usuarios = () => {
             <TouchableOpacity
               style={styles.card}
               onPress={() => {
-                clickEventListener(item.id);
+                toggleFollow(item.id);
               }}
             >
               <View style={styles.cardHeader}></View>
@@ -89,8 +145,10 @@ export default Usuarios = () => {
                     colors={["rgba(238,174,202,0.7)", "rgba(93,135,218,0.9)"]}
                     style={styles.followButton}
                   >
-                    <TouchableOpacity onPress={() => clickEventListener()}>
-                      <Text style={styles.followButtonText}>Seguir</Text>
+                    <TouchableOpacity onPress={() => toggleFollow(item.id)}>
+                      <Text style={styles.followButtonText}>
+                        { isLoadingfollow? "loading" :datafollow?.includes(item.id) || isFollowing(item.id) ? "Siguiendo" : "Seguir"}
+                      </Text>
                     </TouchableOpacity>
                   </LinearGradient>
                 </View>
@@ -98,11 +156,11 @@ export default Usuarios = () => {
             </TouchableOpacity>
           );
         }}
-       
       />
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   list: {
@@ -131,7 +189,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
   },
   cardFooter: {
-    paddingVertical: 10,
+    paddingVertical: 20,
     paddingHorizontal: 5,
     borderTopLeftRadius: 1,
     borderTopRightRadius: 1,

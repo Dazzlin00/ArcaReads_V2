@@ -3,6 +3,7 @@ import { Ionicons } from 'react-native-vector-icons';
 import Seguidos from '../components/Seguidos';
 import { LinearGradient } from "expo-linear-gradient";
 import { View, ScrollView, StyleSheet, Image, Text, TouchableOpacity, SafeAreaView } from 'react-native';
+import SeguidosPerfilUsuario from '../components/SeguidosPerfilUsuario';
 
 export default function SeguidosPerfilUsuarioScreen() {
   return (
@@ -27,10 +28,8 @@ export default function SeguidosPerfilUsuarioScreen() {
           colors={["rgba(238,174,202,0.7)", "rgba(93,135,218,0.9)"]}
           
         >
-            <View style={styles.tituloContainer}>
-                   <Text style={styles.tituloText}>Total de Seguidos:</Text>
-                </View>
-         <Seguidos />
+        
+         <SeguidosPerfilUsuario />
         </LinearGradient>
       
      
