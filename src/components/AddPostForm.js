@@ -84,6 +84,7 @@ const AddPostForm = ({ onSubmit }) => {
 
   useEffect(() => {
     setName(userInfo.name); // Actualizar el estado con el nombre de usuario
+   
   }, []);
   return (
     <View style={styles.container}>

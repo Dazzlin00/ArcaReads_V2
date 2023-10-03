@@ -1,26 +1,66 @@
 
-import React, { useState } from 'react';
-import { View, Text, Image, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useState,useContext } from 'react';
+import { View, Text, Image, TextInput, StyleSheet, Alert,TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { AuthContext } from "../../context/AuthContext";
 import { ScrollView } from 'react-native';
 import { LinearGradient } from "expo-linear-gradient";
-
+import { useQuery } from "react-query";
+import { BASE_URL } from "../../config";
+import axios from "react-native-axios";
+import { useMutation, useQueryClient } from "react-query";
 const EditProfileView = () => {
-  const profile = {
-    name2: 'Jane Doe',
-    name: 'Jane Doe',
-    email: 'jane.doe@example.com',
-    bio: 'Software engineer and cat lover',
-    avatar: 'https://example.com/jane-doe-avatar.png',
-  }
-  const [name2, setName2] = useState("");
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const { userInfo } = useContext(AuthContext); //AUTENTICACION
+  const queryClient = useQueryClient();
+
+  const [name2, setName2] = useState(userInfo.username);
+  const [name, setName] = useState(userInfo.name);
+  const [email, setEmail] = useState(userInfo.email);
   const [bio, setBio] = useState("");
-  const [avatar, setAvatar] = useState(profile.avatar);
+  const [avatar, setAvatar] = useState(userInfo.profilepic);
 
   const navigation = useNavigation();
+
+
+  const datos = {
+   username:name2,
+   email:email,
+   name:name
+  };
+  async function actualizar() {
+    try {
+      const response = await axios.put(
+        `${BASE_URL}/users/actualizarDatos?id=${userInfo.id}`,datos);
+
+      if (response.status === 200) {
+        Alert.alert("Informacion Actualizada", "La Informacion se ha actualizado", [
+          { text: "OK", onPress: () => console.log("OK Pressed") },
+        ]);
+        return response.data;
+      } else {
+        Alert.alert("Error", "La Informacion no pudo ser actualizada", [
+          { text: "OK", onPress: () => console.log("OK Pressed") },
+        ]);
+        throw new Error(response.statusText);
+      }
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+
+  const { mutate } = useMutation({
+    mutationFn: actualizar,
+
+    onSuccess: () => {
+      queryClient.invalidateQueries(["posts"]);
+      queryClient.invalidateQueries(["postss"]);
+    },
+  });
+  const handlesave = async () => {
+
+    mutate({name2,email,name})
+  }
   return (
     <ScrollView>
    <View style={styles.container}>
@@ -36,7 +76,7 @@ const EditProfileView = () => {
           style={styles.input}
           placeholder="Escribe el Nombre de Usuario"
           value={name2}
-          onChangeText={setName2}
+          onChangeText={(text) =>setName2(text)}
         />
         
         <Text style={styles.label}>Nombre y Apellido </Text>
@@ -44,25 +84,20 @@ const EditProfileView = () => {
           style={styles.input}
           placeholder="Escribe el Nombre y Apellido"
           value={name}
-          onChangeText={setName}
+          onChangeText={(text) =>setName(text)}
         />
         <Text style={styles.label}>Correo</Text>
         <TextInput
           style={styles.input}
           placeholder="Escribe el correo"
           value={email}
-          onChangeText={setEmail}
+          onChangeText={(text) =>setEmail(text)}
         />
-        <Text style={styles.label}>Telefono</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Escribe el telefono"
-          value={bio}
-          onChangeText={setBio}
-        />
+      
+       
        
        <LinearGradient colors={["rgba(238,174,202,0.4)", "rgba(93,135,218,0.7)"]} style={styles.button}>
-       <TouchableOpacity  onPress={() => navigation.navigate('Settings')}>
+       <TouchableOpacity  onPress={handlesave}>
           <Text style={styles.buttonText}>Guardar Cambios</Text>
         </TouchableOpacity>
         </LinearGradient>

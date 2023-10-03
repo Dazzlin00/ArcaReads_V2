@@ -7,28 +7,87 @@ import {
   TouchableOpacity,
   ScrollView,
   Modal,
+  Alert,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../../context/AuthContext";
+import * as ImagePicker from "expo-image-picker";
+import { useQuery } from "react-query";
+import { BASE_URL } from "../../config";
+import axios from "react-native-axios";
+import { useMutation, useQueryClient } from "react-query";
 
 export default Settings = () => {
   const { userInfo } = useContext(AuthContext); //AUTENTICACION
+  const queryClient = useQueryClient();
+
+
   const [avatar, setAvatar] = useState(""); // Nombre de usuario predeterminado
   const [name, setName] = useState(""); // Nombre de usuario predeterminado
   const [email, setEmail] = useState(""); // Nombre de usuario predeterminado
   const [address, setAdress] = useState(""); // Nombre de usuario predeterminado
   const [isImageModalVisible, setIsImageModalVisible] = useState(false);
   const navigation = useNavigation();
-  
 
   const openPhotoModal = () => {
     setIsImageModalVisible(!isImageModalVisible);
   };
 
-  const handleModalButtonPress = () => {
-    console.log('Botón del modal presionado');
-    // Aquí puedes agregar la lógica que quieras ejecutar cuando se presione el botón del modal
+  const datos = {
+    profilepic: avatar,
+  };
+  async function actualizar() {
+    try {
+      const response = await axios.put(
+        `${BASE_URL}/users/actualizarFotoPerfil?id=${userInfo.id}`,
+        { profilepic: avatar }
+      );
+
+      if (response.status === 200) {
+        Alert.alert("Foto Actualizada", "La foto de perfil se ha actualizado", [
+          { text: "OK", onPress: () => console.log("OK Pressed") },
+        ]);
+        return response.data;
+      } else {
+        Alert.alert("Error", "La foto de perfil no pudo ser actualizada", [
+          { text: "OK", onPress: () => console.log("OK Pressed") },
+        ]);
+        throw new Error(response.statusText);
+      }
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+
+  const { mutate } = useMutation({
+    mutationFn: actualizar,
+
+    onSuccess: () => {
+      queryClient.invalidateQueries(["posts"]);
+      queryClient.invalidateQueries(["postss"]);
+    },
+  });
+  const handleModalButtonPress = async () => {
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 1,
+      });
+
+      if (!result.cancelled) {
+        // Aquí puedes guardar la imagen seleccionada en el estado del avatar
+        mutate({ avatar }), setAvatar(result.uri);
+        // También puedes enviar la imagen al servidor si es necesario
+      }
+    } catch (error) {
+      console.error("Error al seleccionar una imagen: ", error);
+    }
+
+    openPhotoModal(); // Cierra el modal después de seleccionar la imagen
   };
 
   const handleModifyProfilePicture = () => {
@@ -52,119 +111,113 @@ export default Settings = () => {
     setName(userInfo.name); // Actualizar el estado con el nombre de usuario
     setEmail(userInfo.email); // Actualizar el estado con el nombre de usuario
     setAdress(userInfo.city); // Actualizar el estado con el nombre de usuario
-   
-   
   }, []);
   return (
-
     <ScrollView>
-      <LinearGradient colors={["rgba(238,174,202,0.4)", "rgba(93,135,218,0.7)"]} style={styles.container}>
-      <View style={styles.container}>
-      
-      <Modal
-        visible={isImageModalVisible}
-        transparent={true}
-        onRequestClose={openPhotoModal}
+      <LinearGradient
+        colors={["rgba(238,174,202,0.4)", "rgba(93,135,218,0.7)"]}
+        style={styles.container}
       >
-        <TouchableOpacity
-          style={styles.modalContainer}
-          onPress={openPhotoModal}
-        >
-          <Image
-            source={{ uri: userInfo.profilepic }}
-            style={styles.modalImage}
-          />
-        
-        <TouchableOpacity
-        style={styles.modalButton}
-        onPress={handleModalButtonPress}
-        >
-          <Text style={styles.modalButtonText}>Cambiar Foto</Text>
-          </TouchableOpacity>
-        </TouchableOpacity>
-      
-      </Modal>
+        <View style={styles.container}>
+          <Modal
+            visible={isImageModalVisible}
+            transparent={true}
+            onRequestClose={openPhotoModal}
+          >
+            <TouchableOpacity
+              style={styles.modalContainer}
+              onPress={openPhotoModal}
+            >
+              <Image
+                source={{ uri: userInfo.profilepic }}
+                style={styles.modalImage}
+              />
 
+              <TouchableOpacity
+                style={styles.modalButton}
+                onPress={handleModalButtonPress}
+              >
+                <Text style={styles.modalButtonText}>Cambiar Foto</Text>
+              </TouchableOpacity>
+            </TouchableOpacity>
+          </Modal>
 
+          <View style={styles.header}>
+            <View style={styles.headerContent}>
+              <TouchableOpacity onPress={openPhotoModal}>
+                <Image
+                  style={styles.avatar}
+                  source={{
+                    uri: avatar || userInfo.profilepic, // Usa la imagen seleccionada si está presente, de lo contrario, usa la imagen de perfil actual
+                  }}
+                />
+              </TouchableOpacity>
 
+              <Text style={styles.name}>{name} </Text>
+              <Text style={styles.userInfo}>{email} </Text>
+              <Text style={styles.userInfo}>{address} </Text>
+            </View>
+          </View>
 
+          <View style={styles.body}>
+            <TouchableOpacity
+              style={styles.item}
+              onPress={handleModifyProfilePicture}
+            >
+              <View style={styles.iconContent}>
+                <Image
+                  style={styles.icon}
+                  source={require("../../assets/ediiiitar.png")}
+                />
+              </View>
+              <View style={styles.infoContent}>
+                <Text style={styles.info}>Editar Perfil</Text>
+              </View>
+            </TouchableOpacity>
 
-        <View style={styles.header}>
-          <View style={styles.headerContent}>
-          <TouchableOpacity onPress={openPhotoModal}>
-                    <Image
-                      style={styles.avatar}
-                      source={{
-                        uri: userInfo.profilepic,
-                      }}
-                    />
-                  </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.item}
+              onPress={handleModifyInformation}
+            >
+              <View style={styles.iconContent}>
+                <Image
+                  style={styles.icon}
+                  source={require("../../assets/cambiarrr.png")}
+                />
+              </View>
+              <View style={styles.infoContent}>
+                <Text style={styles.info}>Cambiar Contraseña </Text>
+              </View>
+            </TouchableOpacity>
 
-            <Text style={styles.name}>{name} </Text>
-            <Text style={styles.userInfo}>{email} </Text>
-            <Text style={styles.userInfo}>{address} </Text>
+            <TouchableOpacity style={styles.item} onPress={handleLogout}>
+              <View style={styles.iconContent}>
+                <Image
+                  style={styles.icon}
+                  source={require("../../assets/cerrar.png")}
+                />
+              </View>
+              <View style={styles.infoContent}>
+                <Text style={styles.info}>Cerrar sesion</Text>
+              </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.item}
+              onPress={handleDeactivateAccount}
+            >
+              <View style={styles.iconContent}>
+                <Image
+                  style={styles.icon}
+                  source={require("../../assets/basura.png")}
+                />
+              </View>
+              <View style={styles.infoContent}>
+                <Text style={styles.info}>Desactivar Cuenta</Text>
+              </View>
+            </TouchableOpacity>
           </View>
         </View>
-
-        <View style={styles.body}>
-          <TouchableOpacity
-            style={styles.item}
-            onPress={handleModifyProfilePicture}
-          >
-            <View style={styles.iconContent}>
-              <Image
-                style={styles.icon}
-                source={require("../../assets/ediiiitar.png")}
-              />
-            </View>
-            <View style={styles.infoContent}>
-              <Text style={styles.info}>Editar Perfil</Text>
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.item}
-            onPress={handleModifyInformation}
-          >
-            <View style={styles.iconContent}>
-              <Image
-                style={styles.icon}
-                source={require("../../assets/cambiarrr.png")}
-              />
-            </View>
-            <View style={styles.infoContent}>
-              <Text style={styles.info}>Cambiar Contraseña </Text>
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.item} onPress={handleLogout}>
-            <View style={styles.iconContent}>
-              <Image
-                style={styles.icon}
-                source={require("../../assets/cerrar.png")}
-              />
-            </View>
-            <View style={styles.infoContent}>
-              <Text style={styles.info}>Cerrar sesion</Text>
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.item}
-            onPress={handleDeactivateAccount}
-          >
-            <View style={styles.iconContent}>
-              <Image
-                style={styles.icon}
-                source={require("../../assets/basura.png")}
-              />
-            </View>
-            <View style={styles.infoContent}>
-              <Text style={styles.info}>Desactivar Cuenta</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-      </View>
       </LinearGradient>
     </ScrollView>
   );
@@ -244,19 +297,19 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
- 
+
   modalButton: {
     marginTop: -150, //mueve el boton hacia arriba o hacia abajo
     height: 35,
     width: 130,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
     borderRadius: 30,
-    backgroundColor: '#00BFFF',
+    backgroundColor: "#00BFFF",
   },
   modalButtonText: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 15,
   },
 
@@ -271,6 +324,4 @@ const styles = StyleSheet.create({
     height: "80%",
     resizeMode: "contain",
   },
-
-
 });

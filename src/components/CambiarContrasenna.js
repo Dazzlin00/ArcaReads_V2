@@ -1,13 +1,18 @@
 import React, { useState,useContext} from 'react';
-import { View, Text, Image, TextInput, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, Image, TextInput, StyleSheet, TouchableOpacity, ScrollView ,Alert} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from "expo-linear-gradient";
 import { AuthContext } from "../../context/AuthContext";
-
+import { useQuery } from "react-query";
+import { BASE_URL } from "../../config";
+import axios from "react-native-axios";
+import { useMutation, useQueryClient } from "react-query";
 
 const ChangePassword = () => {
-
   const { userInfo } = useContext(AuthContext); //AUTENTICACION
+  const queryClient = useQueryClient();
+
+
   const [currentPassword, setCurrentPassword] = useState();
   const [newPassword, setNewPassword] = useState();
   const [repeatPassword, setRepeatPassword] = useState();
@@ -15,6 +20,57 @@ const ChangePassword = () => {
   const navigation = useNavigation();
   
   
+  const datos = {
+    password:newPassword,
+   };
+   async function actualizar() {
+     try {
+       const response = await axios.put(
+         `${BASE_URL}/users/actualizarContra?id=${userInfo.id}`,datos);
+ 
+       if (response.status === 200) {
+         Alert.alert("Contraseña Actualizada", "La Contraseña se ha actualizado", [
+           { text: "OK", onPress: () => console.log("OK Pressed") },
+         ]);
+         return response.data;
+       } else {
+         Alert.alert("Error", "La Contraseña no pudo ser actualizada", [
+           { text: "OK", onPress: () => console.log("OK Pressed") },
+         ]);
+         throw new Error(response.statusText);
+       }
+     } catch (error) {
+       console.log(error);
+       throw error;
+     }
+   }
+   const { mutate } = useMutation({
+    mutationFn: actualizar,
+
+    onSuccess: () => {
+      queryClient.invalidateQueries(["posts"]);
+      queryClient.invalidateQueries(["postss"]);
+    },
+  });
+
+  const handlesave = async () => {
+    if (!currentPassword || !newPassword || !repeatPassword) {
+      Alert.alert("Error", "Por favor complete todos los campos", [
+        { text: "OK", onPress: () => console.log("OK Pressed") },
+      ]);
+      
+      return;
+    }
+  
+    if (newPassword !== repeatPassword) {
+      Alert.alert("Error", "Las contraseñas no coinciden", [
+        { text: "OK", onPress: () => console.log("OK Pressed") },
+      ]);
+      return;
+    }
+    mutate({newPassword})
+  }
+
   return (
     <ScrollView>
     <View style={styles.container}>
@@ -56,7 +112,7 @@ const ChangePassword = () => {
        <LinearGradient
       colors={["rgba(238,174,202,0.7)", "rgba(93,135,218,0.9)"]}
       style={styles.button}>
-        <TouchableOpacity  onPress={() => navigation.navigate('Settings')}>
+        <TouchableOpacity  onPress={handlesave}>
           <Text style={styles.buttonText}>Cambiar Contraseña</Text>
         </TouchableOpacity>
         </LinearGradient>
